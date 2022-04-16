@@ -88,8 +88,14 @@ public class ProductServiceImpl implements ProductService {
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
+        Page<Product> products;
+
+        if (getAllProductRequest.getKeyword() != null) {
+            products = productRepository.findAll(getAllProductRequest.getKeyword(), pageable);
+        }
+
         // masukkan pageable sebagai parameter method findAll
-        Page<Product> products = productRepository.findAll(pageable);
+        products = productRepository.findAll(pageable);
 
         // ambil data hasil findAll
         List<Product> productList = products.getContent();
