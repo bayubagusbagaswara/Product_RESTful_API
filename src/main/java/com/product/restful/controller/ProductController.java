@@ -76,13 +76,15 @@ public class ProductController {
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir,
+            @RequestParam(value = "keyword") String keyword) {
 
         GetAllProductRequest getAllProductRequest = new GetAllProductRequest();
         getAllProductRequest.setPageNo(pageNo);
         getAllProductRequest.setPageSize(pageSize);
         getAllProductRequest.setSortBy(sortBy);
         getAllProductRequest.setSortDir(sortDir);
+        getAllProductRequest.setKeyword(keyword);
         GetAllProductResponse responses = productService.listAllProduct(getAllProductRequest);
         return new WebResponse<>(
                 HttpStatus.OK.value(), HttpStatus.OK, responses
