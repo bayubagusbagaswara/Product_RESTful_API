@@ -1,7 +1,10 @@
 package com.product.restful.repository;
 
 import com.product.restful.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,6 +27,12 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByPriceBetween(BigDecimal priceMin, BigDecimal priceMax);
     List<Product> findByPriceGreaterThanEqual(BigDecimal price);
     List<Product> findByPriceLessThanEqual(BigDecimal price);
+
+    // findAll by keyword
+    @Query("SELECT p FROM Product p WHERE "
+            + "CONCAT(p.id, p.name, p.price, p.quantity)"
+            + "LIKE %?1%")
+    Page<Product> findAll(String keyword, Pageable pageable);
 
 //    @Query("select u from User u where lower(u.name) like lower(concat('%', ?1, '%'))")
 //    List<User> findByNameFree(String name);
