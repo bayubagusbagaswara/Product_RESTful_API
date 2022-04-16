@@ -27,4 +27,6 @@ public class GetAllProductRequest {
 
     @NotBlank(message = "Sort direction must be asc or desc")
     private String sortDir;
+
+    private String keyword;
 }
