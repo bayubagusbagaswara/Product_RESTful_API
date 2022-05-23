@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -68,21 +66,21 @@ public class User {
             foreignKey = @ForeignKey(name = "fk_user_role_id_user"),
             inverseForeignKey = @ForeignKey(name = "fk_user_role_id_role")
     )
-    private List<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
-    public List<Role> getRoles() {
-        if (roles == null) {
-            return null;
-        }
-        return new ArrayList<>(roles);
-    }
-
-    public void setRoles(List<Role> roles) {
-        if (roles == null) {
-            this.roles = null;
-        } else {
-            this.roles = Collections.unmodifiableList(roles);
-        }
-    }
+//    public List<Role> getRoles() {
+//        if (roles == null) {
+//            return null;
+//        }
+//        return new ArrayList<>(roles);
+//    }
+//
+//    public void setRoles(List<Role> roles) {
+//        if (roles == null) {
+//            this.roles = null;
+//        } else {
+//            this.roles = Collections.unmodifiableList(roles);
+//        }
+//    }
 
 }
