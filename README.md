@@ -1,5 +1,10 @@
 # Product Restful API
 
+- Kita contoh Reddit Clone versi lama
+- yakni mengadopsi sistem JWT Authentication lama, nonton aja video nya
+- Jadi kita juga buat entity untuk User, Konfigurasi Web Security, dan login logout menggunakan refresh token
+- Tapi ingat, ini sistem lama atau tidak menggunakan OAuth
+
 ## Create New Product
 
 Request :
