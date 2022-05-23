@@ -19,6 +19,20 @@
 - misalnya untuk UPDATE dan DELETE product hanya diperbolehkan bagi User yang memiliki Role ADMIN
 - Selain role ADMIN, maka User tidak bisa melakukan UPDATE dan DELETE
 
+# Register User
+
+- Pertama kali User SignUp / Register, maka dia akan mendapatkan role yang NORMAL atau user biasa
+- Atau kita beri contoh pertama kali, kita insert ke database satu User dengan ROLE ADMIN
+- Karena hanya user ADMIN, yang bisa menambahkan sebuah ROLE ke user yang lain
+- Jadi setelah User teregister, dan mendapatkan Role User, maka dia hanya bisa mengakses endpoint yang hanya diperbolehkan untuk ROLE USER
+
+# Data ROLE
+
+- ROLE_C_LEVEL
+- ROLE_VICE_PRESIDENT
+- ROLE_MANAGER
+- ROLE_STAFF
+
 ## Create New Product
 
 Request :
