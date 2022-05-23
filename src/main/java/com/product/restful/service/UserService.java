@@ -11,5 +11,5 @@ public interface UserService {
      UserResponse createUser(CreateUserRequest createUserRequest);
 
     // user admin, dapat menambahkan role to User
-    // void addRoleToUser(String username, String roleName)
+     void addRoleToUser(String username, String roleName);
 }
