@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -27,5 +28,5 @@ public class UserResponse {
 
     private String email;
 
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 }
