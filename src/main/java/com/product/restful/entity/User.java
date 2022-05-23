@@ -1,21 +1,26 @@
 package com.product.restful.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * User ini harus implement UserDetails, karena untuk mengakses atau mengambil data User, seperti name, password, email, dan authority
- */
+
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "username" }),
+        @UniqueConstraint(columnNames = { "email" })
+})
 @Data
 @Builder
 @AllArgsConstructor
@@ -24,24 +29,60 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "Username is required")
-    @Column(name = "username", nullable = false)
+    @NotBlank
+    @Column(name = "first_name")
+    @Size(max = 40)
+    private String firstName;
+
+    @NotBlank
+    @Column(name = "last_name")
+    @Size(max = 40)
+    private String lastName;
+
+    @NotBlank
+    @Column(name = "username")
+    @Size(max = 15)
     private String username;
 
-    @NotBlank(message = "Password is required")
-    @Column(name = "password", nullable = false)
+    @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Size(max = 100)
+    @Column(name = "password")
     private String password;
 
+    @NotBlank
+    @NaturalId
+    @Size(max = 40)
+    @Column(name = "email")
     @Email
-    @NotEmpty(message = "Email is required")
-    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name = "fk_user_role_id_user"),
+            inverseForeignKey = @ForeignKey(name = "fk_user_role_id_role")
+    )
+    private List<Role> roles;
 
-    @Column(name = "enabled")
-    private boolean enabled;
+    public List<Role> getRoles() {
+        if (roles == null) {
+            return null;
+        }
+        return new ArrayList<>(roles);
+    }
+
+    public void setRoles(List<Role> roles) {
+        if (roles == null) {
+            this.roles = null;
+        } else {
+            this.roles = Collections.unmodifiableList(roles);
+        }
+    }
+
 }
