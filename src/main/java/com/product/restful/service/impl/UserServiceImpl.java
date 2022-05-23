@@ -14,8 +14,8 @@ import com.product.restful.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -53,9 +53,9 @@ public class UserServiceImpl implements UserService {
         }
 
         // create roles untuk user baru
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         roles.add(
-                roleRepository.findByName(RoleName.STAFF)
+                roleRepository.findByName(RoleName.STAFF.getRoleName())
                         .orElseThrow(() -> new AppException("User role not set")));
 
         // create object User
@@ -81,5 +81,25 @@ public class UserServiceImpl implements UserService {
                 .password(userSaved.getPassword())
                 .roles(userSaved.getRoles())
                 .build();
+    }
+
+    @Override
+    public void addRoleToUser(String username, String roleName) {
+
+        // cari user by username dulu
+        final User user = userRepository.getUserByName(username);
+
+        Set<Role> roles = new HashSet<>();
+
+        // cari role berdasarkan role
+        final Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new AppException("User role not set"));
+        roles.add(role);
+
+        // masukkan role kedalam user
+        user.setRoles(roles);
+
+        // simpan user
+        userRepository.save(user);
     }
 }
