@@ -5,6 +5,20 @@
 - Jadi kita juga buat entity untuk User, Konfigurasi Web Security, dan login logout menggunakan refresh token
 - Tapi ingat, ini sistem lama atau tidak menggunakan OAuth
 
+# Authentication 
+
+- yang bisa akses API kita harus jadi User dulu, jadi harus terdaftar dulu dalam sistem kita
+- tapi untuk GET API kita perbolehkan
+- jadi ini kita anggap tidak ada authorization
+- Prosesnya, pertama ada 2 kondisi, apakah User akan Login atau SignUp (Register)
+- Jika login, maka request pertama kita ijinkan, lalu jika berhasil autentikasi username dan password, maka user akan mendapatkan Token JWT, yang digunakan untuk request selanjutnya
+
+# Authorization
+
+- ini menambahkan hak ases terhadap User yang sudah terdaftar, misal nya User nya memiliki authorization sebagai USER_NORMAL, MEMBER, atau ADMIN
+- misalnya untuk UPDATE dan DELETE product hanya diperbolehkan bagi User yang memiliki Role ADMIN
+- Selain role ADMIN, maka User tidak bisa melakukan UPDATE dan DELETE
+
 ## Create New Product
 
 Request :
