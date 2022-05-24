@@ -1,23 +1,18 @@
 package com.product.restful.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.*;
 
-
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "username" }),
-        @UniqueConstraint(columnNames = { "email" })
+        @UniqueConstraint(columnNames = "username", name = "users_username_unique"),
+        @UniqueConstraint(columnNames = "email", name = "users_email_unique")
 })
 @Data
 @Builder
@@ -30,32 +25,20 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank
-    @Column(name = "first_name")
-    @Size(max = 40)
+    @Column(name = "first_name", length = 40, nullable = false)
     private String firstName;
 
-    @NotBlank
-    @Column(name = "last_name")
-    @Size(max = 40)
+    @Column(name = "last_name", length = 40, nullable = false)
     private String lastName;
 
-    @NotBlank
-    @Column(name = "username")
-    @Size(max = 15)
+    @Column(name = "username", length = 15, nullable = false)
     private String username;
 
-    @NotBlank
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Size(max = 100)
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @NotBlank
-    @NaturalId
-    @Size(max = 40)
-    @Column(name = "email")
     @Email
+    @Column(name = "email", length = 40)
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -68,19 +51,19 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-//    public List<Role> getRoles() {
-//        if (roles == null) {
-//            return null;
-//        }
-//        return new ArrayList<>(roles);
-//    }
-//
-//    public void setRoles(List<Role> roles) {
-//        if (roles == null) {
-//            this.roles = null;
-//        } else {
-//            this.roles = Collections.unmodifiableList(roles);
-//        }
-//    }
+    public Set<Role> getRoles() {
+        if (roles == null) {
+            return null;
+        }
+        return new HashSet<>(roles);
+    }
+
+    public void setRoles(Set<Role> roles) {
+        if (roles == null) {
+            this.roles = null;
+        } else {
+            this.roles = Collections.unmodifiableSet(roles);
+        }
+    }
 
 }
