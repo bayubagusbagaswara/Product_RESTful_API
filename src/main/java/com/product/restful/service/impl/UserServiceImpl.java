@@ -8,6 +8,7 @@ import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
 import com.product.restful.exception.AppException;
 import com.product.restful.exception.BadRequestException;
+import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
@@ -68,29 +69,16 @@ public class UserServiceImpl implements UserService {
                 .roles(roles)
                 .build();
 
-        // save user
-        final User userSaved = userRepository.save(user);
-
         // response
-        return UserResponse.builder()
-                .id(userSaved.getId())
-                .firstName(userSaved.getFirstName())
-                .lastName(userSaved.getLastName())
-                .username(userSaved.getUsername())
-                .email(userSaved.getEmail())
-                .password(userSaved.getPassword())
-                .roles(userSaved.getRoles())
-                .build();
+        return mapUserToUserResponse(userRepository.save(user));
     }
 
     @Override
     public void addRoleToUser(String username, String roleName) {
-
         // cari user by username dulu
         final User user = userRepository.getUserByName(username);
 
         Set<Role> roles = new HashSet<>();
-
         // cari role berdasarkan role
         final Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new AppException("User role not set"));
@@ -101,5 +89,25 @@ public class UserServiceImpl implements UserService {
 
         // simpan user
         userRepository.save(user);
+    }
+
+    @Override
+    public UserResponse getUserById(Long id) {
+        User user = this.userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User"," Id ", id));
+        return mapUserToUserResponse(user);
+    }
+
+    // mapping from User to UserResponse
+    private UserResponse mapUserToUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .build();
     }
 }
