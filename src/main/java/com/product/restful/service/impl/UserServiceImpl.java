@@ -1,8 +1,8 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
-import com.product.restful.dto.CreateUserRequest;
-import com.product.restful.dto.UserResponse;
+import com.product.restful.dto.user.CreateUserRequest;
+import com.product.restful.dto.user.UserResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;

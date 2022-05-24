@@ -1,7 +1,7 @@
 package com.product.restful.service;
 
-import com.product.restful.dto.CreateUserRequest;
-import com.product.restful.dto.UserResponse;
+import com.product.restful.dto.user.CreateUserRequest;
+import com.product.restful.dto.user.UserResponse;
 
 public interface UserService {
 

@@ -1,4 +1,4 @@
-package com.product.restful.dto;
+package com.product.restful.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
