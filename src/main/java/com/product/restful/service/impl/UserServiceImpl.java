@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         // create roles untuk user baru
         Set<Role> roles = new HashSet<>();
         roles.add(
-                roleRepository.findByName(RoleName.STAFF.getRoleName())
+                roleRepository.findByName(RoleName.MEMBER.getRoleName())
                         .orElseThrow(() -> new AppException("User role not set")));
 
         // create object User
