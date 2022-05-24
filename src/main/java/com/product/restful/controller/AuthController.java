@@ -1,5 +1,14 @@
 package com.product.restful.controller;
 
+import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.auth.LoginRequest;
+import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.jwt.JwtAuthenticationResponse;
+import com.product.restful.entity.Role;
+import com.product.restful.entity.RoleName;
+import com.product.restful.entity.User;
+import com.product.restful.exception.AppException;
+import com.product.restful.exception.BlogApiException;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.security.JwtTokenProvider;
@@ -18,8 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * AuthController akan menghandler endpoint signUp, signIn, dan refreshToken
@@ -48,8 +56,6 @@ public class AuthController {
     public ResponseEntity<JwtAuthenticationResponse> authenticateUser(
             @Valid @RequestBody LoginRequest loginRequest) {
 
-        // untuk autentikasi kita cukup menggunakan authenticationManager
-        // autentikasi berdasarkan username dan password, apakah cocok dengan data di database
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsernameOrEmail(),
@@ -58,13 +64,14 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // generate token jwt
         final String jwt = jwtTokenProvider.generateToken(authentication);
+
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername()))) {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "Username is already taken");
         }
@@ -73,25 +80,23 @@ public class AuthController {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "Email is already taken");
         }
 
-        String firstName = signUpRequest.getFirstName().toLowerCase();
-        String lastName = signUpRequest.getLastName().toLowerCase();
-        String username = signUpRequest.getUsername().toLowerCase();
-        String email = signUpRequest.getEmail().toLowerCase();
-        String password = passwordEncoder.encode(signUpRequest.getPassword());
+        User user = User.builder()
+                .firstName(signUpRequest.getFirstName().toLowerCase())
+                .lastName(signUpRequest.getLastName().toLowerCase())
+                .username(signUpRequest.getUsername().toLowerCase())
+                .email(signUpRequest.getEmail().toLowerCase())
+                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .build();
 
-        // create object user
-        User user = new User(firstName, lastName, username, email, password);
-
-        // create object role
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
 
         if (userRepository.count() == 0) {
-            roles.add(roleRepository.findByName(RoleName.ROLE_USER)
+            roles.add(roleRepository.findByName(RoleName.MEMBER.getRoleName())
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
-            roles.add(roleRepository.findByName(RoleName.ROLE_ADMIN)
+            roles.add(roleRepository.findByName(RoleName.ADMIN.getRoleName())
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         } else {
-            roles.add(roleRepository.findByName(RoleName.ROLE_USER)
+            roles.add(roleRepository.findByName(RoleName.MEMBER.getRoleName())
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         }
 
