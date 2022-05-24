@@ -33,6 +33,11 @@
 - ROLE_MANAGER
 - ROLE_STAFF
 
+# JWT Authentication
+
+- Bagaimana cara membuat token JWT atau generate token?
+- Lalu cara membuat refresh token?
+
 ## Create New Product
 
 Request :
