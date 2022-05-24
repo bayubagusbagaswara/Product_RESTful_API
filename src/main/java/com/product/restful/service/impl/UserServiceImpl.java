@@ -2,16 +2,20 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.user.CreateUserRequest;
+import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
+import com.product.restful.entity.UserPrincipal;
 import com.product.restful.exception.AppException;
 import com.product.restful.exception.BadRequestException;
 import com.product.restful.exception.ResourceNotFoundException;
+import com.product.restful.exception.UnauthorizedException;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -75,27 +79,55 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addRoleToUser(String username, String roleName) {
-        // cari user by username dulu
         final User user = userRepository.getUserByName(username);
 
         Set<Role> roles = new HashSet<>();
-        // cari role berdasarkan role
+
         final Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new AppException("User role not set"));
+
         roles.add(role);
 
-        // masukkan role kedalam user
         user.setRoles(roles);
 
-        // simpan user
         userRepository.save(user);
     }
 
     @Override
     public UserResponse getUserById(Long id) {
         User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User"," Id ", id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
         return mapUserToUserResponse(user);
+    }
+
+    @Override
+    public void deleteUser(String username, UserPrincipal currentUser) {
+
+    }
+
+    @Override
+    public UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser) {
+
+        final User user = userRepository.getUserByName(username);
+
+        if (user.getId().equals(currentUser.getId()) ||
+                currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.MANAGER.toString()))) {
+
+            user.setFirstName(updateUserRequest.getFirstName());
+            user.setLastName(updateUserRequest.getLastName());
+            user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
+            user.setUsername(updateUserRequest.getUsername());
+            user.setEmail(updateUserRequest.getEmail());
+
+            return mapUserToUserResponse(userRepository.save(user));
+        }
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .success(Boolean.FALSE)
+                .message("You don't have permission to update profile of: " + username)
+                .build();
+        // lalu lempar error
+        throw new UnauthorizedException(apiResponse);
     }
 
     // mapping from User to UserResponse
