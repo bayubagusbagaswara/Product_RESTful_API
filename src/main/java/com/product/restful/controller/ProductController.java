@@ -41,6 +41,7 @@ public class ProductController {
                 .build();
     }
 
+    // UPDATE Product hanya bisa diakses oleh ROLE MANAGER
     @PutMapping(value = "/{idProduct}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public WebResponse<GetProductResponse> updateProduct(@PathVariable("idProduct") String id, @RequestBody UpdateProductRequest updateProductRequest) throws ProductNotFoundException {
         GetProductResponse getProductResponse = productService.updateProduct(id, updateProductRequest);
