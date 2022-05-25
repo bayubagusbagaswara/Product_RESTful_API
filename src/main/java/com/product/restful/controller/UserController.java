@@ -1,10 +1,8 @@
 package com.product.restful.controller;
 
-import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserResponse;
-import com.product.restful.entity.User;
 import com.product.restful.entity.UserPrincipal;
 import com.product.restful.security.CurrentUser;
 import com.product.restful.service.UserService;
@@ -32,6 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserResponse> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
             @PathVariable(value = "username") String username,
@@ -42,23 +41,12 @@ public class UserController {
     }
 
     @PutMapping("/{username}/addRole")
-    public ResponseEntity<String> addRole(@PathVariable(value = "username") String username, String roleName) {
+    public ResponseEntity<String> addRoleToUser(@PathVariable(value = "username") String username, String roleName) {
         userService.addRoleToUser(username, roleName);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
 
-//    @PutMapping("/{username}")
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-//    public ResponseEntity<User> updateUser(
-//            @Valid @RequestBody User newUser,
-//            @PathVariable(value = "username") String username,
-//            @CurrentUser UserPrincipal currentUser) {
-//
-//        User updatedUSer = userService.updateUser(newUser, username, currentUser);
-//        return new ResponseEntity<>(updatedUSer, HttpStatus.CREATED);
-//    }
-//
 //    @DeleteMapping("/{username}")
 //    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 //    public ResponseEntity<ApiResponse> deleteUser(
