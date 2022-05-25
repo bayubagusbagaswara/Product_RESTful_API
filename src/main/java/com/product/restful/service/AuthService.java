@@ -14,6 +14,7 @@ public interface AuthService {
     User signUp(SignUpRequest signUpRequest);
 
     // verifyAccount
+    // ini membutuhkan verificationToken
 
     // login
     // kita hanya akan mengembalikan response token jika berhasil autentikasi user
