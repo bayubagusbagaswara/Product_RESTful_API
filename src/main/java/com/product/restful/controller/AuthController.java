@@ -9,6 +9,7 @@ import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,17 +65,9 @@ public class AuthController {
     public ResponseEntity<JwtAuthenticationResponse> authenticateUser(
             @Valid @RequestBody LoginRequest loginRequest) {
 
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
-                        loginRequest.getPassword())
-        );
+        final JwtAuthenticationResponse jwtAuthenticationResponse = authService.signIn(loginRequest);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        final String jwt = jwtTokenProvider.generateToken(authentication);
-
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return new ResponseEntity<>(jwtAuthenticationResponse, HttpStatus.OK);
     }
 
 
