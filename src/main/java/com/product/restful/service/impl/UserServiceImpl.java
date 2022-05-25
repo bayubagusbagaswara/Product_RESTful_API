@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.getUserByName(username);
 
         if (user.getId().equals(currentUser.getId()) ||
-                currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.MANAGER.toString()))) {
+                currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
 
             user.setFirstName(updateUserRequest.getFirstName());
             user.setLastName(updateUserRequest.getLastName());
