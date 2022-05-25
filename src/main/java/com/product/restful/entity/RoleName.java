@@ -2,12 +2,10 @@ package com.product.restful.entity;
 
 public enum RoleName {
 
-    C_LEVEL("C_LEVEL"),
-    VICE_PRESIDENT("VICE_PRESIDENT"),
     MANAGER("MANAGER"),
-    STAFF("STAFF"),
+    SUPER_ADMIN("SUPER_ADMIN"),
     ADMIN("ADMIN"),
-    MEMBER("MEMBER");
+    MEMBER("USER");
 
     private final String roleName;
 
