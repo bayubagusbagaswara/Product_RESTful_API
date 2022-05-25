@@ -1,6 +1,8 @@
 package com.product.restful.service.impl;
 
+import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.jwt.JwtAuthenticationResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
@@ -8,8 +10,13 @@ import com.product.restful.exception.AppException;
 import com.product.restful.exception.BlogApiException;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
+import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +31,15 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -71,5 +82,21 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(roles);
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public JwtAuthenticationResponse signIn(LoginRequest loginRequest) {
+
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getPassword())
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final String jwt = jwtTokenProvider.generateToken(authentication);
+
+        return new JwtAuthenticationResponse(jwt);
     }
 }
