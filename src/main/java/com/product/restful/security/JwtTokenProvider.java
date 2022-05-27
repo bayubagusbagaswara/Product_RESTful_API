@@ -24,8 +24,8 @@ public class JwtTokenProvider {
     @Value(value = "${app.jwtSecret}")
     private String jwtSecret;
 
-    @Value(value = "${app.jwtExpirationInMs}")
-    private int jwtExpirationInMs;
+    @Value(value = "${app.jwtExpirationInMillis}")
+    private Long jwtExpirationInMillis;
 
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -36,7 +36,7 @@ public class JwtTokenProvider {
     public String generateTokenFromUsername(String username) {
 
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        Date expiryDate = new Date(now.getTime() + jwtExpirationInMillis);
 
         return Jwts.builder()
                 .setSubject(username)
@@ -75,4 +75,9 @@ public class JwtTokenProvider {
         }
         return false;
     }
+
+    public Long getJwtExpirationInMillis() {
+        return jwtExpirationInMillis;
+    }
+
 }
