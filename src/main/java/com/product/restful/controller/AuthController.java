@@ -1,6 +1,7 @@
 package com.product.restful.controller;
 
 import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
@@ -31,7 +32,6 @@ public class AuthController {
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
         final User user = authService.signUp(signUpRequest);
-
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
                 .buildAndExpand(user.getId()).toUri();
 
@@ -40,14 +40,25 @@ public class AuthController {
                 .body(new ApiResponse(Boolean.TRUE, "User registered successfully"));
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticateUser(
             @Valid @RequestBody LoginRequest loginRequest) {
-
         AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
-
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
+    @PostMapping("/refresh/token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        authService.logout(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Refresh Token Deleted Successfully");
+    }
 
 }
