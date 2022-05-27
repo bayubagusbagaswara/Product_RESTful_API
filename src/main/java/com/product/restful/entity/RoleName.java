@@ -5,7 +5,7 @@ public enum RoleName {
     MANAGER("MANAGER"),
     SUPER_ADMIN("SUPER_ADMIN"),
     ADMIN("ADMIN"),
-    MEMBER("USER");
+    MEMBER("MEMBER");
 
     private final String roleName;
 
