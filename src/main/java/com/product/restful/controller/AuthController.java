@@ -50,14 +50,14 @@ public class AuthController {
     }
 
     @PostMapping("/refresh/token")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest.getRefreshToken());
         return ResponseEntity
