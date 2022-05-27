@@ -13,10 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * UserPrincipal ini harus implement UserDetails, karena untuk mengakses atau mengambil data User, seperti name, password, email, dan authority
- * jadi setiap kita ingin mengambil data UserDetails saat ini, maka kita bisa gunakan UserPrincipal
- */
 @Data
 @Builder
 @NoArgsConstructor
@@ -58,9 +54,7 @@ public class UserPrincipal implements UserDetails {
         }
     }
 
-    // method create UserPrincipal berdasarkan data User
-    public static UserPrincipal create(User user) {
-        // ambil data roles dari user
+    public static UserPrincipal createUserPrincipal(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> {
                     return new SimpleGrantedAuthority(role.getName().getRoleName());
@@ -84,13 +78,6 @@ public class UserPrincipal implements UserDetails {
         if (authorities == null) return null;
         return new ArrayList<>(authorities);
     }
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles.stream()
-//                .map((role) -> new SimpleGrantedAuthority(role.getName()))
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public String getPassword() {
