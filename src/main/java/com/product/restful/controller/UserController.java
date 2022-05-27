@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<UserResponse> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
             @PathVariable(value = "username") String username,
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(
             @PathVariable(value = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
