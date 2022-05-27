@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetProductResponse {
+public class ProductResponse {
 
     private String id;
 
@@ -26,9 +26,9 @@ public class GetProductResponse {
 
     private String createdBy;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     private String updatedBy;
 
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 }
