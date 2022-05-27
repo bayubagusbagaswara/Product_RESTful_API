@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.io.Serial;
 
 @Entity
 @Table(name = "roles", uniqueConstraints = { @UniqueConstraint(columnNames = "name", name = "roles_name_unique")})
@@ -27,6 +28,9 @@ import javax.persistence.UniqueConstraint;
 @SQLDelete(sql = "UPDATE products SET status_record = 'INACTIVE' WHERE id = ?")
 @Where(clause = "status_record = 'ACTIVE'")
 public class Role extends UserDateAudit {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
