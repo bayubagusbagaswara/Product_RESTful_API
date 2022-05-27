@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllProductRequest {
+public class ListProductRequest {
 
     @NotNull(message = "Page Index can not null")
     @Min(value = 0, message = "Page Index must not be less than zero")
@@ -27,6 +27,4 @@ public class GetAllProductRequest {
 
     @NotBlank(message = "Sort direction must be asc or desc")
     private String sortDir;
-
-    private String keyword;
 }
