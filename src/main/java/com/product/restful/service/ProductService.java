@@ -8,25 +8,25 @@ import java.util.List;
 
 public interface ProductService {
 
-    GetProductResponse createProduct(CreateProductRequest createProductRequest);
-    GetProductResponse getProductById(String productId) throws ProductNotFoundException;
-    List<GetProductResponse> getAllProduct();
-    GetProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) throws ProductNotFoundException;
+    ProductResponse createProduct(CreateProductRequest createProductRequest);
+    ProductResponse getProductById(String productId) throws ProductNotFoundException;
+    List<ProductResponse> getAllProduct();
+    ProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) throws ProductNotFoundException;
     void deleteProduct(String productId) throws ProductNotFoundException;
 
-    GetAllProductResponse listAllProduct(GetAllProductRequest getAllProductRequest);
+    ListProductResponse listAllProduct(ListProductRequest listProductRequest);
 
-    GetProductResponse getProductByName(String name) throws ProductNotFoundException;
-    List<GetProductResponse> getProductByNameContaining(String name);
-    List<GetProductResponse> getProductByNameStartingWith(String name);
-    List<GetProductResponse> getProductByNameContainingOrderByName(String name);
-    List<GetProductResponse> getProductByNameContainingOrderByNameDesc(String name);
+    ProductResponse getProductByName(String name) throws ProductNotFoundException;
+    List<ProductResponse> getProductByNameContaining(String name);
+    List<ProductResponse> getProductByNameStartingWith(String name);
+    List<ProductResponse> getProductByNameContainingOrderByName(String name);
+    List<ProductResponse> getProductByNameContainingOrderByNameDesc(String name);
 
-    List<GetProductResponse> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax);
-    List<GetProductResponse> getProductByNameContainingOrderByPrice(String name);
-    List<GetProductResponse> getProductByNameContainingOrderByPriceDesc(String name);
+    List<ProductResponse> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax);
+    List<ProductResponse> getProductByNameContainingOrderByPrice(String name);
+    List<ProductResponse> getProductByNameContainingOrderByPriceDesc(String name);
 
-    List<GetProductResponse> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax);
-    List<GetProductResponse> getProductByPriceGreaterThanEqual(BigDecimal price);
-    List<GetProductResponse> getProductByPriceLessThanEqual(BigDecimal price);
+    List<ProductResponse> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax);
+    List<ProductResponse> getProductByPriceGreaterThanEqual(BigDecimal price);
+    List<ProductResponse> getProductByPriceLessThanEqual(BigDecimal price);
 }
