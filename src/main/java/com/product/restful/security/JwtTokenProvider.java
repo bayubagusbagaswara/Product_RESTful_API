@@ -1,7 +1,13 @@
 package com.product.restful.security;
 
 import com.product.restful.entity.UserPrincipal;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-/**
- * JwtTokenProvider berguna sebagai pembuat token
- */
 @Component
 public class JwtTokenProvider {
 
@@ -25,26 +28,24 @@ public class JwtTokenProvider {
     private int jwtExpirationInMs;
 
     public String generateToken(Authentication authentication) {
-
-        // balikan data ini adalah UserPrincipal (implement dari UserDetails)
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        // set tanggal sekarang
-        Date now = new Date();
+        return generateTokenFromUsername(userPrincipal.getUsername());
+    }
 
-        // set tanggal untuk masa expired token nya, rumus nya adalah tanggal sekarang + jangka waktu yang ditentukan
+    public String generateTokenFromUsername(String username) {
+
+        Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
-        // balikan token
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    // method untuk mengambil id user dari token jwt
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -54,10 +55,9 @@ public class JwtTokenProvider {
         return Long.valueOf(claims.getSubject());
     }
 
-    // method untuk validasi token, apakah benar token tersebut adalah token yang digenerate oleh aplikasi kita
+
     public boolean validateToken(String authToken) {
         try {
-            // cocokkan authToken dengan jwtSecret
             Jwts.parser()
                     .setSigningKey(jwtSecret)
                     .parseClaimsJws(authToken);
