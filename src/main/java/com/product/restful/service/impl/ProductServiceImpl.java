@@ -91,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductResponse> productRespons = mapProductListToGetProductResponseList(productList);
 
         ListProductResponse listAllProductResponse = new ListProductResponse();
-        listAllProductResponse.setProductRespons(productRespons);
+        listAllProductResponse.setProductResponses(productRespons);
         listAllProductResponse.setPageNo(products.getNumber());
         listAllProductResponse.setPageSize(products.getSize());
         listAllProductResponse.setTotalElements(products.getTotalElements());
