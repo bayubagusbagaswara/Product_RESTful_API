@@ -24,7 +24,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with id: %s", id)));
 
-        return UserPrincipal.create(user);
+        return UserPrincipal.createUserPrincipal(user);
     }
 
     @Override
@@ -32,6 +32,6 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with this username or email: %s", usernameOrEmail)));
 
-        return UserPrincipal.create(user);
+        return UserPrincipal.createUserPrincipal(user);
     }
 }
