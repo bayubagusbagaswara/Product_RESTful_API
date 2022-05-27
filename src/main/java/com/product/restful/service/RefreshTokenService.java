@@ -4,7 +4,7 @@ import com.product.restful.entity.RefreshToken;
 
 public interface RefreshTokenService {
 
-    RefreshToken findByToken(String token);
+    RefreshToken findByRefreshToken(String token);
 
     RefreshToken generateRefreshToken();
 
