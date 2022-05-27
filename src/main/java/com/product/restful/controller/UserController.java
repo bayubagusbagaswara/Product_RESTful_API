@@ -43,7 +43,9 @@ public class UserController {
 
     @PutMapping("/{username}/addRole")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> addRoleToUser(@PathVariable(value = "username") String username, String roleName) {
+    public ResponseEntity<String> addRoleToUser(
+            @PathVariable(value = "username") String username,
+            @RequestBody String roleName) {
         userService.addRoleToUser(username, roleName);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
