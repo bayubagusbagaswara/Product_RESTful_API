@@ -1,5 +1,6 @@
 package com.product.restful.service.impl;
 
+import com.product.restful.dto.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
@@ -106,6 +107,21 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshTokenService.generateRefreshToken().getRefreshToken())
                 .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsernameOrEmail())
+                .build();
+    }
+
+    @Override
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+
+        String token = jwtTokenProvider.generateTokenFromUsername(refreshTokenRequest.getUsername());
+
+        return AuthenticationResponse.builder()
+                .accessToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
+                .username(refreshTokenRequest.getUsername())
                 .build();
     }
 }
