@@ -9,13 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
+import java.io.Serial;
 import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
@@ -30,6 +25,13 @@ import java.time.Instant;
 @SQLDelete(sql = "UPDATE refresh_tokens SET status_record = 'INACTIVE' WHERE id = ?")
 @Where(clause = "status_record = 'ACTIVE'")
 public class RefreshToken extends UserDateAudit {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_refresh_token_user_id"), referencedColumnName = "id")
