@@ -37,7 +37,7 @@ public class Role extends UserDateAudit {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "name")
+    @Column(name = "name", length = 20, nullable = false)
     private RoleName name;
 
     public Role(RoleName name) {
