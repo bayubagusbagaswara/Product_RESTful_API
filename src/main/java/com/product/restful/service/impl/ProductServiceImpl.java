@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -32,39 +32,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GetProductResponse createProduct(CreateProductRequest createProductRequest) {
+    public ProductResponse createProduct(CreateProductRequest createProductRequest) {
         validationUtil.validate(createProductRequest);
         Product product = new Product();
         product.setName(createProductRequest.getName());
         product.setPrice(createProductRequest.getPrice());
         product.setQuantity(createProductRequest.getQuantity());
         product.setDescription(createProductRequest.getDescription());
-        product.setCreatedAt(LocalDateTime.now());
+        product.setCreatedAt(Instant.now());
         productRepository.save(product);
         return mapProductToGetProductResponse(product);
     }
 
     @Override
-    public GetProductResponse getProductById(String productId) throws ProductNotFoundException {
+    public ProductResponse getProductById(String productId) throws ProductNotFoundException {
         Product product = getProduct(productId);
         return mapProductToGetProductResponse(product);
     }
 
     @Override
-    public List<GetProductResponse> getAllProduct() {
+    public List<ProductResponse> getAllProduct() {
         Iterable<Product> products = productRepository.findAll();
         List<Product> productList = StreamSupport.stream(products.spliterator(), false).collect(Collectors.toList());
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public GetProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) throws ProductNotFoundException {
+    public ProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) throws ProductNotFoundException {
         validationUtil.validate(updateProductRequest);
         Product product = getProduct(productId);
         product.setName(updateProductRequest.getName());
         product.setPrice(updateProductRequest.getPrice());
         product.setQuantity(updateProductRequest.getQuantity());
-        product.setUpdatedAt(LocalDateTime.now());
+        product.setUpdatedAt(Instant.now());
         productRepository.save(product);
         return mapProductToGetProductResponse(product);
     }
@@ -76,37 +76,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GetAllProductResponse listAllProduct(GetAllProductRequest getAllProductRequest) {
-        Integer pageNo = getAllProductRequest.getPageNo();
-        Integer pageSize = getAllProductRequest.getPageSize();
-        String sortBy = getAllProductRequest.getSortBy();
-        String sortDir = getAllProductRequest.getSortDir(); // asc or desc
+    public ListProductResponse listAllProduct(ListProductRequest listProductRequest) {
+        Integer pageNo = listProductRequest.getPageNo();
+        Integer pageSize = listProductRequest.getPageSize();
+        String sortBy = listProductRequest.getSortBy();
+        String sortDir = listProductRequest.getSortDir();
 
-        // Sorting, cek apakah sortDir = ASC, jika ya maka urutkan secara ascending, jika tidak maka urutkan secara descending
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
-        // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<Product> products;
-
-        if (getAllProductRequest.getKeyword() != null) {
-            products = productRepository.findAll(getAllProductRequest.getKeyword(), pageable);
-        }
-
-        // masukkan pageable sebagai parameter method findAll
-        products = productRepository.findAll(pageable);
-
-        // ambil data hasil findAll
+        Page<Product> products = productRepository.findAll(pageable);
         List<Product> productList = products.getContent();
 
-        // mapping menjadi GetProductResponse
-        List<GetProductResponse> getProductResponses = mapProductListToGetProductResponseList(productList);
+        List<ProductResponse> productRespons = mapProductListToGetProductResponseList(productList);
 
-        // buat object ListAllProductResponse, dan masukkan list data product
-        // dan disini kita bisa ambil data Size, Total Data, Total Pages, dan Page saat ini
-        GetAllProductResponse listAllProductResponse = new GetAllProductResponse();
-        listAllProductResponse.setGetProductResponses(getProductResponses);
+        ListProductResponse listAllProductResponse = new ListProductResponse();
+        listAllProductResponse.setProductRespons(productRespons);
         listAllProductResponse.setPageNo(products.getNumber());
         listAllProductResponse.setPageSize(products.getSize());
         listAllProductResponse.setTotalElements(products.getTotalElements());
@@ -116,102 +101,102 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GetProductResponse getProductByName(String name) throws ProductNotFoundException {
+    public ProductResponse getProductByName(String name) throws ProductNotFoundException {
         Product product = productRepository.findByNameIgnoreCase(name).orElseThrow(() -> new ProductNotFoundException("Product Name = [" +name+ "] Not Found"));
         return mapProductToGetProductResponse(product);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameContaining(String name) {
+    public List<ProductResponse> getProductByNameContaining(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCase(name);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameStartingWith(String name) {
+    public List<ProductResponse> getProductByNameStartingWith(String name) {
         List<Product> productList = productRepository.findByNameStartingWithIgnoreCase(name);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameContainingOrderByName(String name) {
+    public List<ProductResponse> getProductByNameContainingOrderByName(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByName(name);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameContainingOrderByNameDesc(String name) {
+    public List<ProductResponse> getProductByNameContainingOrderByNameDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByNameDesc(name);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
+    public List<ProductResponse> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseAndPriceBetween(name, priceMin, priceMax);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameContainingOrderByPrice(String name) {
+    public List<ProductResponse> getProductByNameContainingOrderByPrice(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPriceDesc(name);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByNameContainingOrderByPriceDesc(String name) {
+    public List<ProductResponse> getProductByNameContainingOrderByPriceDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPrice(name);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
+    public List<ProductResponse> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByPriceBetween(priceMin, priceMax);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByPriceGreaterThanEqual(BigDecimal price) {
+    public List<ProductResponse> getProductByPriceGreaterThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceGreaterThanEqual(price);
         return mapProductListToGetProductResponseList(productList);
     }
 
     @Override
-    public List<GetProductResponse> getProductByPriceLessThanEqual(BigDecimal price) {
+    public List<ProductResponse> getProductByPriceLessThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceLessThanEqual(price);
         return mapProductListToGetProductResponseList(productList);
     }
 
-    private List<GetProductResponse> mapProductListToGetProductResponseList(List<Product> productList) {
+    private List<ProductResponse> mapProductListToGetProductResponseList(List<Product> productList) {
         return productList.stream()
                 .map((product) -> {
-                    GetProductResponse getProductResponse = new GetProductResponse();
-                    getProductResponse.setId(product.getId());
-                    getProductResponse.setName(product.getName());
-                    getProductResponse.setPrice(product.getPrice());
-                    getProductResponse.setQuantity(product.getQuantity());
-                    getProductResponse.setDescription(product.getDescription());
-                    getProductResponse.setCreatedBy(product.getCreatedBy());
-                    getProductResponse.setCreatedAt(product.getCreatedAt());
-                    getProductResponse.setUpdatedBy(product.getUpdatedBy());
-                    getProductResponse.setUpdatedAt(product.getUpdatedAt());
-                    return getProductResponse;
+                    ProductResponse productResponse = new ProductResponse();
+                    productResponse.setId(product.getId());
+                    productResponse.setName(product.getName());
+                    productResponse.setPrice(product.getPrice());
+                    productResponse.setQuantity(product.getQuantity());
+                    productResponse.setDescription(product.getDescription());
+                    productResponse.setCreatedBy(product.getCreatedBy());
+                    productResponse.setCreatedAt(product.getCreatedAt());
+                    productResponse.setUpdatedBy(product.getUpdatedBy());
+                    productResponse.setUpdatedAt(product.getUpdatedAt());
+                    return productResponse;
                 })
                 .collect(Collectors.toList())
                 ;
     }
 
-    private GetProductResponse mapProductToGetProductResponse(Product product) {
-        GetProductResponse getProductResponse = new GetProductResponse();
-        getProductResponse.setId(product.getId());
-        getProductResponse.setName(product.getName());
-        getProductResponse.setPrice(product.getPrice());
-        getProductResponse.setQuantity(product.getQuantity());
-        getProductResponse.setDescription(product.getDescription());
-        getProductResponse.setCreatedBy(product.getCreatedBy());
-        getProductResponse.setCreatedAt(product.getCreatedAt());
-        getProductResponse.setUpdatedBy(product.getUpdatedBy());
-        getProductResponse.setUpdatedAt(product.getUpdatedAt());
-        return getProductResponse;
+    private ProductResponse mapProductToGetProductResponse(Product product) {
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setId(product.getId());
+        productResponse.setName(product.getName());
+        productResponse.setPrice(product.getPrice());
+        productResponse.setQuantity(product.getQuantity());
+        productResponse.setDescription(product.getDescription());
+        productResponse.setCreatedBy(product.getCreatedBy());
+        productResponse.setCreatedAt(product.getCreatedAt());
+        productResponse.setUpdatedBy(product.getUpdatedBy());
+        productResponse.setUpdatedAt(product.getUpdatedAt());
+        return productResponse;
     }
 
     private Product getProduct(String id) throws ProductNotFoundException {
