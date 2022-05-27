@@ -11,6 +11,7 @@ import com.product.restful.service.ProductService;
 import com.product.restful.util.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class ProductController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('MEMBER')")
     public WebResponse<ProductResponse> createProduct(@RequestBody CreateProductRequest createProductRequest) {
         ProductResponse productResponse = productService.createProduct(createProductRequest);
         return WebResponse.<ProductResponse>builder()
@@ -54,8 +56,8 @@ public class ProductController {
                 .build();
     }
 
-    // UPDATE Product hanya bisa diakses oleh ROLE ADMIN or SUPER_ADMIN
     @PutMapping(value = "/{idProduct}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<ProductResponse> updateProduct(@PathVariable("idProduct") String id, @RequestBody UpdateProductRequest updateProductRequest) throws ProductNotFoundException {
         ProductResponse productResponse = productService.updateProduct(id, updateProductRequest);
         return WebResponse.<ProductResponse>builder()
@@ -65,8 +67,8 @@ public class ProductController {
                 .build();
     }
 
-    // DELETE Product hanya bisa diakses oleh ROLE ADMIN
     @DeleteMapping(value = "/{idProduct}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public WebResponse<String> deleteProduct(@PathVariable("idProduct") String id) throws ProductNotFoundException {
         productService.deleteProduct(id);
         return WebResponse.<String>builder()
