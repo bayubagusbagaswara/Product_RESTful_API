@@ -11,9 +11,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllProductResponse {
+public class ListProductResponse {
 
-    private List<GetProductResponse> getProductResponses;
+    private List<ProductResponse> productResponses;
 
     private Integer pageNo;
 
