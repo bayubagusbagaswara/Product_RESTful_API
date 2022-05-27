@@ -67,21 +67,15 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         Set<Role> roles = new HashSet<>();
-
-        // ini coba di test, apakah saat pertama kali signup User mendapatkan role apa?
-        // harusnya cuma role MEMBER
-        // Atau mungkin user yang pertama kali signup akan mendapatkan role ADMIN dan MEMBER
-        // user yang daftar selanjutnya hanya akan mendapatkan role MEMBER
         if (userRepository.count() == 0) {
-
-            roles.add(roleRepository.findByName(RoleName.MEMBER.getRoleName())
+            roles.add(roleRepository.findByName(RoleName.MEMBER)
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
-            roles.add(roleRepository.findByName(RoleName.ADMIN.getRoleName())
+            roles.add(roleRepository.findByName(RoleName.ADMIN)
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         }
 
-        roles.add(roleRepository.findByName(RoleName.MEMBER.getRoleName())
+        roles.add(roleRepository.findByName(RoleName.MEMBER)
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         user.setRoles(roles);

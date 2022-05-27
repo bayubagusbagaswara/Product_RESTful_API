@@ -4,6 +4,7 @@ import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserResponse;
+import com.product.restful.entity.RoleName;
 import com.product.restful.entity.UserPrincipal;
 import com.product.restful.security.CurrentUser;
 import com.product.restful.service.UserService;
@@ -45,7 +46,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addRoleToUser(
             @PathVariable(value = "username") String username,
-            @RequestBody String roleName) {
+            @RequestBody RoleName roleName) {
         userService.addRoleToUser(username, roleName);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

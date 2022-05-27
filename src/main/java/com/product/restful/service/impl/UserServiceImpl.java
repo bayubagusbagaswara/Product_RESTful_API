@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         // create roles untuk user baru
         Set<Role> roles = new HashSet<>();
         roles.add(
-                roleRepository.findByName(RoleName.MEMBER.getRoleName())
+                roleRepository.findByName(RoleName.MEMBER)
                         .orElseThrow(() -> new AppException("User role not set")));
 
         // create object User
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
+    public void addRoleToUser(String username, RoleName roleName) {
         final User user = userRepository.getUserByName(username);
 
         Set<Role> roles = new HashSet<>();
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.getUserByName(username);
 
         Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(RoleName.MEMBER.getRoleName())
+        roles.add(roleRepository.findByName(RoleName.MEMBER)
                 .orElseThrow(() -> new AppException("User role not set")));
 
         user.setRoles(roles);

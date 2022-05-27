@@ -25,7 +25,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE products SET status_record = 'INACTIVE' WHERE id = ?")
+@SQLDelete(sql = "UPDATE roles SET status_record = 'INACTIVE' WHERE id = ?")
 @Where(clause = "status_record = 'ACTIVE'")
 public class Role extends UserDateAudit {
 
