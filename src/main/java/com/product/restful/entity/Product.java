@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serial;
 import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
@@ -27,6 +28,9 @@ import java.math.BigDecimal;
 @SQLDelete(sql = "UPDATE products SET status_record = 'INACTIVE' WHERE id = ?")
 @Where(clause = "status_record = 'ACTIVE'")
 public class Product extends UserDateAudit {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(generator = "system-uuid")
