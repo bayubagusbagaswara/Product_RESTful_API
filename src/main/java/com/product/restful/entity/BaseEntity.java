@@ -16,11 +16,14 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
+//  @Id
+//  @GeneratedValue(generator = "system-uuid")
+//  @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+//  @Column(name = "id", nullable = false, length = 64)
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "id", nullable = false, length = 64)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false)
