@@ -1,15 +1,12 @@
 package com.product.restful.entity.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.product.restful.entity.StatusRecord;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import java.io.Serial;
 
@@ -32,7 +29,4 @@ public abstract class UserDateAudit extends DateAudit {
     @LastModifiedBy
     private String updatedBy;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_record", nullable = false)
-    private StatusRecord statusRecord = StatusRecord.ACTIVE;
 }
