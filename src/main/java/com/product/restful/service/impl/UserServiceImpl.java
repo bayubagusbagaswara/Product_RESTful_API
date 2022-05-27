@@ -8,10 +8,7 @@ import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
 import com.product.restful.entity.UserPrincipal;
-import com.product.restful.exception.AppException;
-import com.product.restful.exception.BadRequestException;
-import com.product.restful.exception.ResourceNotFoundException;
-import com.product.restful.exception.UnauthorizedException;
+import com.product.restful.exception.*;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
@@ -101,11 +98,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String username, UserPrincipal currentUser) {
-
-    }
-
-    @Override
     public UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser) {
 
         final User user = userRepository.getUserByName(username);
@@ -130,7 +122,45 @@ public class UserServiceImpl implements UserService {
         throw new UnauthorizedException(apiResponse);
     }
 
-    // mapping from User to UserResponse
+    @Override
+    public ApiResponse deleteUser(String username, UserPrincipal currentUser) {
+
+        final User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", username));
+
+        if (!user.getId().equals(currentUser.getId()) || !currentUser.getAuthorities()
+                .contains(new SimpleGrantedAuthority(RoleName.ADMIN.getRoleName()))) {
+
+            ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username);
+            throw new AccessDeniedException(apiResponse);
+        }
+
+        userRepository.deleteById(user.getId());
+
+        return ApiResponse.builder()
+                .success(Boolean.TRUE)
+                .message("You successfully deleted profile of: " + username)
+                .build();
+    }
+
+    @Override
+    public ApiResponse removeAdmin(String username) {
+        final User user = userRepository.getUserByName(username);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName(RoleName.MEMBER.getRoleName())
+                .orElseThrow(() -> new AppException("User role not set")));
+
+        user.setRoles(roles);
+
+        userRepository.save(user);
+
+        return ApiResponse.builder()
+                .success(Boolean.TRUE)
+                .message("You took ADMIN role from user: " + username)
+                .build();
+    }
+
     private UserResponse mapUserToUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
