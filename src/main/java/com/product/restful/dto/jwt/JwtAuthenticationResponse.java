@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,8 +19,4 @@ public class JwtAuthenticationResponse {
         this.accessToken = accessToken;
     }
 
-//    private String authenticationToken atau accessToken;
-//    private String refreshToken;
-//    private Instant expiresAt;
-//    private String username;
 }
