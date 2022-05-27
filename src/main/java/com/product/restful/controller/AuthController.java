@@ -10,6 +10,7 @@ import com.product.restful.entity.User;
 import com.product.restful.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,12 +50,14 @@ public class AuthController {
     }
 
     @PostMapping("/refresh/token")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest.getRefreshToken());
         return ResponseEntity
