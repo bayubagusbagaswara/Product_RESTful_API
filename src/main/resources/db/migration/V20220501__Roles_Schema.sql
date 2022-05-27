@@ -1,7 +1,12 @@
 -- TABLE ROLES
 create table roles (
     id bigint not null primary key,
-    name character varying(255)
+    created_at timestamp without time zone not null,
+    status_record character varying(255) not null,
+    updated_at timestamp without time zone not null,
+    created_by character varying(255),
+    updated_by character varying(255),
+    name character varying(20) not null
 );
 
 alter table roles
