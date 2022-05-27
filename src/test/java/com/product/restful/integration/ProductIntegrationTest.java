@@ -1,16 +1,7 @@
 package com.product.restful.integration;
 
-import com.product.restful.dto.CreateProductRequest;
-import com.product.restful.dto.UpdateProductRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-
-import java.math.BigDecimal;
-
-import static io.restassured.RestAssured.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

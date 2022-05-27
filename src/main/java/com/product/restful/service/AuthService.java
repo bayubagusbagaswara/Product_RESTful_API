@@ -1,6 +1,6 @@
 package com.product.restful.service;
 
-import com.product.restful.dto.RefreshTokenRequest;
+import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
@@ -16,4 +16,5 @@ public interface AuthService {
     AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
 
     // logout
+    void logout(String refreshToken);
 }

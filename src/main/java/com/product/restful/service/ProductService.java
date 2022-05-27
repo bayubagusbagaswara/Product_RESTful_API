@@ -1,6 +1,6 @@
 package com.product.restful.service;
 
-import com.product.restful.dto.*;
+import com.product.restful.dto.product.*;
 import com.product.restful.exception.ProductNotFoundException;
 
 import java.math.BigDecimal;

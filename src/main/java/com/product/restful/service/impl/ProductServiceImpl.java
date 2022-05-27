@@ -1,6 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.*;
+import com.product.restful.dto.product.*;
 import com.product.restful.entity.Product;
 import com.product.restful.exception.ProductNotFoundException;
 import com.product.restful.repository.ProductRepository;

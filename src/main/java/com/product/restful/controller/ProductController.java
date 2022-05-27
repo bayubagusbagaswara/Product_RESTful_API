@@ -1,10 +1,10 @@
 package com.product.restful.controller;
 
-import com.product.restful.dto.CreateProductRequest;
-import com.product.restful.dto.ListProductRequest;
-import com.product.restful.dto.ListProductResponse;
-import com.product.restful.dto.ProductResponse;
-import com.product.restful.dto.UpdateProductRequest;
+import com.product.restful.dto.product.CreateProductRequest;
+import com.product.restful.dto.product.ListProductRequest;
+import com.product.restful.dto.product.ListProductResponse;
+import com.product.restful.dto.product.ProductResponse;
+import com.product.restful.dto.product.UpdateProductRequest;
 import com.product.restful.dto.WebResponse;
 import com.product.restful.exception.ProductNotFoundException;
 import com.product.restful.service.ProductService;

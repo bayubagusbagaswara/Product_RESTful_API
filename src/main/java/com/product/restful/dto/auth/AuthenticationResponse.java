@@ -14,7 +14,12 @@ import java.time.Instant;
 public class AuthenticationResponse {
 
     private String accessToken;
+
     private String refreshToken;
+
     private Instant expiresAt;
+
+    private String tokenType = "Bearer";
+
     private String username;
 }

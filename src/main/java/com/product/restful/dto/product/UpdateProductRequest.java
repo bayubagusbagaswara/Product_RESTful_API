@@ -1,4 +1,4 @@
-package com.product.restful.dto;
+package com.product.restful.dto.product;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProductRequest {
+public class UpdateProductRequest {
 
     @NotBlank(message = "Name must not be blank")
     @Size(max = 100, message = "Name length max must be 100 characters")

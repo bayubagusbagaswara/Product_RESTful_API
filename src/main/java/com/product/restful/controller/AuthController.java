@@ -1,7 +1,8 @@
 package com.product.restful.controller;
 
 import com.product.restful.dto.ApiResponse;
-import com.product.restful.dto.RefreshTokenRequest;
+import com.product.restful.dto.auth.LogoutRequest;
+import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
@@ -54,8 +55,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        authService.logout(refreshTokenRequest.getRefreshToken());
+    public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
+        authService.logout(logoutRequest.getRefreshToken());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Refresh Token Deleted Successfully");

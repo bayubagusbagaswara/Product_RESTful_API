@@ -1,4 +1,4 @@
-package com.product.restful.dto;
+package com.product.restful.dto.refreshToken;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
