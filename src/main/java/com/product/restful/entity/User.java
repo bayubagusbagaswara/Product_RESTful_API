@@ -1,13 +1,29 @@
 package com.product.restful.entity;
 
+import com.product.restful.entity.audit.DateAudit;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import java.io.Serial;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -15,10 +31,14 @@ import java.util.*;
         @UniqueConstraint(columnNames = "email", name = "users_email_unique")
 })
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends DateAudit {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,19 +85,5 @@ public class User {
             this.roles = Collections.unmodifiableSet(roles);
         }
     }
-
-//    public void addRole(Role role) {
-//        roles.add(role);
-//        role.getUserList().add(this);
-//    }
-//
-//    public void addRoles(Set<Role> roles) {
-//        roles.forEach(this::addRole);
-//    }
-//
-//    public void removeRole(Role role) {
-//        roles.remove(role);
-//        role.getUserList().remove(this);
-//    }
 
 }
