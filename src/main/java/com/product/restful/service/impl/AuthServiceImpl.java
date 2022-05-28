@@ -1,9 +1,11 @@
 package com.product.restful.service.impl;
 
+import com.product.restful.dto.auth.LogoutRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.refreshToken.RefreshTokenResponse;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
@@ -16,7 +18,6 @@ import com.product.restful.repository.UserRepository;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.RefreshTokenService;
-import org.hibernate.cfg.SetSimpleValueTypeSecondPass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -87,11 +86,10 @@ public class AuthServiceImpl implements AuthService {
             roleSet.add(roleUser);
         }
         roleSet.add(roleUser);
-
         user.setRoles(roleSet);
 
         userRepository.save(user);
-        return mapToDto(user);
+        return UserResponse.mapToDto(user);
     }
 
     @Override
@@ -120,32 +118,23 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
 
-        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        RefreshTokenResponse refreshTokenResponse = refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 
         String token = jwtTokenProvider.generateTokenFromUsername(refreshTokenRequest.getUsername());
 
         return AuthenticationResponse.builder()
                 .accessToken(token)
-                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .refreshToken(refreshTokenResponse.getRefreshToken())
                 .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
                 .username(refreshTokenRequest.getUsername())
                 .build();
     }
 
     @Override
-    public void logout(String refreshToken) {
-        refreshTokenService.deleteRefreshToken(refreshToken);
+    public void logout(LogoutRequest logoutRequest) {
+        RefreshTokenResponse refreshTokenResponse = refreshTokenService.validateRefreshToken(logoutRequest.getRefreshToken());
+
+        refreshTokenService.deleteRefreshTokenByUserId(refreshTokenResponse.getUser().getId());
     }
 
-    private UserResponse mapToDto(User user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setFirstName(user.getFirstName());
-        userResponse.setLastName(user.getLastName());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setPassword(user.getPassword());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setRoles(user.getRoles());
-        return userResponse;
-    }
 }
