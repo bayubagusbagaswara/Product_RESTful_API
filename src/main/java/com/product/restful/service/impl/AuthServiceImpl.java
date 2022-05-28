@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
         Role roleAdmin = roleRepository.findByName(RoleName.ADMIN)
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET));
 
-        Role roleMember = roleRepository.findByName(RoleName.MEMBER)
+        Role roleMember = roleRepository.findByName(RoleName.USER)
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET));
 
         log.info("User count: {}", userRepository.count());
