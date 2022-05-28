@@ -1,6 +1,7 @@
 package com.product.restful.dto.user;
 
 import com.product.restful.entity.Role;
+import com.product.restful.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +30,16 @@ public class UserResponse {
     private String email;
 
     private Set<Role> roles = new HashSet<>();
+
+    public static UserResponse mapToDto(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .build();
+    }
 }
