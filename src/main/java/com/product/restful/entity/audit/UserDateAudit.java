@@ -19,8 +19,8 @@ import java.io.Serial;
 )
 public abstract class UserDateAudit extends DateAudit {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+//    @Serial
+//    private static final long serialVersionUID = 1L;
 
     @CreatedBy
     @Column(updatable = false)

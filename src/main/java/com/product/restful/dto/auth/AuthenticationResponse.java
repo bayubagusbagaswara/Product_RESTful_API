@@ -19,7 +19,7 @@ public class AuthenticationResponse {
 
     private Instant expiresAt;
 
-    private String tokenType = "Bearer";
+    private final String tokenType = "Bearer";
 
     private String username;
 }

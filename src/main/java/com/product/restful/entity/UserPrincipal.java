@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private Long id;
+    private String id;
 
     private String firstName;
 
@@ -32,7 +32,7 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Long id,
+    public UserPrincipal(String id,
                          String firstName,
                          String lastName,
                          String username,
@@ -56,9 +56,7 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal createUserPrincipal(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> {
-                    return new SimpleGrantedAuthority(role.getName().getRoleName());
-                })
+                .map(role -> new SimpleGrantedAuthority(role.getName().getRoleName()))
                 .collect(Collectors.toList())
                 ;
 
@@ -120,13 +118,5 @@ public class UserPrincipal implements UserDetails {
 
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 }

@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserResponse {
 
-    private Long id;
+    private String id;
 
     private String firstName;
 
