@@ -1,10 +1,10 @@
 package com.product.restful.service;
 
-import com.product.restful.entity.RefreshToken;
+import com.product.restful.dto.refreshToken.RefreshTokenResponse;
 
 public interface RefreshTokenService {
 
-    RefreshToken generateRefreshToken();
+    RefreshTokenResponse generateRefreshToken(Long userId);
 
     void validateRefreshToken(String token);
 
