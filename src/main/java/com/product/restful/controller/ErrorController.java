@@ -2,10 +2,11 @@ package com.product.restful.controller;
 
 import com.product.restful.dto.WebResponse;
 import com.product.restful.exception.ProductNotFoundException;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class ErrorController {
