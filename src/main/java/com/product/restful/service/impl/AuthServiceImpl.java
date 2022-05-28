@@ -8,6 +8,7 @@ import com.product.restful.dto.user.UserResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
+import com.product.restful.entity.UserPrincipal;
 import com.product.restful.exception.AppException;
 import com.product.restful.exception.BlogApiException;
 import com.product.restful.repository.RoleRepository;
@@ -104,11 +105,13 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
         final String token = jwtTokenProvider.generateToken(authentication);
 
         return AuthenticationResponse.builder()
                 .accessToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken().getRefreshToken())
+                .refreshToken(refreshTokenService.generateRefreshToken(userPrincipal.getId()).getRefreshToken())
                 .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsernameOrEmail())
                 .build();
