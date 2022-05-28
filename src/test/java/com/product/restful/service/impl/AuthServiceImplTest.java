@@ -2,8 +2,6 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.user.UserResponse;
-import com.product.restful.entity.Role;
-import com.product.restful.entity.RoleName;
 import com.product.restful.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -11,9 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Set;
-
-import static com.product.restful.entity.RoleName.ADMIN;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -27,15 +22,16 @@ class AuthServiceImplTest {
     @Test
     void signUp() {
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setFirstName("Nikola");
-        signUpRequest.setLastName("Tesla");
-        signUpRequest.setUsername("tesla18");
-        signUpRequest.setPassword("tesla123");
-        signUpRequest.setEmail("tesla@gmail.com");
+        signUpRequest.setFirstName("Issaac");
+        signUpRequest.setLastName("Newton");
+        signUpRequest.setUsername("newton55");
+        signUpRequest.setPassword("newton123");
+        signUpRequest.setEmail("newton@gmail.com");
 
         UserResponse userResponse = authService.signUp(signUpRequest);
 
         assertNotNull(userResponse.getId());
+        log.info("User: {}", userResponse.getRoles());
     }
 
     @Test
