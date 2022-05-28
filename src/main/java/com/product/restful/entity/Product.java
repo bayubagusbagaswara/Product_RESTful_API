@@ -29,8 +29,8 @@ import java.math.BigDecimal;
 @Where(clause = "status_record = 'ACTIVE'")
 public class Product extends UserDateAudit {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+//    @Serial
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(generator = "system-uuid")

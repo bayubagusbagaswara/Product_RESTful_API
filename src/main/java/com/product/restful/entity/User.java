@@ -1,27 +1,17 @@
 package com.product.restful.entity;
 
 import com.product.restful.entity.audit.DateAudit;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serial;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,12 +31,14 @@ import java.util.Set;
 @Where(clause = "status_record = 'ACTIVE'")
 public class User extends DateAudit {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+//    @Serial
+//    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @Column(name = "id", nullable = false, length = 64)
+    private String id;
 
     @Column(name = "first_name", length = 40, nullable = false)
     private String firstName;
@@ -67,26 +59,40 @@ public class User extends DateAudit {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
-            joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"),
-            foreignKey = @ForeignKey(name = "fk_user_role_id_user"),
-            inverseForeignKey = @ForeignKey(name = "fk_user_role_id_role")
+            joinColumns = @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_user_role_id_user"), referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_role", foreignKey = @ForeignKey(name = "fk_user_role_id_role"), referencedColumnName = "id")
     )
     private Set<Role> roles = new HashSet<>();
 
-    public Set<Role> getRoles() {
-        if (roles == null) {
-            return null;
-        }
-        return new HashSet<>(roles);
-    }
-
-    public void setRoles(Set<Role> roles) {
-        if (roles == null) {
-            this.roles = null;
-        } else {
-            this.roles = Collections.unmodifiableSet(roles);
-        }
-    }
+//    public Set<Role> getRoles() {
+//        if (roles == null) {
+//            return null;
+//        }
+//        return new HashSet<>(roles);
+//    }
+//
+//    public void setRoles(Set<Role> roles) {
+//        if (roles == null) {
+//            this.roles = null;
+//        } else {
+//            this.roles = Collections.unmodifiableSet(roles);
+//        }
+//    }
+//
+//    public void addRole(Role role) {
+//        this.roles.add(role);
+//        role.getUsers().add(this);
+//    }
+//
+//    public void removeRole(Role role) {
+//        this.getRoles().remove(role);
+//        role.getUsers().remove(this);
+//    }
+//
+//    public void removeRoles() {
+//        for (Role role : new HashSet<>(roles)) {
+//            removeRole(role);
+//        }
+//    }
 
 }
