@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -51,6 +52,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh/token")
+    @RolesAllowed({"ROLE_CUSTOMER", "ROLE_USER"})
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
