@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         // create roles untuk user baru
         Set<Role> roles = new HashSet<>();
         roles.add(
-                roleRepository.findByName(RoleName.MEMBER)
+                roleRepository.findByName(RoleName.USER)
                         .orElseThrow(() -> new AppException("User role not set")));
 
         // create object User
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserById(String id) {
+    public UserResponse getUserById(Long id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
         return mapUserToUserResponse(user);
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.getUserByName(username);
 
         Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(RoleName.MEMBER)
+        roles.add(roleRepository.findByName(RoleName.USER)
                 .orElseThrow(() -> new AppException("User role not set")));
 
         user.setRoles(roles);

@@ -14,7 +14,7 @@ public interface UserService {
 
      void addRoleToUser(String username, RoleName roleName);
 
-    UserResponse getUserById(String id);
+    UserResponse getUserById(Long id);
 
     ApiResponse deleteUser(String username, UserPrincipal currentUser);
 
