@@ -7,7 +7,6 @@ import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.user.UserResponse;
-import com.product.restful.entity.User;
 import com.product.restful.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +61,7 @@ public class AuthController {
     @PostMapping("/logout")
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
-        authService.logout(logoutRequest.getRefreshToken());
+        authService.logout(logoutRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Refresh Token Deleted Successfully");
