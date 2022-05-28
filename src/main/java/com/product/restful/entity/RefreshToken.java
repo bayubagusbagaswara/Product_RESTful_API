@@ -6,12 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
@@ -27,13 +25,8 @@ import java.time.Instant;
 @Where(clause = "status_record = 'ACTIVE'")
 public class RefreshToken extends UserDateAudit {
 
-//    @Serial
-//    private static final long serialVersionUID = 1L;
-
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "id", nullable = false, length = 64)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @OneToOne
