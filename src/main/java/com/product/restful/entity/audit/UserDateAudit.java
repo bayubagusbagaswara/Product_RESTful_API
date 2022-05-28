@@ -8,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.io.Serial;
 
 @EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
@@ -18,9 +17,6 @@ import java.io.Serial;
         allowGetters = true
 )
 public abstract class UserDateAudit extends DateAudit {
-
-//    @Serial
-//    private static final long serialVersionUID = 1L;
 
     @CreatedBy
     @Column(updatable = false)
