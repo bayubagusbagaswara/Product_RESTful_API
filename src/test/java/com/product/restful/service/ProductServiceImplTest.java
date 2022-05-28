@@ -1,6 +1,8 @@
 package com.product.restful.service;
 
 import com.product.restful.dto.*;
+import com.product.restful.dto.product.CreateProductRequest;
+import com.product.restful.dto.product.ProductResponse;
 import com.product.restful.exception.ProductNotFoundException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -19,28 +21,28 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProductServiceImplTest {
-//
-//    private final static Logger log = LoggerFactory.getLogger(ProductServiceImplTest.class);
-//
-//    @Autowired
-//    ProductService productService;
-//
-//    @Test
-//    @Order(1)
-//    void createProduct() {
-//        CreateProductRequest createProductRequest = CreateProductRequest.builder()
-//                .name("Test Service Product")
-//                .price(new BigDecimal(134_900_000))
-//                .quantity(50)
-//                .description("This is test service product description")
-//                .build();
-//        GetProductResponse getProductResponse = productService.createProduct(createProductRequest);
-//        assertNotNull(getProductResponse.getId());
-//
-//        log.info("ID: {}", getProductResponse.getId());
-//        log.info("Created At: {}", getProductResponse.getCreatedAt());
-//        log.info("Created By: {}", getProductResponse.getCreatedBy());
-//    }
+
+    private final static Logger log = LoggerFactory.getLogger(ProductServiceImplTest.class);
+
+    @Autowired
+    ProductService productService;
+
+    @Test
+    @Order(1)
+    void createProduct() {
+        CreateProductRequest createProductRequest = CreateProductRequest.builder()
+                .name("Test Service Product")
+                .price(new BigDecimal(134_900_000))
+                .quantity(50)
+                .description("This is test service product description")
+                .build();
+        ProductResponse productResponse = productService.createProduct(createProductRequest);
+        assertNotNull(productResponse.getId());
+
+        log.info("ID: {}", productResponse.getId());
+        log.info("Created At: {}", productResponse.getCreatedAt());
+        log.info("Created By: {}", productResponse.getCreatedBy());
+    }
 //
 //    @Test
 //    @Order(2)
