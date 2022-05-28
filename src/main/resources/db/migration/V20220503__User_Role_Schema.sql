@@ -1,7 +1,7 @@
 -- TABLE MANY TO MANY
-create table user_role (
-    id_user character varying(64) not null,
-    id_role character varying(64) not null
+CREATE TABLE public.user_role (
+    id_user bigint NOT NULL,
+    id_role bigint NOT NULL
 );
 
 alter table user_role
