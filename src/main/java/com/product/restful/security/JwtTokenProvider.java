@@ -40,6 +40,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(username)
+                .setIssuer("Bayu Bagaswara")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
