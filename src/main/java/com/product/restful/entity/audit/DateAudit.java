@@ -12,8 +12,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.Instant;
 
 @MappedSuperclass
@@ -23,10 +21,7 @@ import java.time.Instant;
         value = { "createdAt", "updatedAt" },
         allowGetters = true
 )
-public abstract class DateAudit implements Serializable {
-
-//    @Serial
-//    private static final long serialVersionUID = 1L;
+public abstract class DateAudit {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
