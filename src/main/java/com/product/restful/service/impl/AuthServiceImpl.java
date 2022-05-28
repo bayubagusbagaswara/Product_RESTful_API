@@ -4,6 +4,7 @@ import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.user.UserResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
@@ -14,6 +15,9 @@ import com.product.restful.repository.UserRepository;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.RefreshTokenService;
+import org.hibernate.cfg.SetSimpleValueTypeSecondPass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,11 +27,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private static final String USER_ROLE_NOT_SET = "User role not set";
 
@@ -48,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User signUp(SignUpRequest signUpRequest) {
+    public UserResponse signUp(SignUpRequest signUpRequest) {
 
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername()))) {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "Username is already taken");
@@ -58,29 +65,34 @@ public class AuthServiceImpl implements AuthService {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "Email is already taken");
         }
 
-        User user = User.builder()
-                .firstName(signUpRequest.getFirstName().toLowerCase())
-                .lastName(signUpRequest.getLastName().toLowerCase())
-                .username(signUpRequest.getUsername().toLowerCase())
-                .email(signUpRequest.getEmail().toLowerCase())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                .build();
+        User user = new User();
+        user.setFirstName(signUpRequest.getFirstName());
+        user.setLastName(signUpRequest.getLastName());
+        user.setUsername(signUpRequest.getUsername());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setCreatedAt(Instant.now());
 
-        Set<Role> roles = new HashSet<>();
+        Role roleAdmin = roleRepository.findByName(RoleName.ADMIN)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET));
+
+        Role roleMember = roleRepository.findByName(RoleName.MEMBER)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET));
+
+        log.info("User count: {}", userRepository.count());
+
+        Set<Role> roleSet = new HashSet<>();
+
         if (userRepository.count() == 0) {
-            roles.add(roleRepository.findByName(RoleName.MEMBER)
-                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
-
-            roles.add(roleRepository.findByName(RoleName.ADMIN)
-                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+            roleSet.add(roleAdmin);
+            roleSet.add(roleMember);
+            user.setRoles(roleSet);
         }
+        roleSet.add(roleMember);
+        user.setRoles(roleSet);
 
-        roles.add(roleRepository.findByName(RoleName.MEMBER)
-                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
-
-        user.setRoles(roles);
-
-        return userRepository.save(user);
+        userRepository.save(user);
+        return mapToDto(user);
     }
 
     @Override
@@ -122,5 +134,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(String refreshToken) {
         refreshTokenService.deleteRefreshToken(refreshToken);
+    }
+
+    private UserResponse mapToDto(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setPassword(user.getPassword());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setRoles(user.getRoles());
+        return userResponse;
     }
 }
