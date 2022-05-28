@@ -1,5 +1,7 @@
 package com.product.restful.service.impl;
 
+import com.product.restful.dto.auth.AuthenticationResponse;
+import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.service.AuthService;
@@ -36,6 +38,22 @@ class AuthServiceImplTest {
 
     @Test
     void signIn() {
+        String username = "newton55";
+        String password = "newton123";
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsernameOrEmail(username);
+        loginRequest.setPassword(password);
+
+        AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
+
+        assertNotNull(authenticationResponse.getAccessToken());
+        assertNotNull(authenticationResponse.getRefreshToken());
+        assertNotNull(authenticationResponse.getExpiresAt());
+        log.info("Access Token: {}", authenticationResponse.getAccessToken());
+        log.info("Refresh Token: {}", authenticationResponse.getRefreshToken());
+        log.info("Expires at: {}", authenticationResponse.getExpiresAt());
+        log.info("Username: {}", authenticationResponse.getUsername());
     }
 
     @Test
