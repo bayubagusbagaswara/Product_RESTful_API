@@ -41,6 +41,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         refreshToken.setExpiryDate(dateNow.plusMillis(refreshTokenDurationMs));
         refreshToken.setUser(user);
 
+        refreshTokenRepository.save(refreshToken);
+
         return RefreshTokenResponse.mapToDto(refreshToken);
     }
 
