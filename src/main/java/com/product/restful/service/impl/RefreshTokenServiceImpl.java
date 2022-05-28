@@ -5,6 +5,7 @@ import com.product.restful.entity.RefreshToken;
 import com.product.restful.entity.User;
 import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.exception.ResourceNotFoundException;
+import com.product.restful.exception.TokenRefreshException;
 import com.product.restful.repository.RefreshTokenRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.RefreshTokenService;
@@ -47,14 +48,42 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public void validateRefreshToken(String token) {
-        refreshTokenRepository.findByRefreshToken(token)
+    public RefreshTokenResponse validateRefreshToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
                 .orElseThrow(() -> new RefreshTokenNotFoundException("Invalid refresh token"));
+
+        if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
+            refreshTokenRepository.delete(refreshToken);
+            throw new TokenRefreshException(refreshToken.getRefreshToken(), "Refresh token was expired. Please make a new login request");
+        }
+
+        return RefreshTokenResponse.mapToDto(refreshToken);
     }
 
     @Override
-    public void deleteRefreshToken(String token) {
-        refreshTokenRepository.deleteByRefreshToken(token);
+    public RefreshTokenResponse getToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
+                .orElseThrow(() -> new RefreshTokenNotFoundException("Invalid refresh token"));
+
+        return RefreshTokenResponse.mapToDto(refreshToken);
+    }
+
+    @Override
+    public RefreshTokenResponse verifyExpiration(RefreshToken refreshToken) {
+        // jika token expired < tanggal sekarang, maka hapus token nya
+        if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
+            refreshTokenRepository.delete(refreshToken);
+            throw new TokenRefreshException(refreshToken.getRefreshToken(), "Refresh token was expired. Please make a new login request");
+        }
+        return RefreshTokenResponse.mapToDto(refreshToken);
+    }
+
+    @Override
+    public void deleteRefreshTokenByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "user", userId));
+
+        refreshTokenRepository.deleteByUserId(user.getId());
     }
 
 }
