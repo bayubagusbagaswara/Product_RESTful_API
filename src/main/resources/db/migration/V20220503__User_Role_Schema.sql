@@ -1,7 +1,7 @@
 -- TABLE MANY TO MANY
 create table user_role (
-    id_user bigint NOT NULL,
-    id_role bigint NOT NULL
+    id_user bigint not null,
+    id_role bigint not null
 );
 
 alter table user_role
