@@ -28,4 +28,7 @@ public class Role extends UserDateAudit {
     @Column(name = "name", length = 20, nullable = false)
     private RoleName name;
 
+    public Role(RoleName name) {
+        this.name = name;
+    }
 }
