@@ -9,11 +9,12 @@ import com.product.restful.entity.UserPrincipal;
 
 public interface UserService {
 
+    UserResponse crateAdmin(CreateUserRequest createUserRequest);
      UserResponse createUser(CreateUserRequest createUserRequest);
 
      void addRoleToUser(String username, RoleName roleName);
 
-    UserResponse getUserById(Long id);
+    UserResponse getUserById(String id);
 
     ApiResponse deleteUser(String username, UserPrincipal currentUser);
 

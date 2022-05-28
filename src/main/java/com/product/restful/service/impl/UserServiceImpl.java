@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse crateAdmin(CreateUserRequest createUserRequest) {
+        return null;
+    }
+
+    @Override
     public UserResponse createUser(CreateUserRequest userRequest) {
 
         // cek apakah username sudah ada atau belum
@@ -91,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserById(Long id) {
+    public UserResponse getUserById(String id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
         return mapUserToUserResponse(user);
