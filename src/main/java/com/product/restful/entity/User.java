@@ -12,8 +12,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.io.Serial;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,14 +29,9 @@ import java.util.Set;
 @Where(clause = "status_record = 'ACTIVE'")
 public class User extends DateAudit {
 
-//    @Serial
-//    private static final long serialVersionUID = 1L;
-
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "id", nullable = false, length = 64)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "first_name", length = 40, nullable = false)
     private String firstName;
@@ -46,7 +39,7 @@ public class User extends DateAudit {
     @Column(name = "last_name", length = 40, nullable = false)
     private String lastName;
 
-    @Column(name = "username", length = 15, nullable = false)
+    @Column(name = "username", length = 20, nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -64,35 +57,18 @@ public class User extends DateAudit {
     )
     private Set<Role> roles = new HashSet<>();
 
-//    public Set<Role> getRoles() {
-//        if (roles == null) {
-//            return null;
-//        }
-//        return new HashSet<>(roles);
-//    }
-//
-//    public void setRoles(Set<Role> roles) {
-//        if (roles == null) {
-//            this.roles = null;
-//        } else {
-//            this.roles = Collections.unmodifiableSet(roles);
-//        }
-//    }
-//
-//    public void addRole(Role role) {
-//        this.roles.add(role);
-//        role.getUsers().add(this);
-//    }
-//
-//    public void removeRole(Role role) {
-//        this.getRoles().remove(role);
-//        role.getUsers().remove(this);
-//    }
-//
-//    public void removeRoles() {
-//        for (Role role : new HashSet<>(roles)) {
-//            removeRole(role);
-//        }
-//    }
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.getRoles().remove(role);
+    }
+
+    public void removeRoles() {
+        for (Role role : new HashSet<>(roles)) {
+            removeRole(role);
+        }
+    }
 
 }
