@@ -3,6 +3,7 @@ package com.product.restful.service.impl;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.service.AuthService;
 import org.junit.jupiter.api.Test;
@@ -38,8 +39,8 @@ class AuthServiceImplTest {
 
     @Test
     void signIn() {
-        String username = "newton55";
-        String password = "newton123";
+        String username = "tesla18";
+        String password = "tesla123";
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsernameOrEmail(username);
@@ -58,6 +59,22 @@ class AuthServiceImplTest {
 
     @Test
     void refreshToken() {
+        String refreshToken = "";
+        String username = "";
+        RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
+        refreshTokenRequest.setRefreshToken(refreshToken);
+        refreshTokenRequest.setUsername(username);
+
+        AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
+
+        assertNotNull(authenticationResponse.getAccessToken());
+        assertNotNull(authenticationResponse.getRefreshToken());
+        assertNotNull(authenticationResponse.getExpiresAt());
+        log.info("Access Token: {}", authenticationResponse.getAccessToken());
+        log.info("Refresh Token: {}", authenticationResponse.getRefreshToken());
+        log.info("Expires at: {}", authenticationResponse.getExpiresAt());
+        log.info("Username: {}", authenticationResponse.getUsername());
+
     }
 
     @Test
