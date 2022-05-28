@@ -209,3 +209,6 @@ Response :
   ]
 }
 ```
+
+Set<String> set = Stream.of("a", "b", "c")
+.collect(Collectors.toCollection(HashSet::new));
