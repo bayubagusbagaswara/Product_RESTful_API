@@ -46,13 +46,13 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUserIdFromJWT(String token) {
+    public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
 
-        return String.valueOf(claims.getSubject());
+        return Long.valueOf(claims.getSubject());
     }
 
 
