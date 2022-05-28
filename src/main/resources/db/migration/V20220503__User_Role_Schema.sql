@@ -1,5 +1,5 @@
 -- TABLE MANY TO MANY
-CREATE TABLE public.user_role (
+create table user_role (
     id_user bigint NOT NULL,
     id_role bigint NOT NULL
 );
