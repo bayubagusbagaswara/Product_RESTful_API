@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private String id;
+    private Long id;
 
     private String firstName;
 
@@ -32,7 +32,7 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(String id,
+    public UserPrincipal(Long id,
                          String firstName,
                          String lastName,
                          String username,
@@ -46,12 +46,6 @@ public class UserPrincipal implements UserDetails {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
-
-        if (authorities == null) {
-            this.authorities = null;
-        } else {
-            this.authorities = new ArrayList<>(authorities);
-        }
     }
 
     public static UserPrincipal createUserPrincipal(User user) {
