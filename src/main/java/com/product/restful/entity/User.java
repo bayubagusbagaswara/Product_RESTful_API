@@ -1,5 +1,6 @@
 package com.product.restful.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.product.restful.entity.audit.DateAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,6 +50,7 @@ public class User extends DateAudit {
     @Column(name = "email", length = 40)
     private String email;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status_record", nullable = false)
     private StatusRecord statusRecord = StatusRecord.ACTIVE;

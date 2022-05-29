@@ -1,5 +1,6 @@
 package com.product.restful.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.product.restful.entity.audit.UserDateAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,7 @@ public class Product extends UserDateAudit {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status_record", nullable = false)
     private StatusRecord statusRecord = StatusRecord.ACTIVE;
