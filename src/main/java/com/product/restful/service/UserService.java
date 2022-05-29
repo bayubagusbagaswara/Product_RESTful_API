@@ -10,11 +10,16 @@ public interface UserService {
     UserIdentityAvailability checkUsernameAvailability(String username);
     UserIdentityAvailability checkEmailAvailability(String email);
 
+    void checkUsernameIsExists(String username);
+
+    void checkEmailIsExists(String email);
+
     UserProfileResponse getUserProfile(String username);
 
     UserSummaryResponse getCurrentUser(String username);
 
-    UserResponse crateAdmin(CreateUserRequest createUserRequest);
+    UserResponse createAdmin(CreateUserRequest createUserRequest);
+
     UserResponse createUser(CreateUserRequest createUserRequest);
 
     void addRoleToUser(String username, RoleName roleName);
