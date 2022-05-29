@@ -21,4 +21,6 @@ public interface UserService {
     UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser);
 
     ApiResponse removeAdmin(String username);
+
+    void verifyUser(Long id);
 }
