@@ -2,6 +2,7 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
+import com.product.restful.dto.auth.LogoutRequest;
 import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.user.UserResponse;
@@ -25,11 +26,11 @@ class AuthServiceImplTest {
     @Test
     void signUp() {
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setFirstName("Issaac");
-        signUpRequest.setLastName("Newton");
-        signUpRequest.setUsername("newton55");
-        signUpRequest.setPassword("newton123");
-        signUpRequest.setEmail("newton@gmail.com");
+        signUpRequest.setFirstName("Albert");
+        signUpRequest.setLastName("Einstein");
+        signUpRequest.setUsername("albert12");
+        signUpRequest.setPassword("albert123");
+        signUpRequest.setEmail("albert@gmail.com");
 
         UserResponse userResponse = authService.signUp(signUpRequest);
 
@@ -39,8 +40,8 @@ class AuthServiceImplTest {
 
     @Test
     void signIn() {
-        String username = "tesla18";
-        String password = "tesla123";
+        String username = "albert12";
+        String password = "albert123";
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsernameOrEmail(username);
@@ -79,5 +80,12 @@ class AuthServiceImplTest {
 
     @Test
     void logout() {
+        String refreshToken = "bcef9489-6af1-4cd1-a1b4-14e00888908f";
+        Long userId = 2L;
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUserId(userId);
+        logoutRequest.setRefreshToken(refreshToken);
+
+        authService.logout(logoutRequest);
     }
 }
