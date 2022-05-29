@@ -31,4 +31,13 @@ public class RefreshTokenResponse {
                 .expiryDate(refreshToken.getExpiryDate())
                 .build();
     }
+
+    public static RefreshToken mapToEntity(RefreshTokenResponse refreshTokenResponse) {
+        return RefreshToken.builder()
+                .id(refreshTokenResponse.getId())
+                .user(UserResponse.mapToEntity(refreshTokenResponse.getUser()))
+                .refreshToken(refreshTokenResponse.getRefreshToken())
+                .expiryDate(refreshTokenResponse.getExpiryDate())
+                .build();
+    }
 }
