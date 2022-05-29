@@ -16,7 +16,7 @@ public interface UserService {
 
     UserProfileResponse getUserProfile(String username);
 
-    UserSummaryResponse getCurrentUser(String username);
+    UserSummaryResponse getCurrentUser(UserPrincipal currentUser);
 
     UserResponse createAdmin(CreateUserRequest createUserRequest);
 
