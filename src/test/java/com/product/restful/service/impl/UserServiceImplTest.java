@@ -1,8 +1,10 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.user.CreateUserRequest;
+import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserResponse;
+import com.product.restful.entity.UserPrincipal;
 import com.product.restful.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -95,11 +97,34 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateUser() {
+    void updateUserRoleAdminToRoleUser() {
         // hanya bisa dilakukan oleh user yang memiliki ROLE ADMIN
         // atau user yang bersangkutan sendiri, artinya username dan userRequest harus sama
+        // 1. Bayu [admin] akan mengubah data user Gosling
+        String username = "";
+        UpdateUserRequest updateUserRequest = UpdateUserRequest.builder()
+                .firstName("Jamesss")
+                .lastName("Gosling update")
+                .username("james")
+                .email("james@gmail.com")
+                .password("james12345")
+                .build();
 
-        // 1. Bayu [admin] akan mengubah user albert
+        // current user adalah user yang ingin melakukan update
+        // dalam hal ini user nya adalah Bayu
+        // jadi kita ambil data Bayu
+//        UserPrincipal currentUser = UserPrincipal.createUserPrincipal()
 
+
+    }
+
+    @Test
+    void updateUserBySelf() {
+        // 2. Albert akan mengubah data dirinya sendiri
+    }
+
+    @Test
+    void updateUserRoleUserToRoleAdminFailed() {
+        // 3. Albert tidak bisa mengubah data Tesla
     }
 }
