@@ -31,4 +31,8 @@ public class Role extends UserDateAudit {
     public Role(RoleName name) {
         this.name = name;
     }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_record", nullable = false)
+    private StatusRecord statusRecord = StatusRecord.ACTIVE;
 }
