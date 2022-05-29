@@ -21,8 +21,6 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SQLDelete(sql = "UPDATE refresh_tokens SET status_record = 'INACTIVE' WHERE id = ?")
-@Where(clause = "status_record = 'ACTIVE'")
 public class RefreshToken extends UserDateAudit {
 
     @Id
