@@ -89,8 +89,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserSummaryResponse getCurrentUser(String username) {
-        return null;
+    public UserSummaryResponse getCurrentUser(UserPrincipal currentUser) {
+        return UserSummaryResponse.builder()
+                .id(currentUser.getId())
+                .firstName(currentUser.getFirstName())
+                .lastName(currentUser.getLastName())
+                .username(currentUser.getUsername())
+                .email(currentUser.getEmail())
+                .build();
     }
 
     @Override
