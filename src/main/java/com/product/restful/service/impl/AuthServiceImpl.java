@@ -13,6 +13,7 @@ import com.product.restful.entity.User;
 import com.product.restful.entity.UserPrincipal;
 import com.product.restful.exception.AppException;
 import com.product.restful.exception.BlogApiException;
+import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.security.JwtTokenProvider;
@@ -134,7 +135,10 @@ public class AuthServiceImpl implements AuthService {
     public void logout(LogoutRequest logoutRequest) {
         RefreshTokenResponse refreshTokenResponse = refreshTokenService.validateRefreshToken(logoutRequest.getRefreshToken());
 
-        refreshTokenService.deleteRefreshTokenByUserId(refreshTokenResponse.getUser().getId());
+        User user = userRepository.findById(logoutRequest.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", logoutRequest.getUserId()));
+
+        refreshTokenService.deleteRefreshTokenByUser(user);
     }
 
 }
