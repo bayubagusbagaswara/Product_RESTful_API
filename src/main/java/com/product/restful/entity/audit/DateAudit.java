@@ -31,7 +31,5 @@ public abstract class DateAudit {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_record", nullable = false)
-    private StatusRecord statusRecord = StatusRecord.ACTIVE;
+
 }
