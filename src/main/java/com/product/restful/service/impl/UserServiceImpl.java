@@ -158,11 +158,10 @@ public class UserServiceImpl implements UserService {
 
         final User user = userRepository.getUserByName(username);
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(roleName)
-                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+        user.setRoles(new HashSet<>(Collections.singleton(
+                roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
-        user.setRoles(roles);
         userRepository.save(user);
     }
 
