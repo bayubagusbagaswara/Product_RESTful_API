@@ -42,4 +42,16 @@ public class UserResponse {
                 .roles(user.getRoles())
                 .build();
     }
+
+    public static User mapToEntity(UserResponse userResponse) {
+        return User.builder()
+                .id(userResponse.getId())
+                .firstName(userResponse.getFirstName())
+                .lastName(userResponse.getLastName())
+                .username(userResponse.getUsername())
+                .password(userResponse.getPassword())
+                .email(userResponse.getEmail())
+                .roles(userResponse.getRoles())
+                .build();
+    }
 }
