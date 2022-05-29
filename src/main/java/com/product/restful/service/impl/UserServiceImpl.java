@@ -166,6 +166,12 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public void verifyUser(Long id) {
+        userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    }
+
     private UserResponse mapUserToUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
