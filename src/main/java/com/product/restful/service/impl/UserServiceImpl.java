@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -100,8 +101,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse createAdmin(CreateUserRequest createUserRequest) {
-        return null;
+    public UserResponse createAdmin(CreateUserRequest userRequest) {
+        checkUsernameIsExists(userRequest.getUsername());
+        checkEmailIsExists(userRequest.getEmail());
+
+        User user = new User();
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setCreatedAt(Instant.now());
+
+        user.setRoles(new HashSet<>(Collections.singleton(
+                roleRepository.findByName(RoleName.ADMIN)
+                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
+
+        userRepository.save(user);
+        return UserResponse.mapToDto(user);
     }
 
     @Override
