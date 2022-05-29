@@ -1,6 +1,9 @@
 package com.product.restful.service.impl;
 
+import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
+import com.product.restful.dto.user.UserResponse;
+import com.product.restful.entity.RoleName;
 import com.product.restful.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,5 +35,21 @@ class UserServiceImplTest {
         UserIdentityAvailability userIdentityAvailability = userService.checkEmailAvailability(email);
 
         log.info("Email availability: {}", userIdentityAvailability.getAvailable());
+    }
+
+    @Test
+    void createAdmin() {
+        CreateUserRequest createUserRequest = CreateUserRequest.builder()
+                .firstName("Nikola")
+                .lastName("Tesla")
+                .username("tesla99")
+                .email("tesla@gmail.com")
+                .password("tesla123")
+                .build();
+
+        UserResponse admin = userService.createAdmin(createUserRequest);
+
+        assertNotNull(admin.getId());
+        log.info("Role: {}", admin.getRoles());
     }
 }
