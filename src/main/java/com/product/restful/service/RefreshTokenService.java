@@ -2,17 +2,16 @@ package com.product.restful.service;
 
 import com.product.restful.dto.refreshToken.RefreshTokenResponse;
 import com.product.restful.entity.RefreshToken;
-import com.product.restful.entity.User;
 
 public interface RefreshTokenService {
 
     RefreshTokenResponse generateRefreshToken(Long userId);
 
-    RefreshTokenResponse validateRefreshToken(String token);
+    RefreshTokenResponse validateRefreshToken(String refreshToken);
 
-    RefreshTokenResponse getToken(String token);
+    RefreshToken getRefreshToken(String refreshToken);
 
-    RefreshTokenResponse verifyExpiration(RefreshToken token);
+    RefreshToken verifyExpirationRefreshToken(String refreshToken);
 
-    void deleteRefreshTokenByUser(User user);
+    void deleteRefreshToken(String token);
 }
