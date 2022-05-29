@@ -1,9 +1,7 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
-import com.product.restful.dto.user.CreateUserRequest;
-import com.product.restful.dto.user.UpdateUserRequest;
-import com.product.restful.dto.user.UserResponse;
+import com.product.restful.dto.user.*;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
@@ -16,11 +14,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final String USER_ROLE_NOT_SET = "User role not set";
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -33,65 +35,103 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse crateAdmin(CreateUserRequest createUserRequest) {
-        return null;
+    public UserIdentityAvailability checkUsernameAvailability(String username) {
+        // jika response bernilai true, maka username tidak ada di database
+        // dan jika response bernilai false, maka username sudah ada di database
+        // biasanya ini untuk mengecek apakah ada username yang sama di database
+        final Boolean isAvailable = !userRepository.existsByUsername(username);
+        return UserIdentityAvailability.builder()
+                .available(isAvailable)
+                .build();
     }
 
     @Override
-    public UserResponse createUser(CreateUserRequest userRequest) {
+    public UserIdentityAvailability checkEmailAvailability(String email) {
+        Boolean isAvailable = !userRepository.existsByEmail(email);
+        return UserIdentityAvailability.builder()
+                .available(isAvailable)
+                .build();
+    }
 
-        // cek apakah username sudah ada atau belum
-        if (userRepository.existsByUsername(userRequest.getUsername())) {
-
+    @Override
+    public void checkUsernameIsExists(String username) {
+        if (userRepository.existsByUsername(username)) {
             ApiResponse apiResponse = ApiResponse.builder()
                     .success(Boolean.FALSE)
                     .message("Username is already taken")
                     .build();
             throw new BadRequestException(apiResponse);
         }
+    }
 
-        if (userRepository.existsByEmail(userRequest.getEmail())) {
-            // jika email sudah ada
+    @Override
+    public void checkEmailIsExists(String email) {
+        if (userRepository.existsByEmail(email)) {
             ApiResponse apiResponse = ApiResponse.builder()
                     .success(Boolean.FALSE)
                     .message("Email is already taken")
                     .build();
             throw new BadRequestException(apiResponse);
         }
+    }
 
-        // create roles untuk user baru
-        Set<Role> roles = new HashSet<>();
-        roles.add(
-                roleRepository.findByName(RoleName.USER)
-                        .orElseThrow(() -> new AppException("User role not set")));
+    @Override
+    public UserProfileResponse getUserProfile(String username) {
+        return null;
+    }
 
-        // create object User
-        User user = User.builder()
-                .firstName(userRequest.getFirstName())
-                .lastName(userRequest.getLastName())
-                .username(userRequest.getUsername())
-                .email(userRequest.getEmail())
-                .password(passwordEncoder.encode(userRequest.getPassword()))
-                .roles(roles)
-                .build();
+    @Override
+    public UserSummaryResponse getCurrentUser(String username) {
+        return null;
+    }
 
-        // response
-        return mapUserToUserResponse(userRepository.save(user));
+    @Override
+    public UserResponse createAdmin(CreateUserRequest createUserRequest) {
+        return null;
+    }
+
+    @Override
+    public UserResponse createUser(CreateUserRequest userRequest) {
+
+        checkUsernameIsExists(userRequest.getUsername());
+        checkEmailIsExists(userRequest.getEmail());
+
+        User user = new User();
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setCreatedAt(Instant.now());
+
+        Set<Role> roleSet = new HashSet<>();
+
+        if (userRepository.count() == 0) {
+            roleSet.add(roleRepository.findByName(RoleName.ADMIN)
+                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+            roleSet.add(roleRepository.findByName(RoleName.USER)
+                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+        }
+
+        roleSet.add(roleRepository.findByName(RoleName.USER)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+
+        user.setRoles(roleSet);
+
+        userRepository.save(user);
+        return UserResponse.mapToDto(user);
     }
 
     @Override
     public void addRoleToUser(String username, RoleName roleName) {
+
         final User user = userRepository.getUserByName(username);
 
         Set<Role> roles = new HashSet<>();
-
-        final Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new AppException("User role not set"));
-
-        roles.add(role);
+        roles.add(roleRepository.findByName(roleName)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         user.setRoles(roles);
-
         userRepository.save(user);
     }
 
@@ -99,7 +139,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
-        return mapUserToUserResponse(user);
+        return UserResponse.mapToDto(user);
     }
 
     @Override
@@ -107,24 +147,24 @@ public class UserServiceImpl implements UserService {
 
         final User user = userRepository.getUserByName(username);
 
-        if (user.getId().equals(currentUser.getId()) ||
-                currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-
-            user.setFirstName(updateUserRequest.getFirstName());
-            user.setLastName(updateUserRequest.getLastName());
-            user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
-            user.setUsername(updateUserRequest.getUsername());
-            user.setEmail(updateUserRequest.getEmail());
-
-            return mapUserToUserResponse(userRepository.save(user));
+        if (!Objects.equals(user.getId(), currentUser.getId()) ||
+                !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+            ApiResponse apiResponse = ApiResponse.builder()
+                    .success(Boolean.FALSE)
+                    .message("You don't have permission to update profile of: " + username)
+                    .build();
+            throw new UnauthorizedException(apiResponse);
         }
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .success(Boolean.FALSE)
-                .message("You don't have permission to update profile of: " + username)
-                .build();
-        // lalu lempar error
-        throw new UnauthorizedException(apiResponse);
+        user.setFirstName(updateUserRequest.getFirstName());
+        user.setLastName(updateUserRequest.getLastName());
+        user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
+        user.setUsername(updateUserRequest.getUsername());
+        user.setEmail(updateUserRequest.getEmail());
+
+        userRepository.save(user);
+
+        return UserResponse.mapToDto(user);
     }
 
     @Override
@@ -172,15 +212,4 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
-    private UserResponse mapUserToUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .email(user.getEmail())
-                .roles(user.getRoles())
-                .build();
-    }
 }
