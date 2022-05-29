@@ -49,6 +49,10 @@ public class User extends DateAudit {
     @Column(name = "email", length = 40)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_record", nullable = false)
+    private StatusRecord statusRecord = StatusRecord.ACTIVE;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
