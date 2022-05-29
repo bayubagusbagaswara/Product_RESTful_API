@@ -26,11 +26,11 @@ class AuthServiceImplTest {
     @Test
     void signUp() {
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setFirstName("Albert");
-        signUpRequest.setLastName("Einstein");
-        signUpRequest.setUsername("albert12");
-        signUpRequest.setPassword("albert123");
-        signUpRequest.setEmail("albert@gmail.com");
+        signUpRequest.setFirstName("Bayu");
+        signUpRequest.setLastName("Bagaswara");
+        signUpRequest.setUsername("bayu_bagaswara");
+        signUpRequest.setPassword("B@gaswara12");
+        signUpRequest.setEmail("bagaszwara12@gmail.com");
 
         UserResponse userResponse = authService.signUp(signUpRequest);
 
@@ -40,8 +40,8 @@ class AuthServiceImplTest {
 
     @Test
     void signIn() {
-        String username = "albert12";
-        String password = "albert123";
+        String username = "bayu_bagaswara";
+        String password = "B@gaswara12";
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsernameOrEmail(username);
@@ -60,8 +60,8 @@ class AuthServiceImplTest {
 
     @Test
     void refreshToken() {
-        String refreshToken = "";
-        String username = "";
+        String refreshToken = "0b0e48e8-edbd-4978-8dce-85932fe18d24";
+        String username = "bayu_bagaswara";
         RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
         refreshTokenRequest.setRefreshToken(refreshToken);
         refreshTokenRequest.setUsername(username);
@@ -80,8 +80,8 @@ class AuthServiceImplTest {
 
     @Test
     void logout() {
-        String refreshToken = "bcef9489-6af1-4cd1-a1b4-14e00888908f";
-        Long userId = 2L;
+        String refreshToken = "0b0e48e8-edbd-4978-8dce-85932fe18d24";
+        Long userId = 1L;
         LogoutRequest logoutRequest = new LogoutRequest();
         logoutRequest.setUserId(userId);
         logoutRequest.setRefreshToken(refreshToken);
