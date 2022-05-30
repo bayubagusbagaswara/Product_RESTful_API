@@ -2,7 +2,6 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.product.*;
 import com.product.restful.entity.Product;
-import com.product.restful.exception.ProductNotFoundException;
 import com.product.restful.repository.ProductRepository;
 import com.product.restful.service.ProductService;
 import com.product.restful.util.ValidationUtil;
@@ -34,44 +33,48 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse createProduct(CreateProductRequest createProductRequest) {
         validationUtil.validate(createProductRequest);
+
         Product product = new Product();
         product.setName(createProductRequest.getName());
         product.setPrice(createProductRequest.getPrice());
         product.setQuantity(createProductRequest.getQuantity());
         product.setDescription(createProductRequest.getDescription());
         product.setCreatedAt(Instant.now());
+
         productRepository.save(product);
-        return mapProductToGetProductResponse(product);
+        return ProductResponse.fromProduct(product);
     }
 
     @Override
-    public ProductResponse getProductById(String productId) throws ProductNotFoundException {
-        Product product = getProduct(productId);
-        return mapProductToGetProductResponse(product);
+    public ProductResponse getProductById(String id) {
+        Product product = productRepository.getProductById(id);
+        return ProductResponse.fromProduct(product);
     }
 
     @Override
     public List<ProductResponse> getAllProduct() {
         Iterable<Product> products = productRepository.findAll();
         List<Product> productList = StreamSupport.stream(products.spliterator(), false).collect(Collectors.toList());
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
-    public ProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) throws ProductNotFoundException {
+    public ProductResponse updateProduct(String id, UpdateProductRequest updateProductRequest) {
         validationUtil.validate(updateProductRequest);
-        Product product = getProduct(productId);
+
+        Product product = productRepository.getProductById(id);
         product.setName(updateProductRequest.getName());
         product.setPrice(updateProductRequest.getPrice());
         product.setQuantity(updateProductRequest.getQuantity());
         product.setUpdatedAt(Instant.now());
+
         productRepository.save(product);
-        return mapProductToGetProductResponse(product);
+        return ProductResponse.fromProduct(product);
     }
 
     @Override
-    public void deleteProduct(String productId) throws ProductNotFoundException {
-        Product product = getProduct(productId);
+    public void deleteProduct(String id) {
+        Product product = productRepository.getProductById(id);
         productRepository.delete(product);
     }
 
@@ -88,10 +91,10 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         List<Product> productList = products.getContent();
 
-        List<ProductResponse> productRespons = mapProductListToGetProductResponseList(productList);
+        List<ProductResponse> productResponses = ProductResponse.fromProductList(productList);
 
         ListProductResponse listAllProductResponse = new ListProductResponse();
-        listAllProductResponse.setProductResponses(productRespons);
+        listAllProductResponse.setProductResponses(productResponses);
         listAllProductResponse.setPageNo(products.getNumber());
         listAllProductResponse.setPageSize(products.getSize());
         listAllProductResponse.setTotalElements(products.getTotalElements());
@@ -101,105 +104,69 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getProductByName(String name) throws ProductNotFoundException {
-        Product product = productRepository.findByNameIgnoreCase(name).orElseThrow(() -> new ProductNotFoundException("Product Name = [" +name+ "] Not Found"));
-        return mapProductToGetProductResponse(product);
+    public ProductResponse getProductByName(String name) {
+        Product product = productRepository.getProductByName(name);
+        return ProductResponse.fromProduct(product);
     }
 
     @Override
     public List<ProductResponse> getProductByNameContaining(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCase(name);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByNameStartingWith(String name) {
         List<Product> productList = productRepository.findByNameStartingWithIgnoreCase(name);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByNameContainingOrderByName(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByName(name);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByNameContainingOrderByNameDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByNameDesc(name);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseAndPriceBetween(name, priceMin, priceMax);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByNameContainingOrderByPrice(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPriceDesc(name);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByNameContainingOrderByPriceDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPrice(name);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByPriceBetween(priceMin, priceMax);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByPriceGreaterThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceGreaterThanEqual(price);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
     @Override
     public List<ProductResponse> getProductByPriceLessThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceLessThanEqual(price);
-        return mapProductListToGetProductResponseList(productList);
+        return ProductResponse.fromProductList(productList);
     }
 
-    private List<ProductResponse> mapProductListToGetProductResponseList(List<Product> productList) {
-        return productList.stream()
-                .map((product) -> {
-                    ProductResponse productResponse = new ProductResponse();
-                    productResponse.setId(product.getId());
-                    productResponse.setName(product.getName());
-                    productResponse.setPrice(product.getPrice());
-                    productResponse.setQuantity(product.getQuantity());
-                    productResponse.setDescription(product.getDescription());
-                    productResponse.setCreatedBy(product.getCreatedBy());
-                    productResponse.setCreatedAt(product.getCreatedAt());
-                    productResponse.setUpdatedBy(product.getUpdatedBy());
-                    productResponse.setUpdatedAt(product.getUpdatedAt());
-                    return productResponse;
-                })
-                .collect(Collectors.toList())
-                ;
-    }
-
-    private ProductResponse mapProductToGetProductResponse(Product product) {
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setId(product.getId());
-        productResponse.setName(product.getName());
-        productResponse.setPrice(product.getPrice());
-        productResponse.setQuantity(product.getQuantity());
-        productResponse.setDescription(product.getDescription());
-        productResponse.setCreatedBy(product.getCreatedBy());
-        productResponse.setCreatedAt(product.getCreatedAt());
-        productResponse.setUpdatedBy(product.getUpdatedBy());
-        productResponse.setUpdatedAt(product.getUpdatedAt());
-        return productResponse;
-    }
-
-    private Product getProduct(String id) throws ProductNotFoundException {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product ID: [" +id+ "] not found"));
-    }
 }
