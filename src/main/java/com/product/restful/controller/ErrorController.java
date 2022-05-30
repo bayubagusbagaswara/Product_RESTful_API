@@ -1,7 +1,7 @@
 package com.product.restful.controller;
 
 import com.product.restful.dto.WebResponse;
-import com.product.restful.exception.ProductNotFoundException;
+import com.product.restful.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,8 +11,8 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class ErrorController {
 
-    @ExceptionHandler(value = ProductNotFoundException.class)
-    public WebResponse<String> dataNotFoundHandler(ProductNotFoundException productNotFoundException) {
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public WebResponse<String> resourceNotFoundHandler(ResourceNotFoundException resourceNotFoundException) {
         return WebResponse.<String>builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .status(HttpStatus.NOT_FOUND)
