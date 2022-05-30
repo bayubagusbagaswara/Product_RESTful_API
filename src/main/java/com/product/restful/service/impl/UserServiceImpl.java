@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
 
         final User user = userRepository.getUserByName(username);
 
-        if (!Objects.equals(user.getId(), currentUser.getId()) ||
+        if (!Objects.equals(user.getId(), currentUser.getId()) &&
                 !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
             ApiResponse apiResponse = ApiResponse.builder()
                     .success(Boolean.FALSE)
@@ -203,10 +203,13 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", username));
 
-        if (!user.getId().equals(currentUser.getId()) || !currentUser.getAuthorities()
-                .contains(new SimpleGrantedAuthority(RoleName.ADMIN.getRoleName()))) {
+        if (!Objects.equals(user.getId(), currentUser.getId()) &&
+                !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
 
-            ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username);
+            ApiResponse apiResponse = ApiResponse.builder()
+                    .success(Boolean.FALSE)
+                    .message("You don't have permission to delete profile of: " + username)
+                    .build();
             throw new AccessDeniedException(apiResponse);
         }
 
