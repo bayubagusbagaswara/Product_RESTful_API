@@ -1,7 +1,6 @@
 package com.product.restful.service;
 
 import com.product.restful.dto.product.*;
-import com.product.restful.exception.ProductNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,14 +8,14 @@ import java.util.List;
 public interface ProductService {
 
     ProductResponse createProduct(CreateProductRequest createProductRequest);
-    ProductResponse getProductById(String productId) throws ProductNotFoundException;
+    ProductResponse getProductById(String productId);
     List<ProductResponse> getAllProduct();
-    ProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) throws ProductNotFoundException;
-    void deleteProduct(String productId) throws ProductNotFoundException;
+    ProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) ;
+    void deleteProduct(String productId) ;
 
     ListProductResponse listAllProduct(ListProductRequest listProductRequest);
 
-    ProductResponse getProductByName(String name) throws ProductNotFoundException;
+    ProductResponse getProductByName(String name) ;
     List<ProductResponse> getProductByNameContaining(String name);
     List<ProductResponse> getProductByNameStartingWith(String name);
     List<ProductResponse> getProductByNameContainingOrderByName(String name);
