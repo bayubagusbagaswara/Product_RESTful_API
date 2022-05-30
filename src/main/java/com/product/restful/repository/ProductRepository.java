@@ -1,10 +1,9 @@
 package com.product.restful.repository;
 
 import com.product.restful.entity.Product;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.product.restful.exception.ResourceNotFoundException;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -14,56 +13,33 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
 
+    @NonNull
+    @Override
+    Optional<Product> findById(@NonNull String id);
+
     Optional<Product> findByNameIgnoreCase(String name);
     List<Product> findByNameContainsIgnoreCase(String name);
     List<Product> findByNameStartingWithIgnoreCase(String name);
     List<Product> findByNameContainsIgnoreCaseOrderByName(String name);
     List<Product> findByNameContainsIgnoreCaseOrderByNameDesc(String name);
 
-    // NAME DAN PRICE
     List<Product> findByNameContainsIgnoreCaseAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax);
     List<Product> findByNameContainsIgnoreCaseOrderByPrice(String name);
     List<Product> findByNameContainsIgnoreCaseOrderByPriceDesc(String name);
 
-    // PRICE
     List<Product> findByPriceBetween(BigDecimal priceMin, BigDecimal priceMax);
     List<Product> findByPriceGreaterThanEqual(BigDecimal price);
     List<Product> findByPriceLessThanEqual(BigDecimal price);
 
-    // findAll by keyword
-    @Query("SELECT p FROM Product p WHERE "
-            + "CONCAT(p.id, p.name, p.price, p.quantity)"
-            + "LIKE %?1%")
-    Page<Product> findAll(String keyword, Pageable pageable);
 
-//    @Query("select u from User u where lower(u.name) like lower(concat('%', ?1, '%'))")
-//    List<User> findByNameFree(String name);
+    default Product getProductById(String id) {
+        return findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+    }
 
-//    @Query("select u from User u where lower(u.name) like lower(concat('%', :nameToFind, '%'))")
-//    List<User> findByNameFree(@Param("nameToFind") String name);
-
-    // contains example
-//    List<User> findByNameContaining(String name);
-//    List<User> findByNameContains(String name);
-//    List<User> findByNameIsContaining(String name);
-
-    // case insensitivity example
-//    List<User> findByNameContainingIgnoreCase(String name);
-
-    // or define as below
-//    @Query("select u from User u where lower(u.name) like lower(concat('%', ?name, '%'))")
-//    List<User> findByName(@Param("name") String name);
-
-    // if ignore case did not work
-//    @Query(value = "{'title': {$regex : ?0, $options: 'i'}}")
-//    Foo findByTitleRegex(String regexString);
-
-    // limiting the result size with top and first
-//    User findFirstByOrderByLastnameAsc();
-//    User findTopByOrderByAgeDesc();
-//    Page<User> queryFirst10ByLastName(String lastname, Pageable pageable);
-//    Slice<User> findTop3ByLastname(String lastname, Pageable pageable);
-//    List<User> findFirst10ByLastname(String lastname, Sort sort);
-//    List<User> findTop10ByLastname(String lastname, Pageable pageable);
+    default Product getProductByName(String name) {
+        return findByNameIgnoreCase(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "name", name));
+    }
 
 }
