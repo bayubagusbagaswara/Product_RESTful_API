@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
-        return UserResponse.mapToDto(user);
+        return UserResponse.fromUser(user);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roleSet);
 
         userRepository.save(user);
-        return UserResponse.mapToDto(user);
+        return UserResponse.fromUser(user);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
-        return UserResponse.mapToDto(user);
+        return UserResponse.fromUser(user);
     }
 
     @Override
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return UserResponse.mapToDto(user);
+        return UserResponse.fromUser(user);
     }
 
     @Override
@@ -227,7 +227,7 @@ public class UserServiceImpl implements UserService {
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName(RoleName.USER)
-                .orElseThrow(() -> new AppException("User role not set")));
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         user.setRoles(roles);
 
