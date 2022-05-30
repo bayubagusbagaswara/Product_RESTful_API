@@ -40,7 +40,7 @@ public class ProductController {
         ProductResponse productResponse = productService.createProduct(createProductRequest);
         return WebResponse.<ProductResponse>builder()
                 .code(HttpStatus.CREATED.value())
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.CREATED.getReasonPhrase())
                 .data(productResponse)
                 .build();
     }
@@ -50,7 +50,7 @@ public class ProductController {
         ProductResponse productResponse = productService.getProductById(productId);
         return WebResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK)
+                .status(HttpStatus.OK.getReasonPhrase())
                 .data(productResponse)
                 .build();
     }
@@ -61,7 +61,7 @@ public class ProductController {
         ProductResponse productResponse = productService.updateProduct(id, updateProductRequest);
         return WebResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK)
+                .status(HttpStatus.OK.getReasonPhrase())
                 .data(productResponse)
                 .build();
     }
@@ -72,7 +72,7 @@ public class ProductController {
         productService.deleteProduct(id);
         return WebResponse.<String>builder()
                 .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK)
+                .status(HttpStatus.OK.getReasonPhrase())
                 .data(null)
                 .build();
     }
@@ -82,7 +82,7 @@ public class ProductController {
         List<ProductResponse> productRespons = productService.getAllProduct();
         return WebResponse.<List<ProductResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK)
+                .status(HttpStatus.OK.getReasonPhrase())
                 .data(productRespons)
                 .build();
     }
@@ -100,9 +100,11 @@ public class ProductController {
         listProductRequest.setSortBy(sortBy);
         listProductRequest.setSortDir(sortDir);
         ListProductResponse responses = productService.listAllProduct(listProductRequest);
-        return new WebResponse<>(
-                HttpStatus.OK.value(), HttpStatus.OK, responses
-        );
+        return WebResponse.<ListProductResponse>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data(responses)
+                .build();
     }
 
     @GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -110,7 +112,7 @@ public class ProductController {
         List<ProductResponse> productRespons = productService.getProductByNameContaining(name);
         return WebResponse.<List<ProductResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK)
+                .status(HttpStatus.OK.getReasonPhrase())
                 .data(productRespons)
                 .build();
     }
@@ -123,7 +125,7 @@ public class ProductController {
         List<ProductResponse> productRespons = productService.getProductByNameContainingAndPriceBetween(name, priceMin, priceMax);
         return WebResponse.<List<ProductResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK)
+                .status(HttpStatus.OK.getReasonPhrase())
                 .data(productRespons)
                 .build();
     }

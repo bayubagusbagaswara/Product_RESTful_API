@@ -1,6 +1,7 @@
 package com.product.restful.controller;
 
 import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.auth.LogoutRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
@@ -44,27 +45,37 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(
+    public WebResponse<AuthenticationResponse> authenticateUser(
             @Valid @RequestBody LoginRequest loginRequest) {
         AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
-        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
+        return WebResponse.<AuthenticationResponse>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data(authenticationResponse)
+                .build();
     }
 
     @PostMapping("/refresh/token")
     @RolesAllowed({"ROLE_CUSTOMER", "ROLE_USER"})
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public WebResponse<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
-        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
+        return WebResponse.<AuthenticationResponse>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data(authenticationResponse)
+                .build();
     }
 
     @PostMapping("/logout")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
+    public WebResponse<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body("Refresh Token Deleted Successfully");
+        return WebResponse.<String>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data("Refresh Token Deleted Successfully")
+                .build();
     }
 
 }

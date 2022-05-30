@@ -1,6 +1,7 @@
 package com.product.restful.controller;
 
 import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserResponse;
@@ -33,39 +34,55 @@ public class UserController {
 
     @PutMapping("/{username}")
     @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> updateUser(
+    public WebResponse<UserResponse> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
             @PathVariable(value = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
 
         final UserResponse userResponse = userService.updateUser(username, newUser, currentUser);
-        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+        return WebResponse.<UserResponse>builder()
+                .code(HttpStatus.CREATED.value())
+                .status(HttpStatus.CREATED.getReasonPhrase())
+                .data(userResponse)
+                .build();
     }
 
     @PutMapping("/{username}/addRole")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> addRoleToUser(
+    public WebResponse<String> addRoleToUser(
             @PathVariable(value = "username") String username,
             @RequestBody RoleName roleName) {
         userService.addRoleToUser(username, roleName);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        return WebResponse.<String>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data("Success added role to user")
+                .build();
     }
 
     @DeleteMapping("/{username}")
     @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> deleteUser(
+    public WebResponse<ApiResponse> deleteUser(
             @PathVariable(value = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
 
         ApiResponse apiResponse = userService.deleteUser(username, currentUser);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return WebResponse.<ApiResponse>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data(apiResponse)
+                .build();
     }
 
     @PutMapping("/{username}/removeAdmin")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> removeAdmin(@PathVariable(value = "username") String username) {
+    public WebResponse<ApiResponse> removeAdmin(@PathVariable(value = "username") String username) {
         ApiResponse apiResponse = userService.removeAdmin(username);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return WebResponse.<ApiResponse>builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .data(apiResponse)
+                .build();
     }
 
 }
