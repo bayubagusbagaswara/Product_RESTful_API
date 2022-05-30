@@ -26,7 +26,7 @@ public class RefreshTokenResponse {
     public static RefreshTokenResponse mapToDto(RefreshToken refreshToken) {
         return RefreshTokenResponse.builder()
                 .id(refreshToken.getId())
-                .user(UserResponse.mapToDto(refreshToken.getUser()))
+                .user(UserResponse.fromUser(refreshToken.getUser()))
                 .refreshToken(refreshToken.getRefreshToken())
                 .expiryDate(refreshToken.getExpiryDate())
                 .build();
@@ -35,7 +35,7 @@ public class RefreshTokenResponse {
     public static RefreshToken mapToEntity(RefreshTokenResponse refreshTokenResponse) {
         return RefreshToken.builder()
                 .id(refreshTokenResponse.getId())
-                .user(UserResponse.mapToEntity(refreshTokenResponse.getUser()))
+                .user(UserResponse.fromUserResponse(refreshTokenResponse.getUser()))
                 .refreshToken(refreshTokenResponse.getRefreshToken())
                 .expiryDate(refreshTokenResponse.getExpiryDate())
                 .build();
