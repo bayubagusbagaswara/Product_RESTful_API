@@ -40,11 +40,11 @@ class AuthServiceImplTest {
 
     @Test
     void signIn() {
-        String username = "bayu_bagaswara";
+        String usernameOrEmail = "bagaszwara12@gmail.com";
         String password = "B@gaswara12";
 
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsernameOrEmail(username);
+        loginRequest.setUsernameOrEmail(usernameOrEmail);
         loginRequest.setPassword(password);
 
         AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
@@ -52,9 +52,11 @@ class AuthServiceImplTest {
         assertNotNull(authenticationResponse.getAccessToken());
         assertNotNull(authenticationResponse.getRefreshToken());
         assertNotNull(authenticationResponse.getExpiresAt());
+
         log.info("Access Token: {}", authenticationResponse.getAccessToken());
         log.info("Refresh Token: {}", authenticationResponse.getRefreshToken());
         log.info("Expires at: {}", authenticationResponse.getExpiresAt());
+        log.info("Token Type: {}", authenticationResponse.getTokenType());
         log.info("Username: {}", authenticationResponse.getUsername());
     }
 
