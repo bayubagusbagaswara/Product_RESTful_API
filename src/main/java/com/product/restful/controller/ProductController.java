@@ -6,7 +6,6 @@ import com.product.restful.dto.product.ListProductResponse;
 import com.product.restful.dto.product.ProductResponse;
 import com.product.restful.dto.product.UpdateProductRequest;
 import com.product.restful.dto.WebResponse;
-import com.product.restful.exception.ProductNotFoundException;
 import com.product.restful.service.ProductService;
 import com.product.restful.util.AppConstants;
 import org.springframework.http.HttpStatus;
@@ -47,7 +46,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{idProduct}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<ProductResponse> getProductById(@PathVariable("idProduct") String productId) throws ProductNotFoundException {
+    public WebResponse<ProductResponse> getProductById(@PathVariable("idProduct") String productId) {
         ProductResponse productResponse = productService.getProductById(productId);
         return WebResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -58,7 +57,7 @@ public class ProductController {
 
     @PutMapping(value = "/{idProduct}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public WebResponse<ProductResponse> updateProduct(@PathVariable("idProduct") String id, @RequestBody UpdateProductRequest updateProductRequest) throws ProductNotFoundException {
+    public WebResponse<ProductResponse> updateProduct(@PathVariable("idProduct") String id, @RequestBody UpdateProductRequest updateProductRequest) {
         ProductResponse productResponse = productService.updateProduct(id, updateProductRequest);
         return WebResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -69,7 +68,7 @@ public class ProductController {
 
     @DeleteMapping(value = "/{idProduct}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public WebResponse<String> deleteProduct(@PathVariable("idProduct") String id) throws ProductNotFoundException {
+    public WebResponse<String> deleteProduct(@PathVariable("idProduct") String id) {
         productService.deleteProduct(id);
         return WebResponse.<String>builder()
                 .code(HttpStatus.OK.value())
