@@ -7,9 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -31,7 +32,7 @@ public class UserResponse {
 
     private Set<Role> roles = new HashSet<>();
 
-    public static UserResponse mapToDto(User user) {
+    public static UserResponse fromUser(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -43,7 +44,7 @@ public class UserResponse {
                 .build();
     }
 
-    public static User mapToEntity(UserResponse userResponse) {
+    public static User fromUserResponse(UserResponse userResponse) {
         return User.builder()
                 .id(userResponse.getId())
                 .firstName(userResponse.getFirstName())
@@ -53,5 +54,12 @@ public class UserResponse {
                 .email(userResponse.getEmail())
                 .roles(userResponse.getRoles())
                 .build();
+    }
+
+    public static List<UserResponse> fromUserList(List<User> userList) {
+        return userList.stream()
+                .map(UserResponse::fromUser)
+                .collect(Collectors.toList())
+                ;
     }
 }
