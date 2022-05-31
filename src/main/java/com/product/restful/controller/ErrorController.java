@@ -4,6 +4,7 @@ import com.product.restful.dto.ApiResponse;
 import com.product.restful.exception.AccessDeniedException;
 import com.product.restful.exception.AppException;
 import com.product.restful.exception.BadRequestException;
+import com.product.restful.exception.CustomUsernameNotFoundException;
 import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.exception.TokenRefreshException;
@@ -74,5 +75,12 @@ public class ErrorController {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiResponse> resfreshTokenNotFoundHandler(RefreshTokenNotFoundException refreshTokenNotFoundException) {
         return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, refreshTokenNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = CustomUsernameNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiResponse> usernameNotFoundHandler(CustomUsernameNotFoundException usernameNotFoundException) {
+        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, usernameNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
