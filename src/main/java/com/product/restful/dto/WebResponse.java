@@ -1,5 +1,6 @@
 package com.product.restful.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
@@ -10,20 +11,13 @@ import org.springframework.http.HttpStatus;
 
 @Data
 @Builder@JsonPropertyOrder({
-        "code",
-        "status",
         "success",
-        "message"
+        "message",
+        "data"
 })
 @AllArgsConstructor
 @NoArgsConstructor
 public class WebResponse<T> {
-
-    @JsonProperty("code")
-    private Integer code;
-
-    @JsonProperty("status")
-    private String status;
 
     @JsonProperty("success")
     private Boolean success;
@@ -31,6 +25,21 @@ public class WebResponse<T> {
     @JsonProperty("message")
     private String message;
 
+    @JsonProperty("data")
     private T data;
+
+    @JsonIgnore
+    private HttpStatus status;
+
+    public WebResponse(Boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
+
+    public WebResponse(Boolean success, String message, T data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+    }
 }
 
