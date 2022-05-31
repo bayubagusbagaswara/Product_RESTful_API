@@ -1,6 +1,7 @@
 package com.product.restful.configuration;
 
 import com.product.restful.entity.UserPrincipal;
+import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 public class SpringSecurityAuditAwareImpl implements AuditorAware<String> {
 
+    @NonNull
     @Override
     public Optional<String> getCurrentAuditor() {
 
@@ -22,6 +24,6 @@ public class SpringSecurityAuditAwareImpl implements AuditorAware<String> {
 
         UserPrincipal userPrincipal = (UserPrincipal) Objects.requireNonNull(authentication).getPrincipal();
 
-        return Optional.ofNullable(userPrincipal.getUsername());
+        return Optional.ofNullable(userPrincipal.getEmail());
     }
 }
