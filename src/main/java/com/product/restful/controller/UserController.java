@@ -12,7 +12,13 @@ import com.product.restful.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -27,62 +33,47 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest user) {
+    public ResponseEntity<WebResponse<UserResponse>> createUser(@Valid @RequestBody CreateUserRequest user) {
         final UserResponse userResponse = userService.createUser(user);
-        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User was created successfully", userResponse), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{username}")
+    @PutMapping(name = "/{username}")
     @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
-    public WebResponse<UserResponse> updateUser(
+    public ResponseEntity<WebResponse<UserResponse>> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
-            @PathVariable(value = "username") String username,
+            @PathVariable(name = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
 
         final UserResponse userResponse = userService.updateUser(username, newUser, currentUser);
-        return WebResponse.<UserResponse>builder()
-                .code(HttpStatus.CREATED.value())
-                .status(HttpStatus.CREATED.getReasonPhrase())
-                .data(userResponse)
-                .build();
+        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User updated successfully", userResponse), HttpStatus.OK);
     }
 
-    @PutMapping("/{username}/addRole")
+    @PutMapping(name = "/{username}/addRole")
     @PreAuthorize("hasRole('ADMIN')")
-    public WebResponse<String> addRoleToUser(
-            @PathVariable(value = "username") String username,
+    public ResponseEntity<ApiResponse> addRoleToUser(
+            @PathVariable(name = "username") String username,
             @RequestBody RoleName roleName) {
+
         userService.addRoleToUser(username, roleName);
-        return WebResponse.<String>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data("Success added role to user")
-                .build();
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role to user"), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping(name = "/{username}")
     @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
-    public WebResponse<ApiResponse> deleteUser(
-            @PathVariable(value = "username") String username,
+    public ResponseEntity<ApiResponse> deleteUser(
+            @PathVariable(name = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
 
         ApiResponse apiResponse = userService.deleteUser(username, currentUser);
-        return WebResponse.<ApiResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(apiResponse)
-                .build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/{username}/removeAdmin")
+    @PutMapping(name = "/{username}/removeAdmin")
     @PreAuthorize("hasRole('ADMIN')")
-    public WebResponse<ApiResponse> removeAdmin(@PathVariable(value = "username") String username) {
+    public ResponseEntity<ApiResponse> removeAdmin(@PathVariable(name = "username") String username) {
         ApiResponse apiResponse = userService.removeAdmin(username);
-        return WebResponse.<ApiResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(apiResponse)
-                .build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 }
