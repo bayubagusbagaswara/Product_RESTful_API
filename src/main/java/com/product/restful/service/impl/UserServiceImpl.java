@@ -1,7 +1,6 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
-import com.product.restful.dto.role.RoleResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
