@@ -32,7 +32,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/signup")
+    @PostMapping(value = "/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         UserResponse userResponse = authService.signUp(signUpRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
@@ -42,14 +42,14 @@ public class AuthController {
                 .body(new ApiResponse(Boolean.TRUE, "User registered successfully"));
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<WebResponse<AuthenticationResponse>> authenticateUser(
             @Valid @RequestBody LoginRequest loginRequest) {
         AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User authenticated successfully", authenticationResponse), HttpStatus.OK);
     }
 
-    @PostMapping("/refresh/token")
+    @PostMapping(value = "/refresh/token")
     @RolesAllowed({"ROLE_CUSTOMER", "ROLE_USER"})
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<WebResponse<AuthenticationResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
@@ -57,7 +57,7 @@ public class AuthController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Refresh token successfully updated", authenticationResponse), HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
+    @PostMapping(value = "/logout")
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<ApiResponse> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
