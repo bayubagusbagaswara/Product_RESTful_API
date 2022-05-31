@@ -17,6 +17,7 @@ import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -210,6 +211,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void verifyUserByUsername(String username) {
         userRepository.getUserByName(username);
+    }
+
+    @Override
+    public void verifyUserByUsernameOrEmail(String usernameOrEmail) {
+        userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with this username or email: %s", usernameOrEmail)));
     }
 
     @Override
