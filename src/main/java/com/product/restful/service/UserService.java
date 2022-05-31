@@ -34,5 +34,7 @@ public interface UserService {
 
     void verifyUserByUsername(String username);
 
+    void verifyUserByUsernameOrEmail(String usernameOrEmail);
+
     void verifyEmail(String email);
 }
