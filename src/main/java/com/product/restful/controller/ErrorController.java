@@ -11,6 +11,7 @@ import com.product.restful.exception.TokenRefreshException;
 import com.product.restful.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -82,5 +83,12 @@ public class ErrorController {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiResponse> usernameNotFoundHandler(CustomUsernameNotFoundException usernameNotFoundException) {
         return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, usernameNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = AuthenticationException.class)
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ApiResponse> authenticationHandler(AuthenticationException authenticationException) {
+        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, authenticationException.getMessage() + ", User is not authenticated"), HttpStatus.UNAUTHORIZED);
     }
 }
