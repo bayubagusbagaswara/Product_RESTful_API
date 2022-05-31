@@ -12,6 +12,7 @@ import com.product.restful.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -81,7 +82,14 @@ public class ErrorController {
     @ExceptionHandler(value = CustomUsernameNotFoundException.class)
     @ResponseBody
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ResponseEntity<ApiResponse> usernameNotFoundHandler(CustomUsernameNotFoundException usernameNotFoundException) {
+    public ResponseEntity<ApiResponse> customUsernameNotFoundHandler(CustomUsernameNotFoundException usernameNotFoundException) {
+        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, usernameNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiResponse> usernameNotFoundHandler(UsernameNotFoundException usernameNotFoundException) {
         return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, usernameNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
     }
 
