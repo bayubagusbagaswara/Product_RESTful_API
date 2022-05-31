@@ -83,9 +83,9 @@ class AuthServiceImplTest {
     @Test
     void logout() {
         String refreshToken = "0b0e48e8-edbd-4978-8dce-85932fe18d24";
-        Long userId = 1L;
+        String username = "";
         LogoutRequest logoutRequest = new LogoutRequest();
-        logoutRequest.setUserId(userId);
+        logoutRequest.setUsername(username);
         logoutRequest.setRefreshToken(refreshToken);
 
         authService.logout(logoutRequest);
