@@ -1,12 +1,14 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.role.RoleResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserProfileResponse;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.dto.user.UserSummaryResponse;
+import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
 import com.product.restful.entity.UserPrincipal;
@@ -19,10 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -124,20 +123,22 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setCreatedAt(Instant.now());
 
+        Set<Role> roleSet = new HashSet<>();
+
         if (userRepository.count() == 0) {
-            user.setRoles(new HashSet<>(List.of(
-                    roleRepository.findByName(RoleName.ADMIN)
-                            .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)),
-                    roleRepository.findByName(RoleName.USER)
-                            .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET))
-            )));
+            roleSet.add(roleRepository.findByName(RoleName.ADMIN)
+                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+
+            roleSet.add(roleRepository.findByName(RoleName.USER)
+                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         }
 
-        user.setRoles(new HashSet<>(Collections.singleton(
-                roleRepository.findByName(RoleName.USER)
-                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
+        roleSet.add(roleRepository.findByName(RoleName.USER)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
+        user.setRoles(roleSet);
         userRepository.save(user);
+
         return UserResponse.fromUser(user);
     }
 
@@ -207,9 +208,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void verifyUser(Long id) {
-        userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    public void verifyUserByUsername(String username) {
+        userRepository.getUserByName(username);
     }
 
     @Override
