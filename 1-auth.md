@@ -86,3 +86,62 @@
   "message": "Refresh Token Deleted Successfully"
 }
 ```
+
+
+# Create User
+
+## First User
+
+```json
+{
+  "firstName": "Bayu",
+  "lastName": "Bagaswara",
+  "email": "bagaszwara12@gmail.com",
+  "username": "bayu_bagaswara",
+  "password": "B@gaswara12"
+}
+```
+
+## Admin
+
+```json
+{
+  "firstName": "Albert",
+  "lastName": "Einstein",
+  "email": "albert@gmail.com",
+  "username": "albert_einstein",
+  "password": "albert123"
+}
+```
+
+## User
+
+```json
+{
+  "firstName": "Nikola",
+  "lastName": "Tesla",
+  "email": "tesla@gmail.com",
+  "username": "tesla99",
+  "password": "tesla123"
+}
+```
+
+```json
+{
+  "firstName": "Isaac",
+  "lastName": "Newton",
+  "email": "newton@gmail.com",
+  "username": "newton_12",
+  "password": "newton123"
+}
+```
+
+```json
+{
+  "firstName": "James",
+  "lastName": "Watt",
+  "email": "james@gmail.com",
+  "username": "james_watt",
+  "password": "james123"
+}
+```
