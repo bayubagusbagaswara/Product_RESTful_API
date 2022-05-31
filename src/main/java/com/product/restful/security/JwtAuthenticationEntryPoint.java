@@ -6,13 +6,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * Class ini berfungsi untuk mengirim pesan jika user tidak berhasil terautentikasi
+ * atau tidak dikenali username atau password nya
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -23,7 +23,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse,
-			AuthenticationException e) throws IOException, ServletException {
+			AuthenticationException e) throws IOException {
 
 		LOGGER.error("Responding with unauthorized error. Message - {}", e.getMessage());
 		httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Sorry, You're not authorized to access this resource.");
