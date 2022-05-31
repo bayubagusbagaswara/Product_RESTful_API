@@ -34,48 +34,34 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-
         UserResponse userResponse = authService.signUp(signUpRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
                 .buildAndExpand(userResponse.getId()).toUri();
-
         return ResponseEntity
                 .created(location)
                 .body(new ApiResponse(Boolean.TRUE, "User registered successfully"));
     }
 
     @PostMapping("/login")
-    public WebResponse<AuthenticationResponse> authenticateUser(
+    public ResponseEntity<WebResponse<AuthenticationResponse>> authenticateUser(
             @Valid @RequestBody LoginRequest loginRequest) {
         AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
-        return WebResponse.<AuthenticationResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(authenticationResponse)
-                .build();
+        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User authenticated successfully", authenticationResponse), HttpStatus.OK);
     }
 
     @PostMapping("/refresh/token")
     @RolesAllowed({"ROLE_CUSTOMER", "ROLE_USER"})
     @PreAuthorize("hasRole('MEMBER')")
-    public WebResponse<AuthenticationResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<WebResponse<AuthenticationResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
-        return WebResponse.<AuthenticationResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(authenticationResponse)
-                .build();
+        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Refresh token successfully updated", authenticationResponse), HttpStatus.OK);
     }
 
     @PostMapping("/logout")
     @PreAuthorize("hasRole('MEMBER')")
-    public WebResponse<String> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
+    public ResponseEntity<ApiResponse> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
-        return WebResponse.<String>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data("Refresh Token Deleted Successfully")
-                .build();
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Refresh token deleted successfully"), HttpStatus.OK);
     }
 
 }
