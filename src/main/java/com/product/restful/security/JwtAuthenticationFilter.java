@@ -1,6 +1,5 @@
 package com.product.restful.security;
 
-import com.product.restful.service.CustomUserDetailsService;
 import com.product.restful.service.impl.CustomUserDetailsServiceImpl;
 import lombok.NonNull;
 import org.slf4j.Logger;
