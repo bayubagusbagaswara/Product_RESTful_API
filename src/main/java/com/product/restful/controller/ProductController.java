@@ -35,29 +35,31 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<WebResponse<ProductResponse>> createProduct(@RequestBody CreateProductRequest createProductRequest) {
         ProductResponse productResponse = productService.createProduct(createProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product was created successfully", productResponse), HttpStatus.CREATED);
     }
 
-    @GetMapping(name = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<ProductResponse>> getProductById(@PathVariable(name = "id") String id) {
         ProductResponse productResponse = productService.getProductById(id);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product successfully retrieved based on id", productResponse), HttpStatus.OK);
     }
 
-    @PutMapping(name = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<WebResponse<ProductResponse>> updateProduct(
-            @PathVariable(name = "id") String id,
+            @PathVariable(value = "id") String id,
             @RequestBody UpdateProductRequest updateProductRequest) {
         ProductResponse productResponse = productService.updateProduct(id, updateProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product updated successfully", productResponse), HttpStatus.OK);
     }
 
-    @DeleteMapping(name = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<WebResponse<String>> deleteProduct(@PathVariable(name = "id") String id) {
         productService.deleteProduct(id);
@@ -66,10 +68,10 @@ public class ProductController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<ListProductResponse>> getAllProducts(
-            @RequestParam(name = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(name = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
 
         ListProductRequest listProductRequest = ListProductRequest.builder()
                 .pageNo(pageNo)
@@ -77,17 +79,18 @@ public class ProductController {
                 .sortBy(sortBy)
                 .sortDir(sortDir)
                 .build();
+
         ListProductResponse responses = productService.listAllProduct(listProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "All products successfully retrieved", responses), HttpStatus.OK);
     }
 
-    @GetMapping(name= "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/name/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<List<ProductResponse>>> getProductByName(@PathVariable(name = "name") String name) {
         List<ProductResponse> productResponses = productService.getProductByNameContaining(name);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "All products successfully retrieved", productResponses), HttpStatus.OK);
     }
 
-    @GetMapping(name = "/price/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/name/{name}/price", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<List<ProductResponse>>> getProductByNameAndPriceBetween(
             @PathVariable(name = "name") String name,
             @RequestParam(name = "priceMin") BigDecimal priceMin,
