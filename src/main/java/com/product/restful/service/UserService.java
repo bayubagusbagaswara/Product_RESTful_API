@@ -32,7 +32,7 @@ public interface UserService {
 
     ApiResponse removeAdmin(String username);
 
-    void verifyUser(Long id);
+    void verifyUserByUsername(String username);
 
     void verifyEmail(String email);
 }
