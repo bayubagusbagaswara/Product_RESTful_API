@@ -39,6 +39,7 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMillis);
 
         return Jwts.builder()
+//                .setClaims(), claims ini biasanya isinya roles dari UserPrincipal
                 .setSubject(username)
                 .setIssuer("Bagaswara Application")
                 .setIssuedAt(new Date())
