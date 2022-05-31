@@ -1,8 +1,12 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
-import com.product.restful.dto.user.*;
-import com.product.restful.entity.Role;
+import com.product.restful.dto.user.CreateUserRequest;
+import com.product.restful.dto.user.UpdateUserRequest;
+import com.product.restful.dto.user.UserIdentityAvailability;
+import com.product.restful.dto.user.UserProfileResponse;
+import com.product.restful.dto.user.UserResponse;
+import com.product.restful.dto.user.UserSummaryResponse;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
 import com.product.restful.entity.UserPrincipal;
@@ -17,8 +21,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,39 +44,25 @@ public class UserServiceImpl implements UserService {
         // jika response bernilai true, maka username tidak ada di database
         // dan jika response bernilai false, maka username sudah ada di database
         // biasanya ini untuk mengecek apakah ada username yang sama di database
-        final Boolean isAvailable = !userRepository.existsByUsername(username);
-        return UserIdentityAvailability.builder()
-                .available(isAvailable)
-                .build();
+        return new UserIdentityAvailability(!userRepository.existsByUsername(username));
     }
 
     @Override
     public UserIdentityAvailability checkEmailAvailability(String email) {
-        Boolean isAvailable = !userRepository.existsByEmail(email);
-        return UserIdentityAvailability.builder()
-                .available(isAvailable)
-                .build();
+        return new UserIdentityAvailability(!userRepository.existsByEmail(email));
     }
 
     @Override
     public void checkUsernameIsExists(String username) {
         if (userRepository.existsByUsername(username)) {
-            ApiResponse apiResponse = ApiResponse.builder()
-                    .success(Boolean.FALSE)
-                    .message("Username is already taken")
-                    .build();
-            throw new BadRequestException(apiResponse);
+            throw new BadRequestException(new ApiResponse(Boolean.FALSE, "Username is already taken"));
         }
     }
 
     @Override
     public void checkEmailIsExists(String email) {
         if (userRepository.existsByEmail(email)) {
-            ApiResponse apiResponse = ApiResponse.builder()
-                    .success(Boolean.FALSE)
-                    .message("Email is already taken")
-                    .build();
-            throw new BadRequestException(apiResponse);
+            throw new BadRequestException(new ApiResponse(Boolean.FALSE, "Email is already taken"));
         }
     }
 
@@ -123,7 +113,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(CreateUserRequest userRequest) {
-
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
@@ -135,19 +124,18 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setCreatedAt(Instant.now());
 
-        Set<Role> roleSet = new HashSet<>();
-
         if (userRepository.count() == 0) {
-            roleSet.add(roleRepository.findByName(RoleName.ADMIN)
-                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
-            roleSet.add(roleRepository.findByName(RoleName.USER)
-                    .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+            user.setRoles(new HashSet<>(List.of(
+                    roleRepository.findByName(RoleName.ADMIN)
+                            .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)),
+                    roleRepository.findByName(RoleName.USER)
+                            .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET))
+            )));
         }
 
-        roleSet.add(roleRepository.findByName(RoleName.USER)
-                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
-
-        user.setRoles(roleSet);
+        user.setRoles(new HashSet<>(Collections.singleton(
+                roleRepository.findByName(RoleName.USER)
+                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
         return UserResponse.fromUser(user);
@@ -177,13 +165,8 @@ public class UserServiceImpl implements UserService {
 
         final User user = userRepository.getUserByName(username);
 
-        if (!Objects.equals(user.getId(), currentUser.getId()) &&
-                !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-            ApiResponse apiResponse = ApiResponse.builder()
-                    .success(Boolean.FALSE)
-                    .message("You don't have permission to update profile of: " + username)
-                    .build();
-            throw new UnauthorizedException(apiResponse);
+        if (!Objects.equals(user.getId(), currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+            throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, "You don't have permission to update profile of: " + username));
         }
 
         user.setFirstName(updateUserRequest.getFirstName());
@@ -191,6 +174,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
         user.setUsername(updateUserRequest.getUsername());
         user.setEmail(updateUserRequest.getEmail());
+        user.setUpdatedAt(Instant.now());
 
         userRepository.save(user);
 
@@ -199,44 +183,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse deleteUser(String username, UserPrincipal currentUser) {
-
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", username));
 
-        if (!Objects.equals(user.getId(), currentUser.getId()) &&
-                !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-
-            ApiResponse apiResponse = ApiResponse.builder()
-                    .success(Boolean.FALSE)
-                    .message("You don't have permission to delete profile of: " + username)
-                    .build();
-            throw new AccessDeniedException(apiResponse);
+        if (!Objects.equals(user.getId(), currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+            throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username));
         }
 
         userRepository.deleteById(user.getId());
-
-        return ApiResponse.builder()
-                .success(Boolean.TRUE)
-                .message("You successfully deleted profile of: " + username)
-                .build();
+        return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
     }
 
     @Override
     public ApiResponse removeAdmin(String username) {
         final User user = userRepository.getUserByName(username);
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(RoleName.USER)
-                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
-
-        user.setRoles(roles);
+        user.setRoles(new HashSet<>(Collections.singleton(
+                roleRepository.findByName(RoleName.ADMIN)
+                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
-
-        return ApiResponse.builder()
-                .success(Boolean.TRUE)
-                .message("You took ADMIN role from user: " + username)
-                .build();
+        return new ApiResponse(Boolean.TRUE, "You took ADMIN role from user: " + username);
     }
 
     @Override
@@ -245,4 +212,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
+    @Override
+    public void verifyEmail(String email) {
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+    }
 }
