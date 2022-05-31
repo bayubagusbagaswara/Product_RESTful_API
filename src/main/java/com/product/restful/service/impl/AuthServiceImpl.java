@@ -97,7 +97,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(LogoutRequest logoutRequest) {
-        userService.verifyUser(logoutRequest.getUserId());
+        userService.verifyUserByUsername(logoutRequest.getUsername());
         RefreshToken refreshToken = refreshTokenService.verifyExpirationRefreshToken(logoutRequest.getRefreshToken());
         refreshTokenService.deleteRefreshToken(refreshToken.getRefreshToken());
     }
