@@ -13,9 +13,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class RefreshTokenRequest {
 
-    @NotBlank
+    @NotBlank(message = "Username must not be blank and not email")
+    private String username;
+
+    @NotBlank(message = "Refresh Token must not be blank")
     private String refreshToken;
 
-    @NotBlank
-    private String username;
 }
