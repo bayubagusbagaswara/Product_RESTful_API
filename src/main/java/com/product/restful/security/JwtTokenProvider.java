@@ -40,14 +40,14 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuer("Bayu Bagaswara")
+                .setIssuer("Bagaswara Application")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public Long getUserIdFromJWT(String token) {
+    public Long getUserIdFromJwtToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
@@ -56,6 +56,13 @@ public class JwtTokenProvider {
         return Long.valueOf(claims.getSubject());
     }
 
+    public String getUsernameFromJwtToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 
     public boolean validateToken(String authToken) {
         try {
