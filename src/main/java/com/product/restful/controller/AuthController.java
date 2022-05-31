@@ -50,15 +50,14 @@ public class AuthController {
     }
 
     @PostMapping(value = "/refresh/token")
-    @RolesAllowed({"ROLE_CUSTOMER", "ROLE_USER"})
-    @PreAuthorize("hasRole('MEMBER')")
+//    @RolesAllowed({"ADMIN", "CUSTOMER", "USER"})
+//    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<WebResponse<AuthenticationResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Refresh token successfully updated", authenticationResponse), HttpStatus.OK);
     }
 
     @PostMapping(value = "/logout")
-    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<ApiResponse> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         authService.logout(logoutRequest);
         return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Refresh token deleted successfully"), HttpStatus.OK);
