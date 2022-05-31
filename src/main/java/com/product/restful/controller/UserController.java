@@ -38,7 +38,7 @@ public class UserController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User was created successfully", userResponse), HttpStatus.CREATED);
     }
 
-    @PutMapping(name = "/{username}")
+    @PutMapping(value = "/{username}")
     @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<WebResponse<UserResponse>> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
@@ -49,7 +49,7 @@ public class UserController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User updated successfully", userResponse), HttpStatus.OK);
     }
 
-    @PutMapping(name = "/{username}/addRole")
+    @PutMapping(value = "/{username}/addRole")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> addRoleToUser(
             @PathVariable(name = "username") String username,
@@ -59,7 +59,7 @@ public class UserController {
         return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role to user"), HttpStatus.OK);
     }
 
-    @DeleteMapping(name = "/{username}")
+    @DeleteMapping(value = "/{username}")
     @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(
             @PathVariable(name = "username") String username,
@@ -69,7 +69,7 @@ public class UserController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @PutMapping(name = "/{username}/removeAdmin")
+    @PutMapping(value = "/{username}/removeAdmin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> removeAdmin(@PathVariable(name = "username") String username) {
         ApiResponse apiResponse = userService.removeAdmin(username);
