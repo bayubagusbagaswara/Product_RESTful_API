@@ -13,9 +13,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LogoutRequest {
 
+    @NotBlank(message = "Username or Email must not be blank")
+    private String usernameOrEmail;
+
     @NotBlank(message = "Refresh Token must not be blank")
     private String refreshToken;
-
-    @NotBlank(message = "Username must not be blank")
-    private String username;
 }
