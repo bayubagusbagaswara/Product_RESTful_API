@@ -2,6 +2,7 @@ package com.product.restful.security;
 
 import com.product.restful.service.CustomUserDetailsService;
 import com.product.restful.service.impl.CustomUserDetailsServiceImpl;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,24 +34,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            // ambil token dari setiap request user
             String jwt = getJwtFromRequest(request);
 
-            // validasi jwt dari request apakah sama dengan jwt yang diterbitkan oleh aplikasi
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
 
-                // ambil user id
-                Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
+                String usernameFromJwtToken = jwtTokenProvider.getUsernameFromJwtToken(jwt);
 
-                // ambil user detail by id
-                UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(usernameFromJwtToken);
 
-                // autentikasi token
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -65,20 +61,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             LOGGER.error("Could not set user authentication in security context", ex);
         }
 
-        // lalukan filter
         filterChain.doFilter(request, response);
     }
 
-    // ambil token dari request user
     private String getJwtFromRequest(HttpServletRequest request) {
-        // cek apakah request mengandung header Authorization
         String bearerToken = request.getHeader("Authorization");
-
-        // jika memiliki header Authorization dan isinya diawali dengan karakter Bearer, maka ambil tokennya
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
-        // request tidak mengandung header Authorization
         return null;
     }
 
