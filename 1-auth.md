@@ -109,7 +109,7 @@
   "firstName": "Albert",
   "lastName": "Einstein",
   "email": "albert@gmail.com",
-  "username": "albert_einstein",
+  "username": "albert",
   "password": "albert123"
 }
 ```
