@@ -39,7 +39,7 @@ public class ProductController {
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
 //    @RolesAllowed({"ADMIN", "CUSTOMER", "USER"})
     public ResponseEntity<WebResponse<ProductResponse>> createProduct(@RequestBody CreateProductRequest createProductRequest) {
         ProductResponse productResponse = productService.createProduct(createProductRequest);
