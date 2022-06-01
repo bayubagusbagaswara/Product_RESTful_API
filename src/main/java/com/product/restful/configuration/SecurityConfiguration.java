@@ -1,6 +1,5 @@
 package com.product.restful.configuration;
 
-import com.product.restful.entity.RoleName;
 import com.product.restful.security.JwtAuthenticationEntryPoint;
 import com.product.restful.security.JwtAuthenticationFilter;
 import com.product.restful.service.impl.CustomUserDetailsServiceImpl;
@@ -21,10 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        jsr250Enabled = true,
-        securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsServiceImpl customUserDetailsService;
@@ -45,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 .antMatchers(HttpMethod.POST, "/api/roles").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
 
