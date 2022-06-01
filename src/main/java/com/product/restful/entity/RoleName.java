@@ -3,6 +3,7 @@ package com.product.restful.entity;
 public enum RoleName {
 
     MANAGER("MANAGER"),
+
     ADMIN("ADMIN"),
     CUSTOMER("CUSTOMER"),
     USER("USER");
