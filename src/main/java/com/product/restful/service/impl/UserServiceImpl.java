@@ -187,12 +187,24 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", username));
 
-        if (!Objects.equals(user.getId(), currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+        if (!currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
             throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username));
         }
 
         userRepository.deleteById(user.getId());
         return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
+    }
+
+    @Override
+    public ApiResponse giveAdmin(String username) {
+        final User user = userRepository.getUserByName(username);
+
+        user.getRoles()
+                .add(roleRepository.findByName(RoleName.ADMIN)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
+
+        userRepository.save(user);
+        return new ApiResponse(Boolean.TRUE, "You gave ADMIN role to user: " + username);
     }
 
     @Override
