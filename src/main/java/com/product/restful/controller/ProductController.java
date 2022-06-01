@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -36,11 +35,8 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
-//    @RolesAllowed({"ADMIN", "CUSTOMER", "USER"})
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<WebResponse<ProductResponse>> createProduct(@RequestBody CreateProductRequest createProductRequest) {
         ProductResponse productResponse = productService.createProduct(createProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product was created successfully", productResponse), HttpStatus.CREATED);
@@ -53,16 +49,14 @@ public class ProductController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<WebResponse<ProductResponse>> updateProduct(
-            @PathVariable(value = "id") String id,
-            @RequestBody UpdateProductRequest updateProductRequest) {
+    @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
+    public ResponseEntity<WebResponse<ProductResponse>> updateProduct(@PathVariable(name = "id") String id, @RequestBody UpdateProductRequest updateProductRequest) {
         ProductResponse productResponse = productService.updateProduct(id, updateProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product updated successfully", productResponse), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<WebResponse<String>> deleteProduct(@PathVariable(name = "id") String id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product deleted successfully", null), HttpStatus.OK);
