@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController
@@ -41,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}")
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<WebResponse<UserResponse>> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
             @PathVariable(name = "username") String username,
@@ -51,20 +50,18 @@ public class UserController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User updated successfully", userResponse), HttpStatus.OK);
     }
 
-    // kemungkinan karena di JWT kita tidak memasukkan Claim Role nya, karena dia mengambil ROLE dari token
-
     @PutMapping(value = "/{username}/addRole")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> addRoleToUser(
             @PathVariable(name = "username") String username,
             @RequestBody RoleRequest roleRequest) {
 
-        userService.addRoleToUser(username, RoleName.valueOf(roleRequest.getName()));
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role to user"), HttpStatus.OK);
+        userService.addRoleToUser(username, RoleName.valueOf(roleRequest.getName().toUpperCase()));
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role to user: " + username), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{username}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(
             @PathVariable(name = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
@@ -74,14 +71,14 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}/giveAdmin")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> giveAdmin(@PathVariable(name = "username") String username) {
         ApiResponse apiResponse = userService.giveAdmin(username);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{username}/removeAdmin")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> removeAdmin(@PathVariable(name = "username") String username) {
         ApiResponse apiResponse = userService.removeAdmin(username);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
