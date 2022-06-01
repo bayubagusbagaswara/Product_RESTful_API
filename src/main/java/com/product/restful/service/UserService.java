@@ -30,6 +30,8 @@ public interface UserService {
 
     UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser);
 
+    ApiResponse giveAdmin(String username);
+
     ApiResponse removeAdmin(String username);
 
     void verifyUserByUsername(String username);
