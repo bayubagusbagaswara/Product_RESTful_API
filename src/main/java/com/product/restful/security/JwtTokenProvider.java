@@ -31,15 +31,11 @@ public class JwtTokenProvider {
     }
 
     public String generateTokenFromUsername(String username) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMillis);
-
         return Jwts.builder()
-//                .setClaims(), claims ini biasanya isinya roles dari UserPrincipal
                 .setSubject(username)
                 .setIssuer("Bagaswara Application")
                 .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
+                .setExpiration(new Date(new Date().getTime() + jwtExpirationInMillis))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
