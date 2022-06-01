@@ -2,6 +2,7 @@ package com.product.restful.controller;
 
 import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.WebResponse;
+import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserResponse;
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}")
-    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<WebResponse<UserResponse>> updateUser(
             @Valid @RequestBody UpdateUserRequest newUser,
             @PathVariable(name = "username") String username,
@@ -50,22 +51,30 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}/addRole")
+    // kemungkinan karena di JWT kita tidak memasukkan Claim Role nya, karena dia mengambil ROLE dari token
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> addRoleToUser(
             @PathVariable(name = "username") String username,
-            @RequestBody RoleName roleName) {
+            @RequestBody RoleRequest roleRequest) {
 
-        userService.addRoleToUser(username, roleName);
+        userService.addRoleToUser(username, RoleName.valueOf(roleRequest.getName()));
         return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role to user"), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{username}")
-    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(
             @PathVariable(name = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
 
         ApiResponse apiResponse = userService.deleteUser(username, currentUser);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{username}/giveAdmin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> giveAdmin(@PathVariable(name = "username") String username) {
+        ApiResponse apiResponse = userService.giveAdmin(username);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
