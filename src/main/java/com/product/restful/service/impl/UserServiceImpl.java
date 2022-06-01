@@ -181,10 +181,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse deleteUser(String username, UserPrincipal currentUser) {
-        final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", username));
+        final User user = userRepository.getUserByName(username);
 
-        if (!currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+        if (!Objects.equals(user.getId(), currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
             throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username));
         }
 
