@@ -55,7 +55,7 @@ public class User extends DateAudit {
     @Column(name = "status_record", nullable = false)
     private StatusRecord statusRecord = StatusRecord.ACTIVE;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_user_role_id_user"), referencedColumnName = "id"),

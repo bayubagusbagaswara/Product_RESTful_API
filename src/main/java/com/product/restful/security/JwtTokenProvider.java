@@ -11,7 +11,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -27,14 +26,11 @@ public class JwtTokenProvider {
     @Value(value = "${app.jwtExpirationInMillis}")
     private Long jwtExpirationInMillis;
 
-    public String generateToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+    public String generateToken(UserPrincipal userPrincipal) {
         return generateTokenFromUsername(userPrincipal.getUsername());
     }
 
     public String generateTokenFromUsername(String username) {
-
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMillis);
 

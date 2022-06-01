@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController
@@ -50,8 +51,9 @@ public class UserController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User updated successfully", userResponse), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{username}/addRole")
     // kemungkinan karena di JWT kita tidak memasukkan Claim Role nya, karena dia mengambil ROLE dari token
+
+    @PutMapping(value = "/{username}/addRole")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> addRoleToUser(
             @PathVariable(name = "username") String username,
@@ -62,7 +64,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{username}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(
             @PathVariable(name = "username") String username,
             @CurrentUser UserPrincipal currentUser) {
@@ -72,14 +74,14 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}/giveAdmin")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> giveAdmin(@PathVariable(name = "username") String username) {
         ApiResponse apiResponse = userService.giveAdmin(username);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{username}/removeAdmin")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> removeAdmin(@PathVariable(name = "username") String username) {
         ApiResponse apiResponse = userService.removeAdmin(username);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);

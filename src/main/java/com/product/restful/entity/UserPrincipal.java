@@ -50,7 +50,7 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal createUserPrincipal(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().getRoleName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList())
                 ;
 
@@ -67,8 +67,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (authorities == null) return null;
-        return new ArrayList<>(authorities);
+        return authorities;
     }
 
     @Override

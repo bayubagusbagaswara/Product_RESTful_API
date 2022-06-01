@@ -72,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        final String token = jwtTokenProvider.generateToken(authentication);
+        final String token = jwtTokenProvider.generateToken(userPrincipal);
 
         return AuthenticationResponse.builder()
                 .accessToken(token)

@@ -144,12 +144,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addRoleToUser(String username, RoleName roleName) {
-
         final User user = userRepository.getUserByName(username);
-
-        user.setRoles(new HashSet<>(Collections.singleton(
-                roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
+        user.addRole(roleRepository.findByName(roleName)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         userRepository.save(user);
     }
@@ -198,9 +195,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse giveAdmin(String username) {
         final User user = userRepository.getUserByName(username);
-
-        user.getRoles()
-                .add(roleRepository.findByName(RoleName.ADMIN)
+        user.addRole(roleRepository.findByName(RoleName.ADMIN)
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         userRepository.save(user);
@@ -210,10 +205,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse removeAdmin(String username) {
         final User user = userRepository.getUserByName(username);
-
-        user.setRoles(new HashSet<>(Collections.singleton(
-                roleRepository.findByName(RoleName.ADMIN)
-                        .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
+        user.removeRole(roleRepository.findByName(RoleName.ADMIN)
+                .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         userRepository.save(user);
         return new ApiResponse(Boolean.TRUE, "You took ADMIN role from user: " + username);
