@@ -12,10 +12,7 @@ import com.product.restful.exception.AccessDeniedException;
 import com.product.restful.exception.UnauthorizedException;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,44 +34,109 @@ class UserServiceImplTest {
 
     @Test
     @Order(1)
-    void createUserFirst() {
-        CreateUserRequest createUserRequest = new CreateUserRequest();
-        createUserRequest.setFirstName("Bayu");
-        createUserRequest.setLastName("Bagaswara");
-        createUserRequest.setUsername("bayu_bagaswara");
-        createUserRequest.setPassword("B@gaswara12");
-        createUserRequest.setEmail("bagaszwara12@gmail.com");
+    void createFirstUser() {
+        CreateUserRequest createUserRequest = new CreateUserRequest(
+                "Bayu",
+                "Bagaswara",
+                "bayu_bagaswara",
+                "B@gaswara12",
+                "bagaszwara12@gmail.com"
+        );
 
         UserResponse user = userService.createUser(createUserRequest);
-
         assertNotNull(user.getId());
+        assertEquals(2, user.getRoles().size());
         log.info("Role: {}", user.getRoles()); // USER, ADMIN
     }
 
     @Test
     @Order(2)
+    void createAdmin() {
+        CreateUserRequest tesla = new CreateUserRequest(
+                "Nikola",
+                "Tesla",
+                "tesla99",
+                "tesla123",
+                "tesla@gmail.com");
+
+        UserResponse admin = userService.createAdmin(tesla);
+        assertNotNull(admin.getId());
+        log.info("Role: {}", admin.getRoles()); // ADMIN
+    }
+
+    @Test
+    @Order(3)
+    void createUser() {
+        CreateUserRequest albert = new CreateUserRequest(
+                "Albert",
+                "Einstein",
+                "albert",
+                "albert123",
+                "albert@gmail.com");
+
+        CreateUserRequest gosling = new CreateUserRequest(
+                "James",
+                "Gosling",
+                "gosling",
+                "gosling123",
+                "gosling@gmail.com");
+
+        CreateUserRequest newton = new CreateUserRequest(
+                "Issac",
+                "Newton",
+                "newton",
+                "newton123",
+                "newton@gmail.com");
+
+        CreateUserRequest watt = new CreateUserRequest(
+                "James",
+                "Watt",
+                "james_watt",
+                "james123",
+                "james@gmail.com");
+
+        UserResponse user1 = userService.createUser(albert);
+        assertNotNull(user1.getId());
+        log.info("Role Albert: {}", user1.getRoles()); // USER
+
+        UserResponse user2 = userService.createUser(newton);
+        assertNotNull(user2.getId());
+        log.info("Role Newton: {}", user2.getRoles()); // USER
+
+        UserResponse user3 = userService.createUser(gosling);
+        assertNotNull(user3.getId());
+        log.info("Role Gosling: {}", user3.getRoles()); // USER
+
+        UserResponse user4 = userService.createUser(watt);
+        assertNotNull(user4.getId());
+        log.info("Role Watt: {}", user4.getRoles()); // USER
+    }
+
+    @Test
+    @Disabled
+    @Order(4)
     void checkUsernameAvailability() {
         String username = "bayu_bagaswara";
         UserIdentityAvailability userIdentityAvailability = userService.checkUsernameAvailability(username);
 
         assertEquals(false, userIdentityAvailability.getAvailable());
-
         log.info("Username availability: {}", userIdentityAvailability.getAvailable());
     }
 
     @Test
-    @Order(3)
+    @Disabled
+    @Order(5)
     void checkUsernameNotAvailability() {
         String username = "bayu123";
         UserIdentityAvailability userIdentityAvailability = userService.checkUsernameAvailability(username);
 
         assertEquals(true, userIdentityAvailability.getAvailable());
-
         log.info("Username availability: {}", userIdentityAvailability.getAvailable());
     }
 
     @Test
-    @Order(4)
+    @Disabled
+    @Order(6)
     void checkEmailAvailability() {
         String email = "bagaszwara12@gmail.com";
         UserIdentityAvailability userIdentityAvailability = userService.checkEmailAvailability(email);
@@ -84,7 +146,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(5)
+    @Disabled
+    @Order(7)
     void checkEmailNotAvailability() {
         String email = "bagaszwara@gmail.com";
         UserIdentityAvailability userIdentityAvailability = userService.checkEmailAvailability(email);
@@ -93,83 +156,11 @@ class UserServiceImplTest {
         log.info("Email availability: {}", userIdentityAvailability.getAvailable());
     }
 
-    @Test
-    @Order(6)
-    void createAdmin() {
-        CreateUserRequest createUserRequest = CreateUserRequest.builder()
-                .firstName("Nikola")
-                .lastName("Tesla")
-                .username("tesla99")
-                .email("tesla@gmail.com")
-                .password("tesla123")
-                .build();
-
-        UserResponse admin = userService.createAdmin(createUserRequest);
-
-        assertNotNull(admin.getId());
-        log.info("Role: {}", admin.getRoles()); // ADMIN
-    }
 
     @Test
-    @Order(7)
-    void createUser() {
-        CreateUserRequest createUserRequest1 = CreateUserRequest.builder()
-                .firstName("Albert")
-                .lastName("Einstein")
-                .username("albert")
-                .email("albert@gmail.com")
-                .password("albert123")
-                .build();
-
-        UserResponse user1 = userService.createUser(createUserRequest1);
-        assertNotNull(user1.getId());
-        log.info("Role: {}", user1.getRoles()); // USER
-
-        CreateUserRequest createUserRequest2 = CreateUserRequest.builder()
-                .firstName("James")
-                .lastName("Gosling")
-                .username("gosling")
-                .email("gosling@gmail.com")
-                .password("gosling123")
-                .build();
-
-        UserResponse user2 = userService.createUser(createUserRequest2);
-        assertNotNull(user2.getId());
-        log.info("Role: {}", user2.getRoles()); // USER
-    }
-
-    @Test
+    @Disabled
     @Order(8)
-    void createUser1() {
-        CreateUserRequest createUserRequest1 = CreateUserRequest.builder()
-                .firstName("Issac")
-                .lastName("Newton")
-                .username("newton")
-                .email("newton@gmail.com")
-                .password("newton123")
-                .build();
-
-        UserResponse user1 = userService.createUser(createUserRequest1);
-        assertNotNull(user1.getId());
-        log.info("Role: {}", user1.getRoles()); // USER
-
-        CreateUserRequest createUserRequest2 = CreateUserRequest.builder()
-                .firstName("James")
-                .lastName("Watt")
-                .username("james_watt")
-                .email("james@gmail.com")
-                .password("james123")
-                .build();
-
-        UserResponse user2 = userService.createUser(createUserRequest2);
-        assertNotNull(user2.getId());
-        log.info("Role: {}", user2.getRoles()); // USER
-    }
-
-    @Test
-    @Order(9)
     void updateUserRoleAdminToRoleUser() {
-        // 1. Bayu [admin] akan mengubah data user Gosling
         String username = "gosling";
         UpdateUserRequest updateUserRequest = UpdateUserRequest.builder()
                 .firstName("Jamesss")
@@ -190,7 +181,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(10)
+    @Disabled
+    @Order(9)
     void updateUserBySelf() {
         // 2. Albert akan mengubah data dirinya sendiri
         String username = "albert";
@@ -213,7 +205,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(11)
+    @Disabled
+    @Order(10)
     void updateUserRoleUserToRoleAdminFailed() {
         // 3. Albert tidak bisa mengubah data Tesla
         String username = "tesla99";
@@ -235,6 +228,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Disabled
     @Order(12)
     void addRoleToUser() {
         // skenario menambahkan ROLE ADMIN ke user
@@ -249,7 +243,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(13)
+    @Disabled
+    @Order(12)
     void deleteUserByAdmin() {
 
         // admin Bayu menghapus user Gosling
@@ -268,9 +263,9 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(14)
+    @Disabled
+    @Order(13)
     void deleteUserBySelf() {
-
         // user Albert menghapus dirinya sendiri
         String username = "newton";
         User user = userRepository.getUserByName("newton");
@@ -287,7 +282,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(15)
+    @Disabled
+    @Order(14)
     void deleteUserToAdmin() {
         // user Newton menghapus Admin Bayu, ini akan gagal
         String username = "bayu_bagaswara";
