@@ -11,6 +11,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -30,15 +31,30 @@ public class JwtTokenProvider {
         return generateTokenFromUsername(userPrincipal.getUsername());
     }
 
+    public String generateTokenByUserId(UserPrincipal userPrincipal) {
+        return generateTokenFromUserId(userPrincipal.getId());
+    }
+
     public String generateTokenFromUsername(String username) {
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuer("Bagaswara Application")
+                .setIssuer("Product API")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationInMillis))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
+
+    public String generateTokenFromUserId(Long userId) {
+        return Jwts.builder()
+                .setSubject(Long.toString(userId))
+                .setIssuer("Product API")
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + jwtExpirationInMillis))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
 
     public Long getUserIdFromJwtToken(String token) {
         Claims claims = Jwts.parser()
