@@ -8,8 +8,6 @@ import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.entity.*;
-import com.product.restful.repository.RoleRepository;
-import com.product.restful.repository.UserRepository;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.RefreshTokenService;
@@ -20,7 +18,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        final String token = jwtTokenProvider.generateToken(userPrincipal);
+        final String token = jwtTokenProvider.generateTokenByUserId(userPrincipal);
 
         return AuthenticationResponse.builder()
                 .accessToken(token)
@@ -85,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = refreshTokenService.verifyExpirationRefreshToken(refreshTokenRequest.getRefreshToken());
-        String token = jwtTokenProvider.generateTokenFromUsername(refreshToken.getUser().getUsername());
+        String token = jwtTokenProvider.generateTokenFromUserId(refreshToken.getUser().getId());
 
         return AuthenticationResponse.builder()
                 .accessToken(token)
