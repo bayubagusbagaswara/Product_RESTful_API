@@ -7,6 +7,7 @@ import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.user.UserResponse;
 import com.product.restful.service.AuthService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,12 @@ class AuthServiceImplTest {
 
     @Test
     void signUp() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setFirstName("Bayu");
-        signUpRequest.setLastName("Bagaswara");
-        signUpRequest.setUsername("bayu_bagaswara");
-        signUpRequest.setPassword("B@gaswara12");
-        signUpRequest.setEmail("bagaszwara12@gmail.com");
+        SignUpRequest signUpRequest = new SignUpRequest(
+                "Bayu",
+                "Bagaswara",
+                "bayu_bagaswara",
+                "B@gaswara12",
+                "bagaszwara12@gmail.com");
 
         UserResponse userResponse = authService.signUp(signUpRequest);
 
@@ -61,26 +62,27 @@ class AuthServiceImplTest {
     }
 
     @Test
+    @Disabled
     void refreshToken() {
-//        String refreshToken = "0b0e48e8-edbd-4978-8dce-85932fe18d24";
-//        String username = "bayu_bagaswara";
-//        RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
-//        refreshTokenRequest.setRefreshToken(refreshToken);
-//        refreshTokenRequest.setUsername(username);
-//
-//        AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
-//
-//        assertNotNull(authenticationResponse.getAccessToken());
-//        assertNotNull(authenticationResponse.getRefreshToken());
-//        assertNotNull(authenticationResponse.getExpiresAt());
-//        log.info("Access Token: {}", authenticationResponse.getAccessToken());
-//        log.info("Refresh Token: {}", authenticationResponse.getRefreshToken());
-//        log.info("Expires at: {}", authenticationResponse.getExpiresAt());
-//        log.info("Username: {}", authenticationResponse.getUsername());
+        String refreshToken = "0b0e48e8-edbd-4978-8dce-85932fe18d24";
+        String username = "bayu_bagaswara";
+        RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
+        refreshTokenRequest.setRefreshToken(refreshToken);
+
+        AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
+
+        assertNotNull(authenticationResponse.getAccessToken());
+        assertNotNull(authenticationResponse.getRefreshToken());
+        assertNotNull(authenticationResponse.getExpiresAt());
+        log.info("Access Token: {}", authenticationResponse.getAccessToken());
+        log.info("Refresh Token: {}", authenticationResponse.getRefreshToken());
+        log.info("Expires at: {}", authenticationResponse.getExpiresAt());
+        log.info("Username: {}", authenticationResponse.getUsername());
 
     }
 
     @Test
+    @Disabled
     void logout() {
         String refreshToken = "0b0e48e8-edbd-4978-8dce-85932fe18d24";
         String usernameOrEmail = "";
