@@ -1,4 +1,4 @@
-package com.product.restful.service;
+package com.product.restful.service.impl;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

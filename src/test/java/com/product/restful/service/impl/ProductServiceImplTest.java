@@ -1,7 +1,8 @@
-package com.product.restful.service;
+package com.product.restful.service.impl;
 
 import com.product.restful.dto.product.CreateProductRequest;
 import com.product.restful.dto.product.ProductResponse;
+import com.product.restful.service.ProductService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
