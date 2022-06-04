@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
     public UserIdentityAvailability checkUsernameAvailability(String username) {
         // jika response bernilai true, maka username tidak ada di database
         // dan jika response bernilai false, maka username sudah ada di database
-        // biasanya ini untuk mengecek apakah ada username yang sama di database
         return new UserIdentityAvailability(!userRepository.existsByUsername(username));
     }
 
@@ -160,10 +159,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser) {
-
         final User user = userRepository.getUserByName(username);
 
-        if (!Objects.equals(user.getId(), currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+        if (!user.getId().equals(currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
             throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, "You don't have permission to update profile of: " + username));
         }
 
@@ -173,9 +171,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(updateUserRequest.getUsername());
         user.setEmail(updateUserRequest.getEmail());
         user.setUpdatedAt(Instant.now());
-
         userRepository.save(user);
-
         return UserResponse.fromUser(user);
     }
 
@@ -183,12 +179,12 @@ public class UserServiceImpl implements UserService {
     public ApiResponse deleteUser(String username, UserPrincipal currentUser) {
         final User user = userRepository.getUserByName(username);
 
-        if (!Objects.equals(user.getId(), currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-            throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username));
+        if (user.getId().equals(currentUser.getId()) || currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
+            userRepository.deleteById(user.getId());
+            return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
         }
 
-        userRepository.deleteById(user.getId());
-        return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
+        throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username));
     }
 
     @Override
@@ -227,4 +223,5 @@ public class UserServiceImpl implements UserService {
         userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
     }
+
 }
