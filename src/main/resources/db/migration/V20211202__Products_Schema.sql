@@ -1,5 +1,5 @@
 create table products (
-    id bigint primary key not null,
+    id character varying(64) not null primary key default uuid_generate_v4(),
     created_at timestamp without time zone not null default now(),
     status_record character varying(255) not null,
     updated_at timestamp without time zone not null,
