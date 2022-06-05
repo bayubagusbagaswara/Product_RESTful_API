@@ -1,5 +1,6 @@
 package com.product.restful.configuration;
 
+import com.product.restful.security.RestAccessDeniedHandler;
 import com.product.restful.security.JwtAuthenticationEntryPoint;
 import com.product.restful.security.JwtAuthenticationFilter;
 import com.product.restful.service.impl.CustomUserDetailsServiceImpl;
@@ -25,11 +26,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsServiceImpl customUserDetailsService;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
+
+    private final RestAccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfiguration(CustomUserDetailsServiceImpl customUserDetailsService, JwtAuthenticationEntryPoint unauthorizedHandler, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfiguration(CustomUserDetailsServiceImpl customUserDetailsService, JwtAuthenticationEntryPoint unauthorizedHandler, RestAccessDeniedHandler accessDeniedHandler, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.customUserDetailsService = customUserDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
+        this.accessDeniedHandler = accessDeniedHandler;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
@@ -52,6 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
+                .accessDeniedHandler(accessDeniedHandler)
 
                 .and()
                 .sessionManagement()
