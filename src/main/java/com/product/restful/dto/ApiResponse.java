@@ -31,6 +31,10 @@ public class ApiResponse {
     @JsonIgnore
     private HttpStatus status;
 
+    public ApiResponse(Boolean success) {
+        this.success = success;
+    }
+
     public ApiResponse(Boolean success, String message) {
         this.success = success;
         this.message = message;
