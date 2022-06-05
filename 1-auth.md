@@ -2,21 +2,28 @@
 
 # Register
 
-- Jika register berhasil, maka user pertama akan mendapatkan roleh MEMBER dan ADMIN
 - Method : POST
 - URL : `http://localhost:8080/api/auth/signup`
 - Request Body
 
 ```json
 {
-  "firstName": "Albert",
-  "lastName": "Einstein",
-  "username": "albert99",
-  "email": "albert@gmail.com",
-  "password": "albert123"
+  "firstName": "string",
+  "lastName": "string",
+  "username": "string",
+  "email": "string",
+  "password": "string"
 }
 ```
-- Response
+
+- Response Success
+
+```json
+{
+  "success": "true",
+  "message": "User registered successfully"
+}
+```
 
 # Login
 
@@ -27,18 +34,32 @@
 ```json
 {
   "usernameOrEmail": "string",
-  "password": "albert123"
+  "password": "string"
 }
 ```
-- Response
+
+- Response Success
 
 ```json
 {
-  "accessToken": "string",
-  "refreshToken": "string",
-  "expiresAt": "date",
-  "tokenType": "Bearer",
-  "username": "string"
+  "success": "string",
+  "message": "string",
+  "data": {
+    "accessToken": "string",
+    "refreshToken": "string",
+    "expiresAt": "date",
+    "tokenType": "Bearer",
+    "username": "string"
+  }
+}
+```
+
+- Response Failed
+
+```json
+{
+  "success": "false",
+  "message": "Bad credentials, User is not authenticated. Username or password do not match"
 }
 ```
 
@@ -50,20 +71,23 @@
 
 ```json
 {
-  "refreshToken": "string",
-  "username": "string"
+  "refreshToken": "string"
 }
 ```
 
-- Response 
+- Response Success
 
 ```json
 {
-  "accessToken": "string",
-  "refreshToken": "string",
-  "expiresAt": "date",
-  "tokenType": "Bearer",
-  "username": "string"
+  "success": "true",
+  "message": "Refresh token successfully updated",
+  "data": {
+    "accessToken": "string",
+    "refreshToken": "string",
+    "expiresAt": "date",
+    "tokenType": "Bearer",
+    "username": "string"
+  }
 }
 ```
 
@@ -75,73 +99,16 @@
 
 ```json
 {
+  "usernameOrEmail": "string",
   "refreshToken": "string"
 }
 ```
 
-- Response
+- Response Success
 
 ```json
 {
+  "success": "true",
   "message": "Refresh Token Deleted Successfully"
-}
-```
-
-
-# Create User
-
-## First User
-
-```json
-{
-  "firstName": "Bayu",
-  "lastName": "Bagaswara",
-  "email": "bagaszwara12@gmail.com",
-  "username": "bayu_bagaswara",
-  "password": "B@gaswara12"
-}
-```
-
-## Admin
-
-```json
-{
-  "firstName": "Albert",
-  "lastName": "Einstein",
-  "email": "albert@gmail.com",
-  "username": "albert",
-  "password": "albert123"
-}
-```
-
-## User
-
-```json
-{
-  "firstName": "Nikola",
-  "lastName": "Tesla",
-  "email": "tesla@gmail.com",
-  "username": "tesla99",
-  "password": "tesla123"
-}
-```
-
-```json
-{
-  "firstName": "Isaac",
-  "lastName": "Newton",
-  "email": "newton@gmail.com",
-  "username": "newton_12",
-  "password": "newton123"
-}
-```
-
-```json
-{
-  "firstName": "James",
-  "lastName": "Watt",
-  "email": "james@gmail.com",
-  "username": "james_watt",
-  "password": "james123"
 }
 ```
