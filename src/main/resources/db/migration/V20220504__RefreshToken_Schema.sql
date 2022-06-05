@@ -2,7 +2,6 @@
 create table refresh_tokens (
     id bigserial not null primary key,
     created_at timestamp without time zone not null default now(),
-    status_record character varying(255) not null,
     updated_at timestamp without time zone not null,
     created_by character varying(255),
     updated_by character varying(255),
