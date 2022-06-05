@@ -16,6 +16,5 @@ public class ValidationUtil {
         if (violations.size() != 0) {
             throw new ConstraintViolationException(violations);
         }
-        validatorFactory.close();
     }
 }
