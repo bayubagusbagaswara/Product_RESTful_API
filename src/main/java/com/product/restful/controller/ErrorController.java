@@ -97,6 +97,6 @@ public class ErrorController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ApiResponse> authenticationHandler(AuthenticationException authenticationException) {
-        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, authenticationException.getMessage() + ", User is not authenticated"), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, authenticationException.getMessage() + ", User is not authenticated. Username or password do not match"), HttpStatus.UNAUTHORIZED);
     }
 }
