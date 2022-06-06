@@ -161,6 +161,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser) {
         final User user = userRepository.getUserByName(username);
 
+        // access denied
         if (!user.getId().equals(currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
             throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, "You don't have permission to update profile of: " + username));
         }
