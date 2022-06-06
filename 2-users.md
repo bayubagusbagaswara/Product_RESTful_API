@@ -1,12 +1,5 @@
 # Users
 
-- Enpoint untuk API /api/users ini harus terautentikasi semua dulu, karena tidak ada method GET
-- Jadi user harus login dulu, karena accessToken akan dibawa user untuk mengakses tiap endpoint
-- Nanti kita coba, kalau user tidak login apakah response nya?
-- Lalu jika accessTokenya kadaluarsa
-- Untuk method CREATE dan UPDATE bisa dilakukan oleh semua User yang berhasil login (dan membawa accessToken)
-- Untuk method ADD_ROLE_TO_USER, DELETE USER, dan REMOVE_ADMIN hanya bisa dilakukan oleh ROLE ADMIN
-
 # Create User
 
 - Method : POST
