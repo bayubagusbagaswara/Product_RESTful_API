@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ProductController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<WebResponse<ProductResponse>> createProduct(@RequestBody CreateProductRequest createProductRequest) {
+    public ResponseEntity<WebResponse<ProductResponse>> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
         ProductResponse productResponse = productService.createProduct(createProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product was created successfully", productResponse), HttpStatus.CREATED);
     }

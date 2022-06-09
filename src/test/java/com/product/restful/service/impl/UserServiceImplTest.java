@@ -55,7 +55,6 @@ class UserServiceImplTest {
         CreateUserRequest tesla = new CreateUserRequest(
                 "Nikola",
                 "Tesla",
-                
                 "tesla99",
                 "tesla123",
                 "tesla@gmail.com");

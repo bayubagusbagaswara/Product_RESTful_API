@@ -23,16 +23,13 @@ import java.util.stream.StreamSupport;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ValidationUtil validationUtil;
 
-    public ProductServiceImpl(ProductRepository productRepository, ValidationUtil validationUtil) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.validationUtil = validationUtil;
     }
 
     @Override
     public ProductResponse createProduct(CreateProductRequest createProductRequest) {
-        validationUtil.validate(createProductRequest);
 
         Product product = new Product();
         product.setName(createProductRequest.getName());
@@ -60,7 +57,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateProduct(String id, UpdateProductRequest updateProductRequest) {
-        validationUtil.validate(updateProductRequest);
 
         Product product = productRepository.getProductById(id);
         product.setName(updateProductRequest.getName());
