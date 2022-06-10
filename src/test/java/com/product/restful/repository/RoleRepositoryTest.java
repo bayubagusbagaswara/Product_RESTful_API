@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,7 @@ class RoleRepositoryTest {
         user.setCreatedAt(dateNow);
         user.setUpdatedAt(dateNow);
 
-        roleRepository.saveAll(List.of(manager, admin, customer, user));
+        roleRepository.saveAll(Arrays.asList(manager, admin, customer, user));
         long count = roleRepository.count();
         assertEquals(4, count);
     }
