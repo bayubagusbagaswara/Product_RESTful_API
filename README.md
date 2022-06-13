@@ -47,3 +47,38 @@ mvn spring-boot:run
 ```
 The app will start running at <http://localhost:8080>
 
+## Explore Rest APIs
+
+The app defines following CRUD APIs.
+
+### Auth
+
+| Method | URL              | Description | Sample Valid Request Body | Response                 |
+| ------ |------------------|-------------| --------------------------- |--------------------------|
+| POST   | /api/auth/signup | Sign up     | [JSON](#signup) | [JSON](#signup_response) |
+| POST   | /api/auth/signin | Log in      | [JSON](#signin) |                          |
+
+Test them using postman or any other rest client.
+
+## Sample Valid JSON Request Bodys
+
+#### <a id="signup">Sign Up Request Body</a>
+
+```json
+{
+  "firstName": "Bayu",
+  "lastName": "Bagaswara",
+  "username": "bayu_bagaswara",
+  "password": "B@gaswara12",
+  "email": "bayubagaswara@mail.com"
+}
+```
+
+#### <a id="signup_response">Sign Up Response</a>
+```json
+{
+  "success": true,
+  "message": "User registered successfully"
+}
+```
+
