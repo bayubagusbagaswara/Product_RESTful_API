@@ -18,17 +18,17 @@ public interface UserService {
 
     UserSummaryResponse getCurrentUser(UserPrincipal currentUser);
 
-    UserResponse createAdmin(CreateUserRequest createUserRequest);
+    UserDto createAdmin(CreateUserRequest createUserRequest);
 
-    UserResponse createUser(CreateUserRequest createUserRequest);
+    UserDto createUser(CreateUserRequest createUserRequest);
 
     void addRoleToUser(String username, RoleName roleName);
 
-    UserResponse getUserById(Long id);
+    UserDto getUserById(Long id);
 
-    ApiResponse deleteUser(String username, UserPrincipal currentUser);
+    ApiResponse deleteUser(String username);
 
-    UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser);
+    UserDto updateUser(String username, UpdateUserRequest updateUserRequest);
 
     ApiResponse giveAdmin(String username);
 
