@@ -2,7 +2,7 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.role.RoleRequest;
-import com.product.restful.dto.role.RoleResponse;
+import com.product.restful.dto.role.RoleDto;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.UserPrincipal;
@@ -27,12 +27,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleResponse createRole(RoleRequest roleRequest) {
+    public RoleDto createRole(RoleRequest roleRequest) {
         Role role = new Role();
         role.setName(RoleName.valueOf(roleRequest.getName().toUpperCase()));
         role.setCreatedAt(Instant.now());
         roleRepository.save(role);
-        return RoleResponse.from(role);
+        return RoleDto.from(role);
     }
 
     @Override
