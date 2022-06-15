@@ -7,7 +7,7 @@ import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
-import com.product.restful.dto.user.UserResponse;
+import com.product.restful.dto.user.UserDto;
 import com.product.restful.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +32,9 @@ public class AuthController {
 
     @PostMapping(value = "/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        UserResponse userResponse = authService.signUp(signUpRequest);
+        UserDto userDto = authService.signUp(signUpRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
-                .buildAndExpand(userResponse.getId()).toUri();
+                .buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity
                 .created(location)
                 .body(new ApiResponse(Boolean.TRUE, "User registered successfully"));
