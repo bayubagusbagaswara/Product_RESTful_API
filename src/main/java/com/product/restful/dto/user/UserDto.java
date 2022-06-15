@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,25 +23,20 @@ public class UserDto {
 
     private String lastName;
 
+    private String email;
+
     private String username;
 
-    private Set<RoleDto> roles = new HashSet<>();
+    private Set<RoleDto> roles;
 
-    public static UserDto fromUser(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .roles(RoleDto.fromRoles(user.getRoles()))
-                .build();
+    public static UserDto fromEntity(User user) {
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername(), RoleDto.fromEntitySet(user.getRoles()));
     }
 
-    public static List<UserDto> fromUserList(List<User> userList) {
+    public static List<UserDto> fromEntityList(List<User> userList) {
         return userList.stream()
-                .map(UserDto::fromUser)
-                .collect(Collectors.toList())
-                ;
+                .map(UserDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
 }
