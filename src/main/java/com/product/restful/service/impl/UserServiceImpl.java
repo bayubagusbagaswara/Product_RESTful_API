@@ -5,7 +5,7 @@ import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserProfileResponse;
-import com.product.restful.dto.user.UserResponse;
+import com.product.restful.dto.user.UserDto;
 import com.product.restful.dto.user.UserSummaryResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.RoleName;
@@ -15,7 +15,6 @@ import com.product.restful.exception.*;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse createAdmin(CreateUserRequest userRequest) {
+    public UserDto createAdmin(CreateUserRequest userRequest) {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
@@ -106,11 +105,11 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
-        return UserResponse.fromUser(user);
+        return UserDto.fromUser(user);
     }
 
     @Override
-    public UserResponse createUser(CreateUserRequest userRequest) {
+    public UserDto createUser(CreateUserRequest userRequest) {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
@@ -138,7 +137,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roleSet);
         userRepository.save(user);
 
-        return UserResponse.fromUser(user);
+        return UserDto.fromUser(user);
     }
 
     @Override
@@ -151,21 +150,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserById(Long id) {
+    public UserDto getUserById(Long id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
-        return UserResponse.fromUser(user);
+        return UserDto.fromUser(user);
     }
 
     @Override
-    public UserResponse updateUser(String username, UpdateUserRequest updateUserRequest, UserPrincipal currentUser) {
+    public UserDto updateUser(String username, UpdateUserRequest updateUserRequest) {
         final User user = userRepository.getUserByName(username);
-
-        // access denied
-        if (!user.getId().equals(currentUser.getId()) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-            throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, "You don't have permission to update profile of: " + username));
-        }
-
         user.setFirstName(updateUserRequest.getFirstName());
         user.setLastName(updateUserRequest.getLastName());
         user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
@@ -173,19 +166,14 @@ public class UserServiceImpl implements UserService {
         user.setEmail(updateUserRequest.getEmail());
         user.setUpdatedAt(Instant.now());
         userRepository.save(user);
-        return UserResponse.fromUser(user);
+        return UserDto.fromUser(user);
     }
 
     @Override
-    public ApiResponse deleteUser(String username, UserPrincipal currentUser) {
+    public ApiResponse deleteUser(String username) {
         final User user = userRepository.getUserByName(username);
-
-        if (user.getId().equals(currentUser.getId()) || currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-            userRepository.deleteById(user.getId());
-            return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
-        }
-
-        throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete profile of: " + username));
+        userRepository.deleteById(user.getId());
+        return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
     }
 
     @Override
