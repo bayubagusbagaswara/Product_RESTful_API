@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductResponse {
+public class ProductDto {
 
     private String id;
 
@@ -34,21 +34,17 @@ public class ProductResponse {
     @JsonIgnore
     private Instant updatedAt;
 
-    public static ProductResponse fromProduct(Product product) {
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setId(product.getId());
-        productResponse.setName(product.getName());
-        productResponse.setPrice(product.getPrice());
-        productResponse.setQuantity(product.getQuantity());
-        productResponse.setDescription(product.getDescription());
-        productResponse.setUpdatedAt(product.getUpdatedAt());
-        productResponse.setCreatedAt(product.getCreatedAt());
-        return productResponse;
+    public static ProductDto fromEntity(Product product) {
+        return new ProductDto(
+                product.getId(), product.getName(), product.getPrice(),
+                product.getQuantity(), product.getDescription(),
+                product.getCreatedAt(), product.getUpdatedAt()
+        );
     }
 
-    public static List<ProductResponse> fromProductList(List<Product> productList) {
+    public static List<ProductDto> fromEntityList(List<Product> productList) {
         return productList.stream()
-                .map(ProductResponse::fromProduct)
+                .map(ProductDto::fromEntity)
                 .collect(Collectors.toList());
     }
 }

@@ -4,7 +4,6 @@ import com.product.restful.dto.product.*;
 import com.product.restful.entity.Product;
 import com.product.restful.repository.ProductRepository;
 import com.product.restful.service.ProductService;
-import com.product.restful.util.ValidationUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse createProduct(CreateProductRequest createProductRequest) {
+    public ProductDto createProduct(CreateProductRequest createProductRequest) {
 
         Product product = new Product();
         product.setName(createProductRequest.getName());
@@ -39,24 +38,24 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedAt(Instant.now());
 
         productRepository.save(product);
-        return ProductResponse.fromProduct(product);
+        return ProductDto.fromProduct(product);
     }
 
     @Override
-    public ProductResponse getProductById(String id) {
+    public ProductDto getProductById(String id) {
         Product product = productRepository.getProductById(id);
-        return ProductResponse.fromProduct(product);
+        return ProductDto.fromProduct(product);
     }
 
     @Override
-    public List<ProductResponse> getAllProduct() {
+    public List<ProductDto> getAllProduct() {
         Iterable<Product> products = productRepository.findAll();
         List<Product> productList = StreamSupport.stream(products.spliterator(), false).collect(Collectors.toList());
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public ProductResponse updateProduct(String id, UpdateProductRequest updateProductRequest) {
+    public ProductDto updateProduct(String id, UpdateProductRequest updateProductRequest) {
 
         Product product = productRepository.getProductById(id);
         product.setName(updateProductRequest.getName());
@@ -65,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(Instant.now());
 
         productRepository.save(product);
-        return ProductResponse.fromProduct(product);
+        return ProductDto.fromProduct(product);
     }
 
     @Override
@@ -87,10 +86,10 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         List<Product> productList = products.getContent();
 
-        List<ProductResponse> productResponses = ProductResponse.fromProductList(productList);
+        List<ProductDto> productRespons = ProductDto.fromProductList(productList);
 
         ListProductResponse listAllProductResponse = new ListProductResponse();
-        listAllProductResponse.setProductResponses(productResponses);
+        listAllProductResponse.setProductRespons(productRespons);
         listAllProductResponse.setPageNo(products.getNumber());
         listAllProductResponse.setPageSize(products.getSize());
         listAllProductResponse.setTotalElements(products.getTotalElements());
@@ -100,69 +99,69 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getProductByName(String name) {
+    public ProductDto getProductByName(String name) {
         Product product = productRepository.getProductByName(name);
-        return ProductResponse.fromProduct(product);
+        return ProductDto.fromProduct(product);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameContaining(String name) {
+    public List<ProductDto> getProductByNameContaining(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCase(name);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameStartingWith(String name) {
+    public List<ProductDto> getProductByNameStartingWith(String name) {
         List<Product> productList = productRepository.findByNameStartingWithIgnoreCase(name);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameContainingOrderByName(String name) {
+    public List<ProductDto> getProductByNameContainingOrderByName(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByName(name);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameContainingOrderByNameDesc(String name) {
+    public List<ProductDto> getProductByNameContainingOrderByNameDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByNameDesc(name);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
+    public List<ProductDto> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseAndPriceBetween(name, priceMin, priceMax);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameContainingOrderByPrice(String name) {
+    public List<ProductDto> getProductByNameContainingOrderByPrice(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPriceDesc(name);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByNameContainingOrderByPriceDesc(String name) {
+    public List<ProductDto> getProductByNameContainingOrderByPriceDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPrice(name);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
+    public List<ProductDto> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByPriceBetween(priceMin, priceMax);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByPriceGreaterThanEqual(BigDecimal price) {
+    public List<ProductDto> getProductByPriceGreaterThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceGreaterThanEqual(price);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
     @Override
-    public List<ProductResponse> getProductByPriceLessThanEqual(BigDecimal price) {
+    public List<ProductDto> getProductByPriceLessThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceLessThanEqual(price);
-        return ProductResponse.fromProductList(productList);
+        return ProductDto.fromProductList(productList);
     }
 
 }

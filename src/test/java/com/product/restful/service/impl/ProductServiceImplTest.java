@@ -1,7 +1,7 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.product.CreateProductRequest;
-import com.product.restful.dto.product.ProductResponse;
+import com.product.restful.dto.product.ProductDto;
 import com.product.restful.service.ProductService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -34,12 +34,12 @@ class ProductServiceImplTest {
                 .quantity(50)
                 .description("This is test service product description")
                 .build();
-        ProductResponse productResponse = productService.createProduct(createProductRequest);
-        assertNotNull(productResponse.getId());
+        ProductDto productDto = productService.createProduct(createProductRequest);
+        assertNotNull(productDto.getId());
 
-        log.info("ID: {}", productResponse.getId());
-        log.info("Created At: {}", productResponse.getCreatedAt());
-        log.info("Created By: {}", productResponse.getCreatedBy());
+        log.info("ID: {}", productDto.getId());
+        log.info("Created At: {}", productDto.getCreatedAt());
+        log.info("Created By: {}", productDto.getCreatedBy());
     }
 //
 //    @Test
