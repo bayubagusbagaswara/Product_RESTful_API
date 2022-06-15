@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,15 +41,15 @@ public class User extends DateAudit {
     @Column(name = "last_name", length = 40, nullable = false)
     private String lastName;
 
+    @Email
+    @Column(name = "email", length = 40)
+    private String email;
+
     @Column(name = "username", length = 20, nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Email
-    @Column(name = "email", length = 40)
-    private String email;
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)
@@ -62,6 +63,35 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "id_role", foreignKey = @ForeignKey(name = "fk_user_role_id_role"), referencedColumnName = "id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    public User(String firstName, String lastName, String email, String username, String password, Instant createdAt) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.setCreatedAt(createdAt);
+    }
+
+    @Override
+    public Instant getCreatedAt() {
+        return super.getCreatedAt();
+    }
+
+    @Override
+    public Instant getUpdatedAt() {
+        return super.getUpdatedAt();
+    }
+
+    @Override
+    public void setCreatedAt(Instant createdAt) {
+        super.setCreatedAt(createdAt);
+    }
+
+    @Override
+    public void setUpdatedAt(Instant updatedAt) {
+        super.setUpdatedAt(updatedAt);
+    }
 
     public void addRole(Role role) {
         this.roles.add(role);
