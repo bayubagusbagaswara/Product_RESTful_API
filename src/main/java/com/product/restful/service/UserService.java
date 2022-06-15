@@ -1,13 +1,18 @@
 package com.product.restful.service;
 
 import com.product.restful.dto.ApiResponse;
-import com.product.restful.dto.user.*;
-import com.product.restful.entity.RoleName;
+import com.product.restful.dto.user.CreateUserRequest;
+import com.product.restful.dto.user.UpdateUserRequest;
+import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserIdentityAvailability;
+import com.product.restful.dto.user.UserProfileResponse;
+import com.product.restful.dto.user.UserSummaryResponse;
 import com.product.restful.entity.UserPrincipal;
 
 public interface UserService {
 
     UserIdentityAvailability checkUsernameAvailability(String username);
+
     UserIdentityAvailability checkEmailAvailability(String email);
 
     void checkUsernameIsExists(String username);
@@ -22,7 +27,7 @@ public interface UserService {
 
     UserDto createUser(CreateUserRequest createUserRequest);
 
-    void addRoleToUser(String username, RoleName roleName);
+    void addRoleToUser(String username, String roleName);
 
     UserDto getUserById(Long id);
 
