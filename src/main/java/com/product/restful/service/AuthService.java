@@ -5,12 +5,11 @@ import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
-import com.product.restful.dto.user.UserResponse;
-import com.product.restful.entity.User;
+import com.product.restful.dto.user.UserDto;
 
 public interface AuthService {
 
-    UserResponse signUp(SignUpRequest signUpRequest);
+    UserDto signUp(SignUpRequest signUpRequest);
 
     AuthenticationResponse signIn(LoginRequest loginRequest);
 
