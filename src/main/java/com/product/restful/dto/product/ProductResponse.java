@@ -1,5 +1,6 @@
 package com.product.restful.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.product.restful.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +28,11 @@ public class ProductResponse {
 
     private String description;
 
-    private String createdBy;
-
+    @JsonIgnore
     private Instant createdAt;
+
+    @JsonIgnore
+    private Instant updatedAt;
 
     public static ProductResponse fromProduct(Product product) {
         ProductResponse productResponse = new ProductResponse();
@@ -38,7 +41,7 @@ public class ProductResponse {
         productResponse.setPrice(product.getPrice());
         productResponse.setQuantity(product.getQuantity());
         productResponse.setDescription(product.getDescription());
-        productResponse.setCreatedBy(product.getCreatedBy());
+        productResponse.setUpdatedAt(product.getUpdatedAt());
         productResponse.setCreatedAt(product.getCreatedAt());
         return productResponse;
     }
