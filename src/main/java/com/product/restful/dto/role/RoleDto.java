@@ -19,13 +19,13 @@ public class RoleDto {
 
     private String name;
 
-    public static RoleDto from(Role role) {
+    public static RoleDto fromEntity(Role role) {
         return new RoleDto(role.getId(), role.getName().name());
     }
 
-    public static Set<RoleDto> fromRoles(Set<Role> roles) {
+    public static Set<RoleDto> fromEntitySet(Set<Role> roles) {
         return roles.stream()
-                .map(RoleDto::from)
+                .map(RoleDto::fromEntity)
                 .collect(Collectors.toSet());
     }
 
