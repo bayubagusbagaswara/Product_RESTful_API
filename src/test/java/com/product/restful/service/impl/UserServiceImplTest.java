@@ -4,12 +4,11 @@ import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
-import com.product.restful.dto.user.UserResponse;
+import com.product.restful.dto.user.UserDto;
 import com.product.restful.entity.RoleName;
 import com.product.restful.entity.User;
 import com.product.restful.entity.UserPrincipal;
 import com.product.restful.exception.AccessDeniedException;
-import com.product.restful.exception.UnauthorizedException;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
 import org.junit.jupiter.api.*;
@@ -43,7 +42,7 @@ class UserServiceImplTest {
                 "bagaszwara12@gmail.com"
         );
 
-        UserResponse user = userService.createUser(createUserRequest);
+        UserDto user = userService.createUser(createUserRequest);
         assertNotNull(user.getId());
         assertEquals(2, user.getRoles().size());
         log.info("Role: {}", user.getRoles()); // USER, ADMIN
@@ -59,7 +58,7 @@ class UserServiceImplTest {
                 "tesla123",
                 "tesla@gmail.com");
 
-        UserResponse admin = userService.createAdmin(tesla);
+        UserDto admin = userService.createAdmin(tesla);
         assertNotNull(admin.getId());
         log.info("Role: {}", admin.getRoles()); // ADMIN
     }
@@ -95,19 +94,19 @@ class UserServiceImplTest {
                 "james123",
                 "james@gmail.com");
 
-        UserResponse user1 = userService.createUser(albert);
+        UserDto user1 = userService.createUser(albert);
         assertNotNull(user1.getId());
         log.info("Role Albert: {}", user1.getRoles()); // USER
 
-        UserResponse user2 = userService.createUser(newton);
+        UserDto user2 = userService.createUser(newton);
         assertNotNull(user2.getId());
         log.info("Role Newton: {}", user2.getRoles()); // USER
 
-        UserResponse user3 = userService.createUser(gosling);
+        UserDto user3 = userService.createUser(gosling);
         assertNotNull(user3.getId());
         log.info("Role Gosling: {}", user3.getRoles()); // USER
 
-        UserResponse user4 = userService.createUser(watt);
+        UserDto user4 = userService.createUser(watt);
         assertNotNull(user4.getId());
         log.info("Role Watt: {}", user4.getRoles()); // USER
     }
@@ -174,10 +173,10 @@ class UserServiceImplTest {
 
         UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
 
-        UserResponse userResponse = userService.updateUser(username, updateUserRequest, currentUser);
+        UserDto userDto = userService.updateUser(username, updateUserRequest);
 
-        log.info("FirstName: {}", userResponse.getFirstName());
-        log.info("Username: {}", userResponse.getUsername());
+        log.info("FirstName: {}", userDto.getFirstName());
+        log.info("Username: {}", userDto.getUsername());
     }
 
     @Test
@@ -198,10 +197,10 @@ class UserServiceImplTest {
 
         UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
 
-        UserResponse userResponse = userService.updateUser(username, updateUserRequest, currentUser);
+        UserDto userDto = userService.updateUser(username, updateUserRequest);
 
-        log.info("FirstName: {}", userResponse.getFirstName());
-        log.info("Username: {}", userResponse.getUsername());
+        log.info("FirstName: {}", userDto.getFirstName());
+        log.info("Username: {}", userDto.getUsername());
     }
 
     @Test
@@ -217,14 +216,6 @@ class UserServiceImplTest {
                 .email("nikola@gmail.com")
                 .password("nikola12345")
                 .build();
-
-        User user = userRepository.getUserByName("newton");
-
-        UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
-
-        assertThrows(UnauthorizedException.class, () -> {
-            UserResponse userResponse = userService.updateUser(username, updateUserRequest, currentUser);
-        });
     }
 
     @Test
@@ -253,7 +244,7 @@ class UserServiceImplTest {
 
         UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
 
-        ApiResponse apiResponse = userService.deleteUser(username, currentUser);
+        ApiResponse apiResponse = userService.deleteUser(username);
 
         assertTrue(apiResponse.getSuccess());
         assertEquals(true, apiResponse.getSuccess());
@@ -272,7 +263,7 @@ class UserServiceImplTest {
 
         UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
 
-        ApiResponse apiResponse = userService.deleteUser(username, currentUser);
+        ApiResponse apiResponse = userService.deleteUser(username);
 
         assertTrue(apiResponse.getSuccess());
         assertEquals(true, apiResponse.getSuccess());
@@ -292,7 +283,7 @@ class UserServiceImplTest {
         UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
 
         assertThrows(AccessDeniedException.class, () -> {
-            ApiResponse apiResponse = userService.deleteUser(username, currentUser);
+            ApiResponse apiResponse = userService.deleteUser(username);
         });
     }
 }
