@@ -18,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -37,12 +38,25 @@ public class Role extends DateAudit {
     @Column(name = "name", length = 20, nullable = false)
     private RoleName name;
 
-    public Role(RoleName name) {
-        this.name = name;
-    }
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status_record", nullable = false)
     private StatusRecord statusRecord = StatusRecord.ACTIVE;
+
+    public Role(RoleName name) {
+        this.name = name;
+    }
+
+    @JsonIgnore
+    @Override
+    public Instant getCreatedAt() {
+        return super.getCreatedAt();
+    }
+
+    @JsonIgnore
+    @Override
+    public Instant getUpdatedAt() {
+        return super.getUpdatedAt();
+    }
 }
