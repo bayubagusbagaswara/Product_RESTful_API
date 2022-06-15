@@ -6,7 +6,7 @@ import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.user.CreateUserRequest;
-import com.product.restful.dto.user.UserResponse;
+import com.product.restful.dto.user.UserDto;
 import com.product.restful.entity.*;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse signUp(SignUpRequest signUpRequest) {
+    public UserDto signUp(SignUpRequest signUpRequest) {
         CreateUserRequest createUserRequest = CreateUserRequest.builder()
                 .firstName(signUpRequest.getFirstName())
                 .lastName(signUpRequest.getLastName())
