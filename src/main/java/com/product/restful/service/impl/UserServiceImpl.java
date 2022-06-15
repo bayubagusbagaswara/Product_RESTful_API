@@ -66,25 +66,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileResponse getUserProfile(String username) {
         final User user = userRepository.getUserByName(username);
-        return UserProfileResponse.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .createdAt(user.getCreatedAt())
-                .build();
+        return new UserProfileResponse(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getCreatedAt());
     }
 
     @Override
     public UserSummaryResponse getCurrentUser(UserPrincipal currentUser) {
-        return UserSummaryResponse.builder()
-                .id(currentUser.getId())
-                .firstName(currentUser.getFirstName())
-                .lastName(currentUser.getLastName())
-                .username(currentUser.getUsername())
-                .email(currentUser.getEmail())
-                .build();
+        return new UserSummaryResponse(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getUsername());
     }
 
     @Override
@@ -92,20 +79,21 @@ public class UserServiceImpl implements UserService {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
-        User user = new User();
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setCreatedAt(Instant.now());
+        User user = new User(
+                userRequest.getFirstName(),
+                userRequest.getLastName(),
+                userRequest.getEmail(),
+                userRequest.getUsername(),
+                passwordEncoder.encode(userRequest.getPassword()),
+                Instant.now()
+        );
 
         user.setRoles(new HashSet<>(Collections.singleton(
-                roleRepository.findByName(RoleName.ADMIN)
+                roleRepository.getByName(RoleName.ADMIN.name())
                         .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
-        return UserDto.fromUser(user);
+        return UserDto.fromEntity(user);
     }
 
     @Override
@@ -113,37 +101,38 @@ public class UserServiceImpl implements UserService {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
-        User user = new User();
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setCreatedAt(Instant.now());
+        User user = new User(
+                userRequest.getFirstName(),
+                userRequest.getLastName(),
+                userRequest.getEmail(),
+                userRequest.getUsername(),
+                passwordEncoder.encode(userRequest.getPassword()),
+                Instant.now()
+        );
 
         Set<Role> roleSet = new HashSet<>();
 
         if (userRepository.count() == 0) {
-            roleSet.add(roleRepository.findByName(RoleName.ADMIN)
+            roleSet.add(roleRepository.getByName(RoleName.ADMIN.name())
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
-            roleSet.add(roleRepository.findByName(RoleName.USER)
+            roleSet.add(roleRepository.getByName(RoleName.USER.name())
                     .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         }
 
-        roleSet.add(roleRepository.findByName(RoleName.USER)
+        roleSet.add(roleRepository.getByName(RoleName.USER.name())
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         user.setRoles(roleSet);
         userRepository.save(user);
 
-        return UserDto.fromUser(user);
+        return UserDto.fromEntity(user);
     }
 
     @Override
-    public void addRoleToUser(String username, RoleName roleName) {
+    public void addRoleToUser(String username, String roleName) {
         final User user = userRepository.getUserByName(username);
-        user.addRole(roleRepository.findByName(roleName)
+        user.addRole(roleRepository.getByName(roleName)
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         userRepository.save(user);
@@ -153,7 +142,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
-        return UserDto.fromUser(user);
+        return UserDto.fromEntity(user);
     }
 
     @Override
@@ -166,7 +155,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(updateUserRequest.getEmail());
         user.setUpdatedAt(Instant.now());
         userRepository.save(user);
-        return UserDto.fromUser(user);
+        return UserDto.fromEntity(user);
     }
 
     @Override
@@ -179,7 +168,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse giveAdmin(String username) {
         final User user = userRepository.getUserByName(username);
-        user.addRole(roleRepository.findByName(RoleName.ADMIN)
+        user.addRole(roleRepository.getByName(RoleName.ADMIN.name())
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         userRepository.save(user);
@@ -189,7 +178,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse removeAdmin(String username) {
         final User user = userRepository.getUserByName(username);
-        user.removeRole(roleRepository.findByName(RoleName.ADMIN)
+        user.removeRole(roleRepository.getByName(RoleName.ADMIN.name())
                 .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
 
         userRepository.save(user);
