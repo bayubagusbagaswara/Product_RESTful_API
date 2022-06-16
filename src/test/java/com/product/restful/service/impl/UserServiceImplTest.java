@@ -225,7 +225,7 @@ class UserServiceImplTest {
         // skenario menambahkan ROLE ADMIN ke user
         String username = "einstein";
 
-        userService.addRoleToUser(username, RoleName.ADMIN);
+        userService.addRoleToUser(username, RoleName.ADMIN.name());
 
         // find user by id, pastikan role user sudah ada ADMIN
         User user = userRepository.getUserByName(username);
