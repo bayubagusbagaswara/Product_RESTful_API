@@ -11,7 +11,4 @@ create table refresh_tokens (
 );
 
 alter table refresh_tokens
-    add constraint refresh_tokens_refresh_token_unique unique (refresh_token);
-
-alter table refresh_tokens
     add constraint fk_refresh_token_user_id foreign key (id_user) references users(id);
