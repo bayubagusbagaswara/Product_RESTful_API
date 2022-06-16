@@ -32,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
         role.setName(RoleName.valueOf(roleRequest.getName().toUpperCase()));
         role.setCreatedAt(Instant.now());
         roleRepository.save(role);
-        return RoleDto.from(role);
+        return RoleDto.fromEntity(role);
     }
 
     @Override
