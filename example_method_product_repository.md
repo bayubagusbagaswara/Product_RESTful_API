@@ -55,3 +55,10 @@
     List<User> findFirst10ByLastname(String lastname, Sort sort);
     List<User> findTop10ByLastname(String lastname, Pageable pageable);
 ```
+
+```
+@Query("SELECT t FROM Tutorial t WHERE t.level BETWEEN ?1 AND ?2")
+List<Tutorial> findByLevelBetween(int start, int end);
+@Query("SELECT t FROM Tutorial t WHERE t.createdAt BETWEEN ?1 AND ?2")
+List<Tutorial> findByDateBetween(Date start, Date end);
+```
