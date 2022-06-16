@@ -39,7 +39,6 @@ class ProductServiceImplTest {
 
         log.info("ID: {}", productDto.getId());
         log.info("Created At: {}", productDto.getCreatedAt());
-        log.info("Created By: {}", productDto.getCreatedBy());
     }
 //
 //    @Test
