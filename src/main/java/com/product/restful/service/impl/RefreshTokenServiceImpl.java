@@ -32,20 +32,20 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshTokenResponse generateRefreshToken(Long userId) {
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        Instant dateNow = Instant.now();
+        if (refreshTokenRepository.getByUser(user).isPresent()) {
+            refreshTokenRepository.deleteByUserId(userId);
+        }
 
         RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setRefreshToken(UUID.randomUUID().toString());
-        refreshToken.setCreatedAt(dateNow);
-        refreshToken.setExpiryDate(dateNow.plusMillis(refreshTokenDurationMs));
         refreshToken.setUser(user);
+        refreshToken.setRefreshToken(UUID.randomUUID().toString());
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+        refreshToken.setCreatedAt(Instant.now());
 
         refreshTokenRepository.save(refreshToken);
-
         return RefreshTokenResponse.mapToDto(refreshToken);
     }
 
@@ -57,7 +57,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken getRefreshToken(String refreshToken) {
-        return refreshTokenRepository.findByRefreshToken(refreshToken)
+        return refreshTokenRepository.getByRefreshToken(refreshToken)
                 .orElseThrow(() -> new RefreshTokenNotFoundException("Invalid refresh token"));
     }
 
