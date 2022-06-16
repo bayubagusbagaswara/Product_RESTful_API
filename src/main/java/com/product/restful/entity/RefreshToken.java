@@ -14,9 +14,7 @@ import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "refresh_tokens", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "refresh_token", name = "refresh_tokens_refresh_token_unique")
-})
+@Table(name = "refresh_tokens")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +34,21 @@ public class RefreshToken extends UserDateAudit {
 
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;
+
+    public RefreshToken(User user, String refreshToken, Instant expiryDate, Instant createdAt) {
+        this.user = user;
+        this.refreshToken = refreshToken;
+        this.expiryDate = expiryDate;
+        this.setCreatedAt(createdAt);
+    }
+
+    @Override
+    public void setCreatedAt(Instant createdAt) {
+        super.setCreatedAt(createdAt);
+    }
+
+    @Override
+    public void setUpdatedAt(Instant updatedAt) {
+        super.setUpdatedAt(updatedAt);
+    }
 }
