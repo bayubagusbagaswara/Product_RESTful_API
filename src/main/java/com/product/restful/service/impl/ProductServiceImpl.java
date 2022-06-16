@@ -38,20 +38,20 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedAt(Instant.now());
 
         productRepository.save(product);
-        return ProductDto.fromProduct(product);
+        return ProductDto.fromEntity(product);
     }
 
     @Override
     public ProductDto getProductById(String id) {
         Product product = productRepository.getProductById(id);
-        return ProductDto.fromProduct(product);
+        return ProductDto.fromEntity(product);
     }
 
     @Override
     public List<ProductDto> getAllProduct() {
         Iterable<Product> products = productRepository.findAll();
         List<Product> productList = StreamSupport.stream(products.spliterator(), false).collect(Collectors.toList());
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(Instant.now());
 
         productRepository.save(product);
-        return ProductDto.fromProduct(product);
+        return ProductDto.fromEntity(product);
     }
 
     @Override
@@ -86,10 +86,10 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         List<Product> productList = products.getContent();
 
-        List<ProductDto> productRespons = ProductDto.fromProductList(productList);
+        List<ProductDto> productRespons = ProductDto.fromEntityList(productList);
 
         ListProductResponse listAllProductResponse = new ListProductResponse();
-        listAllProductResponse.setProductRespons(productRespons);
+        listAllProductResponse.setProducts(productRespons);
         listAllProductResponse.setPageNo(products.getNumber());
         listAllProductResponse.setPageSize(products.getSize());
         listAllProductResponse.setTotalElements(products.getTotalElements());
@@ -101,67 +101,67 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProductByName(String name) {
         Product product = productRepository.getProductByName(name);
-        return ProductDto.fromProduct(product);
+        return ProductDto.fromEntity(product);
     }
 
     @Override
     public List<ProductDto> getProductByNameContaining(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCase(name);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByNameStartingWith(String name) {
         List<Product> productList = productRepository.findByNameStartingWithIgnoreCase(name);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByNameContainingOrderByName(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByName(name);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByNameContainingOrderByNameDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByNameDesc(name);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseAndPriceBetween(name, priceMin, priceMax);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByNameContainingOrderByPrice(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPriceDesc(name);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByNameContainingOrderByPriceDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPrice(name);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByPriceBetween(priceMin, priceMax);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByPriceGreaterThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceGreaterThanEqual(price);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
     @Override
     public List<ProductDto> getProductByPriceLessThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceLessThanEqual(price);
-        return ProductDto.fromProductList(productList);
+        return ProductDto.fromEntityList(productList);
     }
 
 }
