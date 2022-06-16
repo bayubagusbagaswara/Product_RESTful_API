@@ -6,7 +6,6 @@ import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserDto;
-import com.product.restful.entity.RoleName;
 import com.product.restful.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class UserController {
     @PutMapping(value = "/{username}/addRole")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> addRoleToUser(@PathVariable(name = "username") String username, @RequestBody RoleRequest roleRequest) {
-        userService.addRoleToUser(username, RoleName.valueOf(roleRequest.getName().toUpperCase()));
+        userService.addRoleToUser(username, roleRequest.getName().toUpperCase());
         return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role " + roleRequest.getName().toUpperCase() + " to user: " + username), HttpStatus.OK);
     }
 
