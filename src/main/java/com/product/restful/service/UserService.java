@@ -19,6 +19,8 @@ public interface UserService {
 
     void checkEmailIsExists(String email);
 
+    UserDto getUserByUsername(String username);
+
     UserProfileResponse getUserProfile(String username);
 
     UserSummaryResponse getCurrentUser(UserPrincipal currentUser);
