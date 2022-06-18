@@ -2,13 +2,14 @@ package com.product.restful.integration;
 
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ProductIntegrationTest {
 
-//    @LocalServerPort
-//    private Integer serverPort;
+    @LocalServerPort
+    private Integer serverPort;
 //
 //    @BeforeEach
 //    void setUp() {
