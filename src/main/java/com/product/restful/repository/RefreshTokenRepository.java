@@ -2,6 +2,7 @@ package com.product.restful.repository;
 
 import com.product.restful.entity.RefreshToken;
 import com.product.restful.entity.User;
+import com.product.restful.exception.ResourceNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,10 +17,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     @Query("FROM RefreshToken r WHERE r.refreshToken = :token")
     Optional<RefreshToken> getByRefreshToken(@RequestParam(name = "token") String token);
 
-    @Query("FROM RefreshToken r WHERE r.user = :user")
-    Optional<RefreshToken> getByUser(@RequestParam(name = "user") User user);
+    Optional<RefreshToken> findByUserId(Long userId);
 
-//    @Modifying
-//    @Query("DELETE FROM RefreshToken r WHERE r.user = :user")
     void deleteByUserId(Long userId);
 }
