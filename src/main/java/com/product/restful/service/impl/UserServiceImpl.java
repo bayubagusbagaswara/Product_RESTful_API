@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.getUserByName(username);
+        return UserDto.fromEntity(user);
+    }
+
+    @Override
     public UserProfileResponse getUserProfile(String username) {
         final User user = userRepository.getUserByName(username);
         return new UserProfileResponse(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getCreatedAt());
