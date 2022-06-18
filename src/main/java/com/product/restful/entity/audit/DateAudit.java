@@ -20,12 +20,10 @@ import java.time.Instant;
 public abstract class DateAudit {
 
     @CreatedDate
-    @JsonFormat(timezone = "Asia/Jakarta")
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     @LastModifiedDate
-    @JsonFormat(timezone = "Asia/Jakarta")
     @Column(nullable = false)
     private Instant updatedAt;
 }
