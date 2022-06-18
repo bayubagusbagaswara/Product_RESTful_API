@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,21 +25,15 @@ class RefreshTokenRepositoryTest {
     void getByRefreshToken() {
         String token = "caf14092-7da7-4e73-955d-db898d66639e";
         RefreshToken refreshToken = refreshTokenRepository.getByRefreshToken(token).get();
+        assertNotNull(refreshToken);
         log.info("Token: {}", refreshToken.getRefreshToken());
     }
 
     @Test
-    void findByUser() {
+    void deleteRefreshTokenByUserId() {
         String username = "bayu_bagaswara";
         User user = userRepository.getUserByName(username);
-        RefreshToken refreshToken = refreshTokenRepository.getByUser(user).get();
-        log.info("Token: {}", refreshToken.getRefreshToken());
-    }
-
-    @Test
-    void deleteByUser() {
-        String username = "bayu_bagaswara";
-        User user = userRepository.getUserByName(username);
-        refreshTokenRepository.deleteByUserId(user.getId());
+        refreshTokenRepository.delete(user.getRefreshToken());
+        assertNull(user.getRefreshToken());
     }
 }
