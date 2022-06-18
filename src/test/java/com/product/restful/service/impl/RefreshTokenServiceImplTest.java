@@ -1,7 +1,8 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.dto.refreshToken.RefreshTokenResponse;
-import com.product.restful.repository.RefreshTokenRepository;
+import com.product.restful.entity.RefreshToken;
+import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.RefreshTokenService;
 import org.junit.jupiter.api.Test;
@@ -32,17 +33,32 @@ class RefreshTokenServiceImplTest {
 
     @Test
     void validateRefreshToken() {
+        String refreshToken = "";
+        RefreshTokenResponse refreshTokenResponse = refreshTokenService.validateRefreshToken(refreshToken);
+        assertEquals(refreshToken, refreshTokenResponse.getRefreshToken());
     }
 
     @Test
     void getRefreshToken() {
+        String refreshToken = "";
+        RefreshToken token = refreshTokenService.getRefreshToken(refreshToken);
+        assertEquals(refreshToken, token.getRefreshToken());
     }
 
     @Test
     void verifyExpirationRefreshToken() {
+        String refreshToken = "";
+        RefreshToken token = refreshTokenService.verifyExpirationRefreshToken(refreshToken);
+        assertNotNull(token);
+        assertEquals(refreshToken, token.getRefreshToken());
     }
 
     @Test
     void deleteRefreshToken() {
+        String refreshToken = "";
+        refreshTokenService.deleteRefreshToken(refreshToken);
+        assertThrows(RefreshTokenNotFoundException.class, () -> {
+            RefreshToken token = refreshTokenService.getRefreshToken(refreshToken);
+        });
     }
 }
