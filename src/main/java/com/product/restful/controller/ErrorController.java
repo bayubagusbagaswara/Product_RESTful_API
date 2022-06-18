@@ -5,7 +5,6 @@ import com.product.restful.dto.WebResponse;
 import com.product.restful.exception.AccessDeniedException;
 import com.product.restful.exception.AppException;
 import com.product.restful.exception.BadRequestException;
-import com.product.restful.exception.CustomUsernameNotFoundException;
 import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.exception.TokenRefreshException;
@@ -13,7 +12,6 @@ import com.product.restful.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -70,9 +68,9 @@ public class ErrorController {
 
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseBody
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ResponseEntity<ApiResponse> accessDeniedException(AccessDeniedException exception) {
-        return new ResponseEntity<>(exception.getApiResponse(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(exception.getApiResponse(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(value = TokenRefreshException.class)
@@ -94,20 +92,6 @@ public class ErrorController {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiResponse> resfreshTokenNotFoundHandler(RefreshTokenNotFoundException refreshTokenNotFoundException) {
         return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, refreshTokenNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(value = CustomUsernameNotFoundException.class)
-    @ResponseBody
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ResponseEntity<ApiResponse> customUsernameNotFoundHandler(CustomUsernameNotFoundException usernameNotFoundException) {
-        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, usernameNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(value = UsernameNotFoundException.class)
-    @ResponseBody
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ResponseEntity<ApiResponse> usernameNotFoundHandler(UsernameNotFoundException usernameNotFoundException) {
-        return new ResponseEntity<>(new ApiResponse(Boolean.FALSE, usernameNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = AuthenticationException.class)
