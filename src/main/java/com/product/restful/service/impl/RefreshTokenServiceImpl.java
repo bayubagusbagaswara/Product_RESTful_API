@@ -35,15 +35,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        if (refreshTokenRepository.getByUser(user).isPresent()) {
-            refreshTokenRepository.deleteByUserId(userId);
+        if (refreshTokenRepository.findByUserId(userId).isPresent()) {
+            refreshTokenRepository.delete(user.getRefreshToken());
         }
 
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setUser(user);
-        refreshToken.setRefreshToken(UUID.randomUUID().toString());
-        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-        refreshToken.setCreatedAt(Instant.now());
+        RefreshToken refreshToken = new RefreshToken(
+                user, UUID.randomUUID().toString().replace("-",""),
+                Instant.now().plusMillis(refreshTokenDurationMs), Instant.now()
+        );
 
         refreshTokenRepository.save(refreshToken);
         return RefreshTokenResponse.mapToDto(refreshToken);
