@@ -6,10 +6,7 @@ import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserDto;
 import com.product.restful.entity.RoleName;
-import com.product.restful.entity.User;
-import com.product.restful.entity.UserPrincipal;
 import com.product.restful.exception.AccessDeniedException;
-import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -27,9 +24,6 @@ class UserServiceImplTest {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Test
     @Order(1)
@@ -169,12 +163,7 @@ class UserServiceImplTest {
                 .password("james12345")
                 .build();
 
-        User user = userRepository.getUserByName("bayu_bagaswara");
-
-        UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
-
         UserDto userDto = userService.updateUser(username, updateUserRequest);
-
         log.info("FirstName: {}", userDto.getFirstName());
         log.info("Username: {}", userDto.getUsername());
     }
@@ -183,7 +172,6 @@ class UserServiceImplTest {
     @Disabled
     @Order(9)
     void updateUserBySelf() {
-        // 2. Albert akan mengubah data dirinya sendiri
         String username = "albert";
         UpdateUserRequest updateUserRequest = UpdateUserRequest.builder()
                 .firstName("Alberttt")
@@ -193,12 +181,7 @@ class UserServiceImplTest {
                 .password("einstein12345")
                 .build();
 
-        User user = userRepository.getUserByName("albert");
-
-        UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
-
         UserDto userDto = userService.updateUser(username, updateUserRequest);
-
         log.info("FirstName: {}", userDto.getFirstName());
         log.info("Username: {}", userDto.getUsername());
     }
@@ -207,7 +190,6 @@ class UserServiceImplTest {
     @Disabled
     @Order(10)
     void updateUserRoleUserToRoleAdminFailed() {
-        // 3. Albert tidak bisa mengubah data Tesla
         String username = "tesla99";
         UpdateUserRequest updateUserRequest = UpdateUserRequest.builder()
                 .firstName("Nikolaaa")
@@ -222,14 +204,9 @@ class UserServiceImplTest {
     @Disabled
     @Order(12)
     void addRoleToUser() {
-        // skenario menambahkan ROLE ADMIN ke user
         String username = "einstein";
-
         userService.addRoleToUser(username, RoleName.ADMIN.name());
-
-        // find user by id, pastikan role user sudah ada ADMIN
-        User user = userRepository.getUserByName(username);
-
+        UserDto user = userService.getUserByUsername(username);
         log.info("Role: {}", user.getRoles());
     }
 
@@ -237,13 +214,7 @@ class UserServiceImplTest {
     @Disabled
     @Order(12)
     void deleteUserByAdmin() {
-
-        // admin Bayu menghapus user Gosling
         String username = "james_gosling";
-        User user = userRepository.getUserByName("bayu_bagaswara");
-
-        UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
-
         ApiResponse apiResponse = userService.deleteUser(username);
 
         assertTrue(apiResponse.getSuccess());
@@ -257,12 +228,7 @@ class UserServiceImplTest {
     @Disabled
     @Order(13)
     void deleteUserBySelf() {
-        // user Albert menghapus dirinya sendiri
         String username = "newton";
-        User user = userRepository.getUserByName("newton");
-
-        UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
-
         ApiResponse apiResponse = userService.deleteUser(username);
 
         assertTrue(apiResponse.getSuccess());
@@ -276,12 +242,7 @@ class UserServiceImplTest {
     @Disabled
     @Order(14)
     void deleteUserToAdmin() {
-        // user Newton menghapus Admin Bayu, ini akan gagal
         String username = "bayu_bagaswara";
-        User user = userRepository.getUserByName("james_watt");
-
-        UserPrincipal currentUser = UserPrincipal.createUserPrincipal(user);
-
         assertThrows(AccessDeniedException.class, () -> {
             ApiResponse apiResponse = userService.deleteUser(username);
         });
