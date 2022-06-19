@@ -1,7 +1,6 @@
 # Product RESTful API 
 
 Build Restful CRUD API for a product online store.
-Kita menggunakan hasAuthority untuk mengidentifikasi User, maka kita nanti coba hilangkan @CurrentUser
 
 ## Techologies 
 
