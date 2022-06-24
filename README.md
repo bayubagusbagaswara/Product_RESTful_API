@@ -2,7 +2,7 @@
 
 Build Restful CRUD API for a product online store.
 
-## Techologies 
+## Technologies 
 
 - Java JDK 1.8
 - Spring Boot version 2.6.7
