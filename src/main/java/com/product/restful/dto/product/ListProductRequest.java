@@ -23,7 +23,7 @@ public class ListProductRequest {
     @Min(value = 1, message = "Page Size must not be less than one")
     private Integer pageSize;
 
-    @NotBlank(message = "Property must not be blank")
+    @NotBlank(message = "Sort by must not be blank")
     private String sortBy;
 
     @NotBlank(message = "Sort direction must be asc or desc")
