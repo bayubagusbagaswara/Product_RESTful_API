@@ -71,13 +71,13 @@ The app defines following CRUD APIs.
 
 ### Users
 
-| Method | URL                               | Description                                                                   | Request Body | Response Success                      | Response Error                      |
-|--------|-----------------------------------|-------------------------------------------------------------------------------|--------------|---------------------------------------|-------------------------------------|
-| POST   | /api/users                        | Create new user                                                               |              | [JSON](#create_user_response_success) | [JSON](#create_user_response_error) |
-| PUT    | /api/users/{username}             | Update user (If profile belongs to logged in user or logged in user is admin) |              | [JSON](#update_user_success)          | [JSON](#update_user_error)          |
-| PUT    | /api/users/{username}/addRole     | Add role to another user (only for admins)                                    |              | [JSON](#add_role_success)             | [JSON](#add_role_error)             |
-| DELETE | /api/users/{usernaame}            | Delete user (Only admin)                                                      |              | [JSON](#delete_user_success)          | [JSON](#delete_user_error)          |
-| PUT    | /api/users/{username}/giveAdmin   | Give admin role to user (only for admins)                                     |              |                                       |                                     |
+| Method | URL                              | Description                                                                   | Request Body | Response Success                      | Response Error                      |
+|--------|----------------------------------|-------------------------------------------------------------------------------|--------------|---------------------------------------|-------------------------------------|
+| POST   | /api/users                       | Create new user                                                               |              | [JSON](#create_user_response_success) | [JSON](#create_user_response_error) |
+| PUT    | /api/users/{username}            | Update user (If profile belongs to logged in user or logged in user is admin) |              | [JSON](#update_user_success)          | [JSON](#update_user_error)          |
+| PUT    | /api/users/{username}/addRole    | Add role to another user (only for admins)                                    |              | [JSON](#add_role_success)             | [JSON](#add_role_error)             |
+| DELETE | /api/users/{username}            | Delete user (Only admin)                                                      |              | [JSON](#delete_user_success)          | [JSON](#delete_user_error)          |
+| PUT    | /api/users/{username}/giveAdmin  | Give admin role to user (only for admins)                                     |              |                                       |                                     |
 | PUT    | /api/users/{username}/removeAdmin | Take admin role from user (only for admins)                                   |              | [JSON](#remove_admin_success)         |                                     |
 
 
