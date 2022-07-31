@@ -5,10 +5,11 @@ Build Restful CRUD API for a product online store.
 ## Technologies 
 
 - Java JDK 1.8
-- Spring Boot version 2.6.7
+- Maven version 3.8.5
+- Spring Boot version 2.7.1
 - Spring Data JPA, Hibernate
 - Spring Security
-- JWT
+- JSON Web Token (JWT)
 - PostgreSQL database
 - Flyway migration
 - JUnit testing
