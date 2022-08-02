@@ -2,6 +2,7 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.product.*;
 import com.product.restful.entity.Product;
+import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.repository.ProductRepository;
 import com.product.restful.service.ProductService;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.nio.file.ReadOnlyFileSystemException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(updateProductRequest.getName());
         product.setPrice(updateProductRequest.getPrice());
         product.setQuantity(updateProductRequest.getQuantity());
-        product.setUpdatedAt(Instant.now());
+        product.setUpdatedAt(Instant.now()); // sebenarnya tidak perlu, secara otomatis Spring akan melakukan auditing untuk update
 
         productRepository.save(product);
         return ProductDto.fromEntity(product);
@@ -164,4 +166,8 @@ public class ProductServiceImpl implements ProductService {
         return ProductDto.fromEntityList(productList);
     }
 
+    @Override
+    public Product getProductByIdNeW(String id) {
+        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+    }
 }
