@@ -1,6 +1,7 @@
 package com.product.restful.service;
 
 import com.product.restful.dto.product.*;
+import com.product.restful.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface ProductService {
     List<ProductDto> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax);
     List<ProductDto> getProductByPriceGreaterThanEqual(BigDecimal price);
     List<ProductDto> getProductByPriceLessThanEqual(BigDecimal price);
+
+    Product getProductByIdNeW(String id);
 }
