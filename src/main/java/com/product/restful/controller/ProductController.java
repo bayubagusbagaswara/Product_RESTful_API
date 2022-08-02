@@ -3,6 +3,7 @@ package com.product.restful.controller;
 import com.product.restful.dto.product.*;
 import com.product.restful.dto.product.ProductDto;
 import com.product.restful.dto.WebResponse;
+import com.product.restful.entity.Product;
 import com.product.restful.service.ProductService;
 import com.product.restful.util.AppConstants;
 import org.springframework.http.HttpStatus;
@@ -92,4 +93,11 @@ public class ProductController {
         List<ProductDto> productRespons = productService.getProductByNameContainingAndPriceBetween(name, priceMin, priceMax);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "All products successfully retrieved", productRespons), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/new/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WebResponse<Product>> getProductByIdNew(@PathVariable(name = "id") String id) {
+        Product product = productService.getProductByIdNeW(id);
+        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product successfully retrieved based on id", product), HttpStatus.OK);
+    }
+
 }
