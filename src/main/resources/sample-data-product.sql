@@ -23,3 +23,6 @@ values ('acer-nitro-5', 'Acer Nitro 5', 10701000, 30, 'This is Acer Nitro 5 desc
 insert into products (id, name, price, quantity, description, created_by, created_at, updated_at, status_record)
 values ('hp-pavilion-x360', 'HP Pavilion X360', 7599000, 5, 'This is HP Pavilion X360 description', 'User', current_timestamp, current_timestamp, 'ACTIVE'),
         ('hp-envy-x360', 'HP Envy X360', 10149000, 8, 'This is HP Envy X360 description', 'User', current_timestamp, current_timestamp, 'ACTIVE');
+
+insert into products (id, name, price, quantity, description, created_by, updated_by, created_at, updated_at, status_record)
+values ('acer-nitro-5', 'Acer Nitro 5', 10701000, 30, 'This is Acer Nitro 5 description', 'User', 'Bayu', current_timestamp, current_timestamp, 'ACTIVE');
