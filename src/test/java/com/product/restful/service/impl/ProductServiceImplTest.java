@@ -52,6 +52,7 @@ class ProductServiceImplTest {
         assertSame(id, product.getId());
         assertNotNull(product);
         log.info("ID: {}", product.getId());
+        log.info("Product: {}", product);
     }
 
     @Test
