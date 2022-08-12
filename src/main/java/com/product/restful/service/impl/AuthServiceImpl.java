@@ -8,6 +8,7 @@ import com.product.restful.dto.auth.SignUpRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UserDto;
 import com.product.restful.entity.*;
+import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.RefreshTokenService;

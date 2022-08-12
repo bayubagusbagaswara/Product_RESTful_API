@@ -1,7 +1,7 @@
 package com.product.restful.repository;
 
-import com.product.restful.entity.User;
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.User;
+import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.exception.ResourceNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

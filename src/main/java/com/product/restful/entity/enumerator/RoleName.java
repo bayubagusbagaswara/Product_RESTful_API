@@ -1,4 +1,4 @@
-package com.product.restful.entity;
+package com.product.restful.entity.enumerator;
 
 public enum RoleName {
 

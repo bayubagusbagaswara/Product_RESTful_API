@@ -1,6 +1,6 @@
 package com.product.restful.configuration;
 
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.UserPrincipal;
 import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

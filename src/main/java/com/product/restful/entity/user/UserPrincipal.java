@@ -1,4 +1,4 @@
-package com.product.restful.entity;
+package com.product.restful.entity.user;
 
 import lombok.Builder;
 import lombok.Data;

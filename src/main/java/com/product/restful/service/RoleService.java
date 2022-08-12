@@ -3,7 +3,7 @@ package com.product.restful.service;
 import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.role.RoleDto;
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.UserPrincipal;
 
 public interface RoleService {
 

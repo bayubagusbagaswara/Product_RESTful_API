@@ -1,6 +1,6 @@
 package com.product.restful.security;
 
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

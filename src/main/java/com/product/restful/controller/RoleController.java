@@ -4,7 +4,7 @@ import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.role.RoleDto;
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.service.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

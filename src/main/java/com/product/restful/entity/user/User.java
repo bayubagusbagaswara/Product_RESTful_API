@@ -1,6 +1,9 @@
-package com.product.restful.entity;
+package com.product.restful.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.product.restful.entity.RefreshToken;
+import com.product.restful.entity.Role;
+import com.product.restful.entity.enumerator.StatusRecord;
 import com.product.restful.entity.audit.DateAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

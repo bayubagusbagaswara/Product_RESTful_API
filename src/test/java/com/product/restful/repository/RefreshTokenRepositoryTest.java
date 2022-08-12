@@ -1,7 +1,7 @@
 package com.product.restful.repository;
 
 import com.product.restful.entity.RefreshToken;
-import com.product.restful.entity.User;
+import com.product.restful.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

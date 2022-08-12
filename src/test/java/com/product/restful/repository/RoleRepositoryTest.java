@@ -1,7 +1,7 @@
 package com.product.restful.repository;
 
 import com.product.restful.entity.Role;
-import com.product.restful.entity.RoleName;
+import com.product.restful.entity.enumerator.RoleName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

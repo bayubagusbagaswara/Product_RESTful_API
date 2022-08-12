@@ -2,7 +2,7 @@ package com.product.restful.service.impl;
 
 import com.product.restful.dto.refreshToken.RefreshTokenResponse;
 import com.product.restful.entity.RefreshToken;
-import com.product.restful.entity.User;
+import com.product.restful.entity.user.User;
 import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.exception.TokenRefreshException;

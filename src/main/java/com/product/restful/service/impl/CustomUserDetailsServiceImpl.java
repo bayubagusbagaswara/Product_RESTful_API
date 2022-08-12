@@ -1,7 +1,7 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.entity.User;
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.User;
+import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.CustomUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;

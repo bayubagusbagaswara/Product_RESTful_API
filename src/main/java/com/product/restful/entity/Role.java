@@ -2,6 +2,8 @@ package com.product.restful.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.product.restful.entity.audit.DateAudit;
+import com.product.restful.entity.enumerator.RoleName;
+import com.product.restful.entity.enumerator.StatusRecord;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

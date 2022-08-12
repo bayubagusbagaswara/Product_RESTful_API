@@ -5,7 +5,7 @@ import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserDto;
-import com.product.restful.entity.RoleName;
+import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.exception.AccessDeniedException;
 import com.product.restful.service.UserService;
 import org.junit.jupiter.api.*;

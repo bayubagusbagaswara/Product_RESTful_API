@@ -7,7 +7,7 @@ import com.product.restful.dto.user.UserDto;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserProfileResponse;
 import com.product.restful.dto.user.UserSummaryResponse;
-import com.product.restful.entity.UserPrincipal;
+import com.product.restful.entity.user.UserPrincipal;
 
 public interface UserService {
 

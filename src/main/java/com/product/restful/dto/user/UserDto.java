@@ -1,7 +1,7 @@
 package com.product.restful.dto.user;
 
 import com.product.restful.dto.role.RoleDto;
-import com.product.restful.entity.User;
+import com.product.restful.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
