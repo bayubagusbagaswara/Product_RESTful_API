@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reset_passwords", uniqueConstraints = {
+@Table(name = "reset_password", uniqueConstraints = {
         @UniqueConstraint(name = "reset_password_code_unique", columnNames = "unique_code")
 })
 @Data
