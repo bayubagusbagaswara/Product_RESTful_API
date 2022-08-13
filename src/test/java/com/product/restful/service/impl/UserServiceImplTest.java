@@ -6,6 +6,7 @@ import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserDto;
 import com.product.restful.entity.enumerator.RoleName;
+import com.product.restful.entity.user.User;
 import com.product.restful.exception.AccessDeniedException;
 import com.product.restful.service.UserService;
 import org.junit.jupiter.api.*;
@@ -40,21 +41,6 @@ class UserServiceImplTest {
         assertNotNull(user.getId());
         assertEquals(2, user.getRoles().size());
         log.info("Role: {}", user.getRoles()); // USER, ADMIN
-    }
-
-    @Test
-    void createNewUser() {
-        CreateUserRequest createUserRequest = CreateUserRequest.builder()
-                .firstName("Cristiano")
-                .lastName("Ronaldo")
-                .username("cristiano")
-                .email("cristiano@gmail.com")
-                .build();
-
-        UserDto user = userService.createUser(createUserRequest);
-        assertNotNull(user.getId());
-//        assertEquals(2, user.getRoles().size());
-        log.info("Role: {}", user.getRoles()); // USER
     }
 
     @Test
@@ -261,5 +247,54 @@ class UserServiceImplTest {
         assertThrows(AccessDeniedException.class, () -> {
             ApiResponse apiResponse = userService.deleteUser(username);
         });
+    }
+
+    @Test
+    void createNewUser() {
+        CreateUserRequest createUserRequest = CreateUserRequest.builder()
+                .firstName("Bayu")
+                .lastName("Bagaswara")
+                .username("bagaswara")
+                .email("bayu@gmail.com")
+                .build();
+
+        UserDto user = userService.createUser(createUserRequest);
+        assertNotNull(user.getId());
+        log.info("Role: {}", user.getRoles()); // USER
+    }
+
+    @Test
+    void testVerifyEmailAfterRegister() {
+        String uniqueCode = "71c7622a-3b6d-403c-a4df-d55409baadb7";
+        userService.verifyEmailAfterRegister(uniqueCode);
+    }
+
+    @Test
+    void testVerifyResetPasswordLink() {
+        String uniqueCode = "3c80e520-0251-48ad-a24e-2119f8f5c4e2";
+        UserDto userDto = userService.verifyResetPasswordLink(uniqueCode);
+        assertNotNull(userDto);
+    }
+
+    @Test
+    void testSetNewPassword() {
+        String password = "12345678";
+        Long userId = 3L;
+        User user = userService.getUser(userId);
+
+        userService.setNewPassword(user, password);
+    }
+
+    @Test
+    void testForgotPassword() {
+        String email = "";
+        userService.forgotPassword(email);
+    }
+
+    @Test
+    void getUser() {
+        Long userId = 2L;
+        User user = userService.getUser(userId);
+        System.out.println(user);
     }
 }
