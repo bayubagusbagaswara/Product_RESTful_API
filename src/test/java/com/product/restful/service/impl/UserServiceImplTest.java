@@ -43,6 +43,21 @@ class UserServiceImplTest {
     }
 
     @Test
+    void createNewUser() {
+        CreateUserRequest createUserRequest = CreateUserRequest.builder()
+                .firstName("Cristiano")
+                .lastName("Ronaldo")
+                .username("cristiano")
+                .email("cristiano@gmail.com")
+                .build();
+
+        UserDto user = userService.createUser(createUserRequest);
+        assertNotNull(user.getId());
+//        assertEquals(2, user.getRoles().size());
+        log.info("Role: {}", user.getRoles()); // USER
+    }
+
+    @Test
     @Order(2)
     void createAdmin() {
         CreateUserRequest tesla = new CreateUserRequest(
