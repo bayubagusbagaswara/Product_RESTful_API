@@ -48,6 +48,8 @@ public interface UserService {
 
     void verifyEmail(String email);
 
+    User getUser(Long userId);
+
     UserDto verifyResetPasswordLink(String uniqueCode);
 
     void verifyEmailAfterRegister(String uniqueCode);
