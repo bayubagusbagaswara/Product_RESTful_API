@@ -15,9 +15,9 @@ public class UserPassword {
     @Column(name = "id_user")
     private Long id;
 
-    @OneToOne
     @MapsId
-    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_users_passwords_user_id"))
+    @OneToOne
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_user_password_id_user"), referencedColumnName = "id")
     private User user;
 
     @Column(name = "password")
