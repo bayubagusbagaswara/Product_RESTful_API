@@ -50,8 +50,8 @@ public class User extends DateAudit {
     @Column(name = "username", length = 20, nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+//    @Column(name = "password", nullable = false)
+//    private String password;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
@@ -70,12 +70,11 @@ public class User extends DateAudit {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String email, String username, String password, Instant createdAt) {
+    public User(String firstName, String lastName, String email, String username, Instant createdAt) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
-        this.password = password;
         this.setCreatedAt(createdAt);
     }
 
