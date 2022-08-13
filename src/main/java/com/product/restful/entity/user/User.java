@@ -50,8 +50,8 @@ public class User extends DateAudit {
     @Column(name = "username", length = 20, nullable = false)
     private String username;
 
-    @Column(name = "active", nullable = false)
-    private boolean active;
+    @Column(name = "user_active", nullable = false)
+    private boolean userActive;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
@@ -62,6 +62,7 @@ public class User extends DateAudit {
     @Column(name = "status_record", nullable = false)
     private StatusRecord statusRecord = StatusRecord.ACTIVE;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private UserPassword userPassword;
@@ -95,4 +96,16 @@ public class User extends DateAudit {
         }
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", userActive=" + userActive +
+                ", roles=" + roles +
+                '}';
+    }
 }
