@@ -12,32 +12,24 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * UserPrincipal adalah class yang mengimplementasikan UserDetails
+ * artinya UserPrincipal digunakan untuk membawa data user yang tujuannya untuk autentikasi dan otorisasi
+ */
 @Data
 @Builder
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails {
 
     private Long id;
-
     private String firstName;
-
     private String lastName;
-
     private String username;
-
     private String email;
-
     private String password;
-
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Long id,
-                         String firstName,
-                         String lastName,
-                         String username,
-                         String email,
-                         String password,
-                         Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal( Long id, String firstName, String lastName, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,23 +37,6 @@ public class UserPrincipal implements UserDetails {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
-    }
-
-    public static UserPrincipal createUserPrincipal(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList())
-                ;
-
-        return new UserPrincipal(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities
-        );
     }
 
     @Override
