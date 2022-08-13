@@ -121,12 +121,12 @@ public class UserServiceImpl implements UserService {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
-        User user = User.builder()
-                .firstName(userRequest.getFirstName())
-                .lastName(userRequest.getLastName())
-                .username(userRequest.getUsername())
-                .email(userRequest.getEmail())
-                .build();
+        User user = new User();
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setUsername(userRequest.getUsername());
+        user.setUserActive(false);
 
         Set<Role> roleSet = new HashSet<>();
         if (userRepository.count() == 0) {
@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService {
         user.setUserPassword(userPassword);
 
         userRepository.save(user);
+        userPasswordRepository.save(userPassword);
 
         ResetPassword resetPassword = new ResetPassword();
         resetPassword.setUser(user);
@@ -219,7 +220,7 @@ public class UserServiceImpl implements UserService {
     public void verifyEmailAfterRegister(String uniqueCode) {
         ResetPassword resetPassword = resetPasswordRepository.findByUniqueCode(uniqueCode).orElseThrow(() -> new ResetPasswordInvalidException("Unique Code Tidak Terdaftar"));
         User user = resetPassword.getUser();
-        user.setActive(true);
+        user.setUserActive(true);
         userRepository.save(user);
     }
 
