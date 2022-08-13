@@ -35,9 +35,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        if (refreshTokenRepository.findByUserId(userId).isPresent()) {
-            refreshTokenRepository.delete(user.getRefreshToken());
-        }
+//        if (refreshTokenRepository.findByUserId(userId).isPresent()) {
+//            refreshTokenRepository.delete(user.getRefreshToken());
+//        }
 
         RefreshToken refreshToken = new RefreshToken(
                 user, UUID.randomUUID().toString().replace("-",""),
