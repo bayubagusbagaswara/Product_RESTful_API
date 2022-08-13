@@ -90,7 +90,6 @@ public class UserServiceImpl implements UserService {
                 userRequest.getLastName(),
                 userRequest.getEmail(),
                 userRequest.getUsername(),
-                passwordEncoder.encode(userRequest.getPassword()),
                 Instant.now()
         );
 
@@ -112,7 +111,6 @@ public class UserServiceImpl implements UserService {
                 userRequest.getLastName(),
                 userRequest.getEmail(),
                 userRequest.getUsername(),
-                passwordEncoder.encode(userRequest.getPassword()),
                 Instant.now()
         );
 
@@ -156,7 +154,6 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.getUserByName(username);
         user.setFirstName(updateUserRequest.getFirstName());
         user.setLastName(updateUserRequest.getLastName());
-        user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
         user.setUsername(updateUserRequest.getUsername());
         user.setEmail(updateUserRequest.getEmail());
         user.setUpdatedAt(Instant.now());
