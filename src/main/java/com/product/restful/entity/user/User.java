@@ -50,11 +50,11 @@ public class User extends DateAudit {
     @Column(name = "username", length = 20, nullable = false)
     private String username;
 
-//    @Column(name = "password", nullable = false)
-//    private String password;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 
     @JsonIgnore
@@ -62,7 +62,11 @@ public class User extends DateAudit {
     @Column(name = "status_record", nullable = false)
     private StatusRecord statusRecord = StatusRecord.ACTIVE;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserPassword userPassword;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_user_role_id_user"), referencedColumnName = "id"),
@@ -70,32 +74,11 @@ public class User extends DateAudit {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String email, String username, Instant createdAt) {
+    public User(String firstName, String lastName, String email, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
-        this.setCreatedAt(createdAt);
-    }
-
-    @Override
-    public Instant getCreatedAt() {
-        return super.getCreatedAt();
-    }
-
-    @Override
-    public Instant getUpdatedAt() {
-        return super.getUpdatedAt();
-    }
-
-    @Override
-    public void setCreatedAt(Instant createdAt) {
-        super.setCreatedAt(createdAt);
-    }
-
-    @Override
-    public void setUpdatedAt(Instant updatedAt) {
-        super.setUpdatedAt(updatedAt);
     }
 
     public void addRole(Role role) {
