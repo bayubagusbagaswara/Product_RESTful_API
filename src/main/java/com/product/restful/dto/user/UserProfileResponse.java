@@ -21,6 +21,4 @@ public class UserProfileResponse {
     private String email;
 
     private String username;
-
-    private Instant createdAt;
 }
