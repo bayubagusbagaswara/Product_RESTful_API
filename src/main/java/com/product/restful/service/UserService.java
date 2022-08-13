@@ -7,6 +7,7 @@ import com.product.restful.dto.user.UserDto;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.dto.user.UserProfileResponse;
 import com.product.restful.dto.user.UserSummaryResponse;
+import com.product.restful.entity.user.User;
 import com.product.restful.entity.user.UserPrincipal;
 
 public interface UserService {
@@ -46,4 +47,12 @@ public interface UserService {
     void verifyUserByUsernameOrEmail(String usernameOrEmail);
 
     void verifyEmail(String email);
+
+    UserDto verifyResetPasswordLink(String uniqueCode);
+
+    void verifyEmailAfterRegister(String uniqueCode);
+
+    void setNewPassword(User user, String password);
+
+    void forgotPassword(String email);
 }
