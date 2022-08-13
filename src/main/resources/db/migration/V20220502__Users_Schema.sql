@@ -7,7 +7,6 @@ create table users (
     email character varying(40),
     first_name character varying(40) not null,
     last_name character varying(40) not null,
-    password character varying(255) not null,
     username character varying(15) not null
 );
 
@@ -16,3 +15,24 @@ alter table users
 
 alter table users
     add constraint users_username_unique unique (username);
+
+-- TABLE USER PASSWORD
+
+create table user_password(
+    id_user bigserial,
+    password character varying(255) not null,
+    primary key (id_user),
+    foreign key (id_user) references users(id)
+);
+
+-- TABLE RESET PASSWORD
+create table reset_password(
+    id bigserial,
+    generated timestamp not null,
+    expired timestamp not null,
+    id_user bigserial not null,
+    unique_code character varying(50) not null,
+    primary key (id),
+    foreign key (id_user) references users(id),
+    unique (unique_code)
+);
