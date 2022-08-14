@@ -22,10 +22,6 @@ public interface UserService {
 
     UserDto getUserByUsername(String username);
 
-    UserProfileResponse getUserProfile(String username);
-
-    UserSummaryResponse getCurrentUser(UserPrincipal currentUser);
-
     UserDto createAdmin(CreateUserRequest createUserRequest);
 
     UserDto createUser(CreateUserRequest createUserRequest);
@@ -50,9 +46,9 @@ public interface UserService {
 
     User getUser(Long userId);
 
-    UserDto verifyResetPasswordLink(String uniqueCode);
+    void verifyEmailActivation(String uniqueCode);
 
-    void verifyEmailAfterRegister(String uniqueCode);
+    UserDto verifyResetPasswordLink(String uniqueCode);
 
     void setNewPassword(User user, String password);
 
