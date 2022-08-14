@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDTO signUp(RegisterRequest registerRequest) {
+    public String register(RegisterRequest registerRequest) {
         CreateUserRequest createUserRequest = CreateUserRequest.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
@@ -54,11 +54,12 @@ public class AuthServiceImpl implements AuthService {
                 .password(registerRequest.getPassword())
                 .build();
 
-        return userService.createUser(createUserRequest);
+        UserDTO user = userService.createUser(createUserRequest);
+        return user.getId().toString();
     }
 
     @Override
-    public AuthenticationResponse signIn(LoginRequest loginRequest) {
+    public AuthenticationResponse login(LoginRequest loginRequest) {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
