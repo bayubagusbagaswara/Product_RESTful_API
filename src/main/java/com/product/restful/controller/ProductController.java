@@ -1,9 +1,12 @@
 package com.product.restful.controller;
 
 import com.product.restful.dto.MessageResponse;
-import com.product.restful.dto.product.*;
+import com.product.restful.dto.product.CreateProductRequest;
+import com.product.restful.dto.product.ListProductRequest;
+import com.product.restful.dto.product.ListProductResponse;
 import com.product.restful.dto.product.ProductDTO;
 import com.product.restful.dto.WebResponse;
+import com.product.restful.dto.product.UpdateProductRequest;
 import com.product.restful.entity.Product;
 import com.product.restful.service.ProductService;
 import com.product.restful.util.AppConstants;
@@ -97,7 +100,7 @@ public class ProductController {
 
     @GetMapping(value = "/new/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<Product>> getProductByIdNew(@PathVariable(name = "id") String id) {
-        Product product = productService.getProductByIdNeW(id);
+        Product product = productService.getProductByIdRawData(id);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product successfully retrieved based on id", product), HttpStatus.OK);
     }
 
