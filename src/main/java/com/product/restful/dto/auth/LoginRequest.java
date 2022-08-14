@@ -13,9 +13,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LoginRequest {
 
-    @NotBlank
+    @NotBlank(message = "Username or Email must not be blank")
     private String usernameOrEmail;
 
-    @NotBlank
+    @NotBlank(message = "Password must not be blank")
     private String password;
 }
