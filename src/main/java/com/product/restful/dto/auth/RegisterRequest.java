@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequest {
+public class RegisterRequest {
 
     @NotBlank(message = "Firstname must not be blank")
     @Size(min = 4, max = 40, message = "Firstname minimum length of 4 characters and a maximum of 40 characters")
@@ -28,7 +28,7 @@ public class SignUpRequest {
     private String username;
 
     @NotBlank(message = "Email must not be blank")
-    @Email(message = "E-mail must match the format")
+    @Email(message = "Email must match the format")
     @Size(max = 40, message = "Email maximum length of 40 characters")
     private String email;
 

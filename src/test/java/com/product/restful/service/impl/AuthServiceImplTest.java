@@ -3,7 +3,7 @@ package com.product.restful.service.impl;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.LogoutRequest;
-import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.auth.RegisterRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.user.UserDto;
 import com.product.restful.service.AuthService;
@@ -26,14 +26,14 @@ class AuthServiceImplTest {
 
     @Test
     void signUp() {
-        SignUpRequest signUpRequest = new SignUpRequest(
+        RegisterRequest registerRequest = new RegisterRequest(
                 "Bayu",
                 "Bagaswara",
                 "bayu_bagaswara",
                 "B@gaswara12",
                 "bagaszwara12@gmail.com");
 
-        UserDto userDto = authService.signUp(signUpRequest);
+        UserDto userDto = authService.signUp(registerRequest);
 
         assertNotNull(userDto.getId());
         log.info("User: {}", userDto.getRoles());

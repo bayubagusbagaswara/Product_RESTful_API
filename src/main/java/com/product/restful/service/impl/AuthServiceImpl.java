@@ -4,7 +4,7 @@ import com.product.restful.dto.auth.LogoutRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
-import com.product.restful.dto.auth.SignUpRequest;
+import com.product.restful.dto.auth.RegisterRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UserDto;
 import com.product.restful.entity.*;
@@ -45,13 +45,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDto signUp(SignUpRequest signUpRequest) {
+    public UserDto signUp(RegisterRequest registerRequest) {
         CreateUserRequest createUserRequest = CreateUserRequest.builder()
-                .firstName(signUpRequest.getFirstName())
-                .lastName(signUpRequest.getLastName())
-                .email(signUpRequest.getEmail())
-                .username(signUpRequest.getUsername())
-                .password(signUpRequest.getPassword())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .email(registerRequest.getEmail())
+                .username(registerRequest.getUsername())
+                .password(registerRequest.getPassword())
                 .build();
 
         return userService.createUser(createUserRequest);
