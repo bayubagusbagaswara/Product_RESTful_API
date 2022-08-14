@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = refreshTokenService.verifyExpirationRefreshToken(refreshTokenRequest.getRefreshToken());
         String token = jwtTokenProvider.generateTokenFromUserId(refreshToken.getUser().getId());
-
+        log.info("Success created refresh token for User : {}", refreshToken.getUser().getEmail());
         return AuthenticationResponse.builder()
                 .accessToken(token)
                 .refreshToken(refreshToken.getRefreshToken())
