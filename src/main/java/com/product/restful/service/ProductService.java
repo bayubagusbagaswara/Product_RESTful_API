@@ -30,5 +30,5 @@ public interface ProductService {
     List<ProductDTO> getProductByPriceGreaterThanEqual(BigDecimal price);
     List<ProductDTO> getProductByPriceLessThanEqual(BigDecimal price);
 
-    Product getProductByIdNeW(String id);
+    Product getProductByIdRawData(String id);
 }
