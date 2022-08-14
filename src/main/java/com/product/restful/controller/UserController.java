@@ -53,8 +53,8 @@ public class UserController {
     @DeleteMapping(value = "/{username}")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable(name = "username") String username) {
-        ApiResponse apiResponse = userService.deleteUser(username);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        userService.deleteUser(username);
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{username}/giveAdmin")
