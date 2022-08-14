@@ -34,7 +34,7 @@ public interface UserService {
 
     UserDto updateUser(String username, UpdateUserRequest updateUserRequest);
 
-    ApiResponse giveAdmin(String username);
+    void giveAdmin(String username);
 
     ApiResponse removeAdmin(String username);
 
