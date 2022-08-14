@@ -30,8 +30,6 @@ public class AuthServiceImpl implements AuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    private static final String USER_ROLE_NOT_SET = "User role not set";
-
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
@@ -55,24 +53,21 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         UserDTO user = userService.createUser(createUserRequest);
+        log.info("Success register user : {}", user.getEmail());
         return user.getId().toString();
     }
 
     @Override
     public AuthenticationResponse login(LoginRequest loginRequest) {
-
-        final Authentication authentication = authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
-                        loginRequest.getPassword())
-        );
+                        loginRequest.getUsernameOrEmail(), loginRequest.getPassword()
+                ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
-        final String token = jwtTokenProvider.generateTokenByUserId(userPrincipal);
-
+        log.info("Current User Login : {}", userPrincipal.getEmail());
+        String token = jwtTokenProvider.generateTokenByUserId(userPrincipal.getId());
         return AuthenticationResponse.builder()
                 .accessToken(token)
                 .refreshToken(refreshTokenService.generateRefreshToken(userPrincipal.getId()).getRefreshToken())
