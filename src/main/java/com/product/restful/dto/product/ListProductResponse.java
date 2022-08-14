@@ -14,14 +14,9 @@ import java.util.List;
 public class ListProductResponse {
 
     private List<ProductDTO> products;
-
     private Integer pageNo;
-
     private Integer pageSize;
-
     private Long totalElements;
-
     private Integer totalPages;
-
     private boolean last;
 }
