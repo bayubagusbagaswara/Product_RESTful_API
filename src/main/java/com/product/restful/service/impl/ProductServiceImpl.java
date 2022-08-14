@@ -39,33 +39,30 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedAt(Instant.now());
 
         productRepository.save(product);
-        return ProductDTO.fromEntity(product);
+        return ProductDTO.mapFromEntity(product);
     }
 
     @Override
     public ProductDTO getProductById(String id) {
         Product product = productRepository.getProductById(id);
-        return ProductDTO.fromEntity(product);
+        return ProductDTO.mapFromEntity(product);
     }
 
     @Override
     public List<ProductDTO> getAllProduct() {
         Iterable<Product> products = productRepository.findAll();
         List<Product> productList = StreamSupport.stream(products.spliterator(), false).collect(Collectors.toList());
-        return ProductDTO.fromEntityList(productList);
+        return ProductDTO.mapFromEntityList(productList);
     }
 
     @Override
     public ProductDTO updateProduct(String id, UpdateProductRequest updateProductRequest) {
-
         Product product = productRepository.getProductById(id);
         product.setName(updateProductRequest.getName());
         product.setPrice(updateProductRequest.getPrice());
         product.setQuantity(updateProductRequest.getQuantity());
-        product.setUpdatedAt(Instant.now()); // sebenarnya tidak perlu, secara otomatis Spring akan melakukan auditing untuk update
-
         productRepository.save(product);
-        return ProductDTO.fromEntity(product);
+        return ProductDTO.mapFromEntity(product);
     }
 
     @Override
@@ -82,33 +79,31 @@ public class ProductServiceImpl implements ProductService {
         String sortDir = listProductRequest.getSortDir();
 
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        Page<Product> products = productRepository.findAll(pageable);
-        List<Product> productList = products.getContent();
+        Page<Product> productPage = productRepository.findAll(pageable);
+        List<Product> productList = productPage.getContent();
+        List<ProductDTO> productDTOS = ProductDTO.mapFromEntityList(productList);
 
-        List<ProductDTO> productRespons = ProductDTO.fromEntityList(productList);
-
-        ListProductResponse listAllProductResponse = new ListProductResponse();
-        listAllProductResponse.setProducts(productRespons);
-        listAllProductResponse.setPageNo(products.getNumber());
-        listAllProductResponse.setPageSize(products.getSize());
-        listAllProductResponse.setTotalElements(products.getTotalElements());
-        listAllProductResponse.setTotalPages(products.getTotalPages());
-        listAllProductResponse.setLast(products.isLast());
-        return listAllProductResponse;
+        return ListProductResponse.builder()
+                .products(productDTOS)
+                .pageNo(productPage.getNumber())
+                .pageSize(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .last(productPage.isLast())
+                .build();
     }
 
     @Override
     public ProductDTO getProductByName(String name) {
         Product product = productRepository.getProductByName(name);
-        return ProductDTO.fromEntity(product);
+        return ProductDTO.mapFromEntity(product);
     }
 
     @Override
     public List<ProductDTO> getProductByNameContaining(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCase(name);
-        return ProductDTO.fromEntityList(productList);
+        return ProductDTO.mapFromEntityList(productList);
     }
 
     @Override

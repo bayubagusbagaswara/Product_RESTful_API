@@ -1,6 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.refreshToken.RefreshTokenResponse;
+import com.product.restful.dto.refreshToken.RefreshTokenDTO;
 import com.product.restful.entity.RefreshToken;
 import com.product.restful.entity.user.User;
 import com.product.restful.exception.RefreshTokenNotFoundException;
@@ -31,7 +31,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public RefreshTokenResponse generateRefreshToken(Long userId) {
+    public RefreshTokenDTO generateRefreshToken(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         if (refreshTokenRepository.findByUserId(userId).isPresent()) {
@@ -44,13 +44,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         );
 
         refreshTokenRepository.save(refreshToken);
-        return RefreshTokenResponse.fromEntity(refreshToken);
+        return RefreshTokenDTO.fromEntity(refreshToken);
     }
 
     @Override
-    public RefreshTokenResponse validateRefreshToken(String refreshToken) {
+    public RefreshTokenDTO validateRefreshToken(String refreshToken) {
         RefreshToken token = verifyExpirationRefreshToken(refreshToken);
-        return RefreshTokenResponse.fromEntity(token);
+        return RefreshTokenDTO.fromEntity(token);
     }
 
     @Override

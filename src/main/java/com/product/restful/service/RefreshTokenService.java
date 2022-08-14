@@ -1,13 +1,13 @@
 package com.product.restful.service;
 
-import com.product.restful.dto.refreshToken.RefreshTokenResponse;
+import com.product.restful.dto.refreshToken.RefreshTokenDTO;
 import com.product.restful.entity.RefreshToken;
 
 public interface RefreshTokenService {
 
-    RefreshTokenResponse generateRefreshToken(Long userId);
+    RefreshTokenDTO generateRefreshToken(Long userId);
 
-    RefreshTokenResponse validateRefreshToken(String refreshToken);
+    RefreshTokenDTO validateRefreshToken(String refreshToken);
 
     RefreshToken getRefreshToken(String refreshToken);
 

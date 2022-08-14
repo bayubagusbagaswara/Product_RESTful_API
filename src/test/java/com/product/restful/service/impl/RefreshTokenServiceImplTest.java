@@ -1,6 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.refreshToken.RefreshTokenResponse;
+import com.product.restful.dto.refreshToken.RefreshTokenDTO;
 import com.product.restful.entity.RefreshToken;
 import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.repository.UserRepository;
@@ -27,15 +27,15 @@ class RefreshTokenServiceImplTest {
     @Test
     void generateRefreshToken() {
         Long userId = 1L;
-        RefreshTokenResponse refreshTokenResponse = refreshTokenService.generateRefreshToken(userId);
-        log.info("Token: {}", refreshTokenResponse.getRefreshToken());
+        RefreshTokenDTO refreshTokenDTO = refreshTokenService.generateRefreshToken(userId);
+        log.info("Token: {}", refreshTokenDTO.getRefreshToken());
     }
 
     @Test
     void validateRefreshToken() {
         String refreshToken = "";
-        RefreshTokenResponse refreshTokenResponse = refreshTokenService.validateRefreshToken(refreshToken);
-        assertEquals(refreshToken, refreshTokenResponse.getRefreshToken());
+        RefreshTokenDTO refreshTokenDTO = refreshTokenService.validateRefreshToken(refreshToken);
+        assertEquals(refreshToken, refreshTokenDTO.getRefreshToken());
     }
 
     @Test
