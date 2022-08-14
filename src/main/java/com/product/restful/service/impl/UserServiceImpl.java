@@ -171,11 +171,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse giveAdmin(String username) {
+    public void giveAdmin(String username) {
         User user = userRepository.getUserByName(username);
         user.addRole(roleRepository.getByName(RoleName.ADMIN.name()).orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         userRepository.save(user);
-        return new ApiResponse(Boolean.TRUE, "You gave ADMIN role to user: " + username);
     }
 
     @Override
