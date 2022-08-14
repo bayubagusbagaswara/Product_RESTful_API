@@ -13,7 +13,7 @@ public interface AuthService {
 
     AuthenticationResponse login(LoginRequest loginRequest);
 
-    AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
+    AuthenticationResponse createRefreshToken(RefreshTokenRequest refreshTokenRequest);
 
     void logout(LogoutRequest logoutRequest);
 }
