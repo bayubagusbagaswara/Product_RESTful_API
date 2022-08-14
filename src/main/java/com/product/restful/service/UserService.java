@@ -3,7 +3,7 @@ package com.product.restful.service;
 import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
-import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.dto.user.UserIdentityAvailability;
 import com.product.restful.entity.user.User;
 
@@ -17,19 +17,19 @@ public interface UserService {
 
     void checkEmailIsExists(String email);
 
-    UserDto getUserByUsername(String username);
+    UserDTO getUserByUsername(String username);
 
-    UserDto createAdmin(CreateUserRequest createUserRequest);
+    UserDTO createAdmin(CreateUserRequest createUserRequest);
 
-    UserDto createUser(CreateUserRequest createUserRequest);
+    UserDTO createUser(CreateUserRequest createUserRequest);
 
     void addRoleToUser(String username, String roleName);
 
-    UserDto getUserById(Long id);
+    UserDTO getUserById(Long id);
 
     void deleteUser(String username);
 
-    UserDto updateUser(String username, UpdateUserRequest updateUserRequest);
+    UserDTO updateUser(String username, UpdateUserRequest updateUserRequest);
 
     void giveAdmin(String username);
 
@@ -45,7 +45,7 @@ public interface UserService {
 
     void verifyEmailActivation(String uniqueCode);
 
-    UserDto verifyResetPasswordLink(String uniqueCode);
+    UserDTO verifyResetPasswordLink(String uniqueCode);
 
     void setNewPassword(User user, String password);
 

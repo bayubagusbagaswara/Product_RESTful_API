@@ -4,7 +4,7 @@ import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
-import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.entity.user.User;
 import com.product.restful.exception.AccessDeniedException;
@@ -37,7 +37,7 @@ class UserServiceImplTest {
                 "bagaszwara12@gmail.com"
         );
 
-        UserDto user = userService.createUser(createUserRequest);
+        UserDTO user = userService.createUser(createUserRequest);
         assertNotNull(user.getId());
         assertEquals(2, user.getRoles().size());
         log.info("Role: {}", user.getRoles()); // USER, ADMIN
@@ -53,7 +53,7 @@ class UserServiceImplTest {
                 "tesla123",
                 "tesla@gmail.com");
 
-        UserDto admin = userService.createAdmin(tesla);
+        UserDTO admin = userService.createAdmin(tesla);
         assertNotNull(admin.getId());
         log.info("Role: {}", admin.getRoles()); // ADMIN
     }
@@ -89,19 +89,19 @@ class UserServiceImplTest {
                 "james123",
                 "james@gmail.com");
 
-        UserDto user1 = userService.createUser(albert);
+        UserDTO user1 = userService.createUser(albert);
         assertNotNull(user1.getId());
         log.info("Role Albert: {}", user1.getRoles()); // USER
 
-        UserDto user2 = userService.createUser(newton);
+        UserDTO user2 = userService.createUser(newton);
         assertNotNull(user2.getId());
         log.info("Role Newton: {}", user2.getRoles()); // USER
 
-        UserDto user3 = userService.createUser(gosling);
+        UserDTO user3 = userService.createUser(gosling);
         assertNotNull(user3.getId());
         log.info("Role Gosling: {}", user3.getRoles()); // USER
 
-        UserDto user4 = userService.createUser(watt);
+        UserDTO user4 = userService.createUser(watt);
         assertNotNull(user4.getId());
         log.info("Role Watt: {}", user4.getRoles()); // USER
     }
@@ -164,7 +164,7 @@ class UserServiceImplTest {
                 .password("james12345")
                 .build();
 
-        UserDto userDto = userService.updateUser(username, updateUserRequest);
+        UserDTO userDto = userService.updateUser(username, updateUserRequest);
         log.info("FirstName: {}", userDto.getFirstName());
         log.info("Username: {}", userDto.getUsername());
     }
@@ -182,7 +182,7 @@ class UserServiceImplTest {
                 .password("einstein12345")
                 .build();
 
-        UserDto userDto = userService.updateUser(username, updateUserRequest);
+        UserDTO userDto = userService.updateUser(username, updateUserRequest);
         log.info("FirstName: {}", userDto.getFirstName());
         log.info("Username: {}", userDto.getUsername());
     }
@@ -207,7 +207,7 @@ class UserServiceImplTest {
     void addRoleToUser() {
         String username = "einstein";
         userService.addRoleToUser(username, RoleName.ADMIN.name());
-        UserDto user = userService.getUserByUsername(username);
+        UserDTO user = userService.getUserByUsername(username);
         log.info("Role: {}", user.getRoles());
     }
 
@@ -258,7 +258,7 @@ class UserServiceImplTest {
                 .email("bayu@gmail.com")
                 .build();
 
-        UserDto user = userService.createUser(createUserRequest);
+        UserDTO user = userService.createUser(createUserRequest);
         assertNotNull(user.getId());
         log.info("Role: {}", user.getRoles()); // USER
     }
@@ -272,7 +272,7 @@ class UserServiceImplTest {
     @Test
     void testVerifyResetPasswordLink() {
         String uniqueCode = "3c80e520-0251-48ad-a24e-2119f8f5c4e2";
-        UserDto userDto = userService.verifyResetPasswordLink(uniqueCode);
+        UserDTO userDto = userService.verifyResetPasswordLink(uniqueCode);
         assertNotNull(userDto);
     }
 

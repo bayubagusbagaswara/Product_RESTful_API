@@ -5,7 +5,7 @@ import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.LogoutRequest;
 import com.product.restful.dto.auth.RegisterRequest;
 import com.product.restful.dto.refreshToken.RefreshTokenRequest;
-import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.service.AuthService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class AuthServiceImplTest {
                 "B@gaswara12",
                 "bagaszwara12@gmail.com");
 
-        UserDto userDto = authService.signUp(registerRequest);
+        UserDTO userDto = authService.signUp(registerRequest);
 
         assertNotNull(userDto.getId());
         log.info("User: {}", userDto.getRoles());

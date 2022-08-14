@@ -4,7 +4,7 @@ import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
-import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.entity.user.ResetPassword;
@@ -77,13 +77,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByUsername(String username) {
+    public UserDTO getUserByUsername(String username) {
         User user = userRepository.getUserByName(username);
-        return UserDto.fromEntity(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Override
-    public UserDto createAdmin(CreateUserRequest userRequest) {
+    public UserDTO createAdmin(CreateUserRequest userRequest) {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
@@ -99,11 +99,11 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
-        return UserDto.fromEntity(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Override
-    public UserDto createUser(CreateUserRequest userRequest) {
+    public UserDTO createUser(CreateUserRequest userRequest) {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
         resetPassword.setUser(user);
         resetPasswordRepository.save(resetPassword);
 
-        return UserDto.fromEntity(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Override
@@ -147,20 +147,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Long id) {
+    public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
-        return UserDto.fromEntity(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Override
-    public UserDto updateUser(String username, UpdateUserRequest updateUserRequest) {
+    public UserDTO updateUser(String username, UpdateUserRequest updateUserRequest) {
         User user = userRepository.getUserByName(username);
         user.setFirstName(updateUserRequest.getFirstName());
         user.setLastName(updateUserRequest.getLastName());
         user.setUsername(updateUserRequest.getUsername());
         user.setEmail(updateUserRequest.getEmail());
         userRepository.save(user);
-        return UserDto.fromEntity(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Override
@@ -209,7 +209,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto verifyResetPasswordLink(String uniqueCode) {
+    public UserDTO verifyResetPasswordLink(String uniqueCode) {
         ResetPassword resetPassword = resetPasswordRepository.findByUniqueCode(uniqueCode).orElseThrow(() -> new ResetPasswordInvalidException("Invalid code " + uniqueCode));
 
         if (LocalDateTime.now().isAfter(resetPassword.getExpired())) {
@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = resetPassword.getUser();
         resetPasswordRepository.deleteByUser(user);
-        return UserDto.fromEntity(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Override

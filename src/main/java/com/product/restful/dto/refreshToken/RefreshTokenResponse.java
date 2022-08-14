@@ -1,6 +1,6 @@
 package com.product.restful.dto.refreshToken;
 
-import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.RefreshToken;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,15 +14,14 @@ import java.time.Instant;
 public class RefreshTokenResponse {
 
     private Long id;
-
-    private UserDto user;
+    private UserDTO user;
 
     private String refreshToken;
 
     private Instant expiryDate;
 
     public static RefreshTokenResponse fromEntity(RefreshToken refreshToken) {
-        return new RefreshTokenResponse(refreshToken.getId(), UserDto.fromEntity(refreshToken.getUser()), refreshToken.getRefreshToken(), refreshToken.getExpiryDate());
+        return new RefreshTokenResponse(refreshToken.getId(), UserDTO.fromEntity(refreshToken.getUser()), refreshToken.getRefreshToken(), refreshToken.getExpiryDate());
     }
 
 }

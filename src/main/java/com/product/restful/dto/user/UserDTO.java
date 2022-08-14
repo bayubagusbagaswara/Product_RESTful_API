@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserDTO {
 
     private Long id;
 
@@ -29,13 +29,13 @@ public class UserDto {
 
     private Set<RoleDto> roles;
 
-    public static UserDto fromEntity(User user) {
-        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername(), RoleDto.fromEntitySet(user.getRoles()));
+    public static UserDTO fromEntity(User user) {
+        return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername(), RoleDto.fromEntitySet(user.getRoles()));
     }
 
-    public static List<UserDto> fromEntityList(List<User> userList) {
+    public static List<UserDTO> fromEntityList(List<User> userList) {
         return userList.stream()
-                .map(UserDto::fromEntity)
+                .map(UserDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 

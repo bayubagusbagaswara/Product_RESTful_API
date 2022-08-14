@@ -5,7 +5,7 @@ import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
-import com.product.restful.dto.user.UserDto;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +32,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<MessageResponse> createUser(@Valid @RequestBody CreateUserRequest user) {
-        final UserDto userDto = userService.createUser(user);
+        final UserDTO userDto = userService.createUser(user);
         return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, String.format("User %s was created successfully", userDto.getUsername()), HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{username}")
     @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<WebResponse<UserDto>> updateUser(@Valid @RequestBody UpdateUserRequest newUser, @PathVariable(name = "username") String username) {
-        final UserDto userDto = userService.updateUser(username, newUser);
+    public ResponseEntity<WebResponse<UserDTO>> updateUser(@Valid @RequestBody UpdateUserRequest newUser, @PathVariable(name = "username") String username) {
+        final UserDTO userDto = userService.updateUser(username, newUser);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User updated successfully", userDto), HttpStatus.OK);
     }
 
