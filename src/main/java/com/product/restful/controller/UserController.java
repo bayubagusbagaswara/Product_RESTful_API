@@ -31,9 +31,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<WebResponse<UserDto>> createUser(@Valid @RequestBody CreateUserRequest user) {
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody CreateUserRequest user) {
         final UserDto userDto = userService.createUser(user);
-        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User was created successfully", userDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, String.format("User %s was created successfully", userDto.getUsername()), HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{username}")
