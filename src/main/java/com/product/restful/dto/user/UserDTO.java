@@ -1,6 +1,6 @@
 package com.product.restful.dto.user;
 
-import com.product.restful.dto.role.RoleDto;
+import com.product.restful.dto.role.RoleDTO;
 import com.product.restful.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +22,10 @@ public class UserDTO {
     private String lastName;
     private String email;
     private String username;
-    private Set<RoleDto> roles;
+    private Set<RoleDTO> roles;
 
     public static UserDTO mapFromEntity(User user) {
-        return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername(), RoleDto.fromEntitySet(user.getRoles()));
+        return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername(), RoleDTO.fromEntitySet(user.getRoles()));
     }
 
     public static List<UserDTO> mapFromEntityList(List<User> userList) {

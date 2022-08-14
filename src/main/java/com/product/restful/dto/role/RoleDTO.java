@@ -13,20 +13,18 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDto {
+public class RoleDTO {
 
     private Long id;
-
     private String name;
 
-    public static RoleDto fromEntity(Role role) {
-        return new RoleDto(role.getId(), role.getName().name());
+    public static RoleDTO mapFromEntity(Role role) {
+        return new RoleDTO(role.getId(), role.getName().name());
     }
 
-    public static Set<RoleDto> fromEntitySet(Set<Role> roles) {
+    public static Set<RoleDTO> mapFromEntitiesSet(Set<Role> roles) {
         return roles.stream()
-                .map(RoleDto::fromEntity)
+                .map(RoleDTO::mapFromEntity)
                 .collect(Collectors.toSet());
     }
-
 }

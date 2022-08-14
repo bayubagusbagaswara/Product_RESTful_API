@@ -2,8 +2,8 @@ package com.product.restful.controller;
 
 import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.WebResponse;
-import com.product.restful.dto.role.RoleRequest;
-import com.product.restful.dto.role.RoleDto;
+import com.product.restful.dto.role.CreateRoleRequest;
+import com.product.restful.dto.role.RoleDTO;
 import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.service.RoleService;
 import org.springframework.http.HttpStatus;
@@ -22,8 +22,8 @@ public class RoleController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<RoleDto>> createRole(@RequestBody RoleRequest roleRequest) {
-        RoleDto roleDto = roleService.createRole(roleRequest);
+    public ResponseEntity<WebResponse<RoleDTO>> createRole(@RequestBody CreateRoleRequest createRoleRequest) {
+        RoleDTO roleDto = roleService.createRole(createRoleRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Role was created successfully", roleDto), HttpStatus.OK);
     }
 

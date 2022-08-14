@@ -2,7 +2,7 @@ package com.product.restful.controller;
 
 import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.WebResponse;
-import com.product.restful.dto.role.RoleRequest;
+import com.product.restful.dto.role.CreateRoleRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserDTO;
@@ -45,9 +45,9 @@ public class UserController {
 
     @PutMapping(value = "/{username}/addRole")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public ResponseEntity<MessageResponse> addRoleToUser(@PathVariable(name = "username") String username, @RequestBody RoleRequest roleRequest) {
-        userService.addRoleToUser(username, roleRequest.getName().toUpperCase());
-        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Successfully added role " + roleRequest.getName().toUpperCase() + " to user: " + username), HttpStatus.OK);
+    public ResponseEntity<MessageResponse> addRoleToUser(@PathVariable(name = "username") String username, @RequestBody CreateRoleRequest createRoleRequest) {
+        userService.addRoleToUser(username, createRoleRequest.getName().toUpperCase());
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Successfully added role " + createRoleRequest.getName().toUpperCase() + " to user: " + username), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{username}")
