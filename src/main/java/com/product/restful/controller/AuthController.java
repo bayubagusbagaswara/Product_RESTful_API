@@ -30,7 +30,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         String userId = authService.register(registerRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
