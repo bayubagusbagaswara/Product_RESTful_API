@@ -41,9 +41,8 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<WebResponse<AuthenticationResponse>> authenticateUser(
-            @Valid @RequestBody LoginRequest loginRequest) {
-        AuthenticationResponse authenticationResponse = authService.signIn(loginRequest);
+    public ResponseEntity<WebResponse<AuthenticationResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
+        AuthenticationResponse authenticationResponse = authService.login(loginRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User authenticated successfully", authenticationResponse), HttpStatus.OK);
     }
 
