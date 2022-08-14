@@ -46,9 +46,9 @@ public class AuthController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User authenticated successfully", authenticationResponse), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/refresh/token")
-    public ResponseEntity<WebResponse<AuthenticationResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        AuthenticationResponse authenticationResponse = authService.refreshToken(refreshTokenRequest);
+    @PostMapping(value = "/create/refreshToken")
+    public ResponseEntity<WebResponse<AuthenticationResponse>> createRefreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        AuthenticationResponse authenticationResponse = authService.createRefreshToken(refreshTokenRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Refresh token successfully updated", authenticationResponse), HttpStatus.OK);
     }
 
