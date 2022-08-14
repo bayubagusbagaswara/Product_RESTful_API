@@ -60,8 +60,8 @@ public class UserController {
     @PutMapping(value = "/{username}/giveAdmin")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> giveAdmin(@PathVariable(name = "username") String username) {
-        ApiResponse apiResponse = userService.giveAdmin(username);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        userService.giveAdmin(username);
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "You gave ADMIN role to user: " + username), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{username}/removeAdmin")
