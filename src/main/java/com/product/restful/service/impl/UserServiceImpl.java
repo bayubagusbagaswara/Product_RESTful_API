@@ -165,10 +165,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse deleteUser(String username) {
+    public void deleteUser(String username) {
         User user = userRepository.getUserByName(username);
         userRepository.deleteById(user.getId());
-        return new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username);
     }
 
     @Override
