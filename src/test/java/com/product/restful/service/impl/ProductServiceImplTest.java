@@ -36,7 +36,7 @@ class ProductServiceImplTest {
                 .description("This is test service product description")
                 .build();
 
-        ProductDto productDto = productService.createProduct(createProductRequest);
+        ProductDTO productDto = productService.createProduct(createProductRequest);
 
         assertNotNull(productDto.getId());
         log.info("ID: {}", productDto.getId());
@@ -47,7 +47,7 @@ class ProductServiceImplTest {
     @Order(2)
     void getProductById() {
         String id = "macbook-pro-14-2021";
-        ProductDto product = productService.getProductById(id);
+        ProductDTO product = productService.getProductById(id);
 
         assertSame(id, product.getId());
         assertNotNull(product);
@@ -66,7 +66,7 @@ class ProductServiceImplTest {
                 .description("Update description")
                 .build();
 
-        ProductDto product = productService.updateProduct(productId, updateProductRequest);
+        ProductDTO product = productService.updateProduct(productId, updateProductRequest);
         assertEquals(productId, product.getId());
 
         assertNotNull(product.getUpdatedAt());
@@ -83,7 +83,7 @@ class ProductServiceImplTest {
         String productId = "acer-nitro-5";
         productService.deleteProduct(productId);
         assertThrows(ResourceNotFoundException.class, () -> {
-            ProductDto product = productService.getProductById(productId);
+            ProductDTO product = productService.getProductById(productId);
         });
     }
 
@@ -110,7 +110,7 @@ class ProductServiceImplTest {
     @Order(6)
     void getProductByName() {
         String name = "apple macBook pro 14-inch 2021";
-        ProductDto product = productService.getProductByName(name);
+        ProductDTO product = productService.getProductByName(name);
         assertEquals(name, product.getName());
         log.info("Name = {}", product.getName());
     }
@@ -120,8 +120,8 @@ class ProductServiceImplTest {
     void getProductByNameContaining() {
         Integer totalProductMac = 0;
         String name = "mac";
-        List<ProductDto> productDtos = productService.getProductByNameContaining(name);
-        assertEquals(totalProductMac, productDtos.size());
+        List<ProductDTO> productDTOS = productService.getProductByNameContaining(name);
+        assertEquals(totalProductMac, productDTOS.size());
     }
 
     @Test
@@ -129,8 +129,8 @@ class ProductServiceImplTest {
     void getProductByNameStartingWith() {
         Integer totalProductApple = 0;
         String name = "apple";
-        List<ProductDto> productDtos = productService.getProductByNameStartingWith(name);
-        assertEquals(totalProductApple, productDtos.size());
+        List<ProductDTO> productDTOS = productService.getProductByNameStartingWith(name);
+        assertEquals(totalProductApple, productDTOS.size());
     }
 
     @Test
@@ -138,7 +138,7 @@ class ProductServiceImplTest {
     void getProductByNameContainingOrderByName() {
         Integer totalProductContainingName = 0;
         String name = "acer";
-        List<ProductDto> product = productService.getProductByNameContainingOrderByName(name);
+        List<ProductDTO> product = productService.getProductByNameContainingOrderByName(name);
         assertEquals(totalProductContainingName, product.size());
     }
 
@@ -146,7 +146,7 @@ class ProductServiceImplTest {
     @Order(10)
     void getProductByNameContainingOrderByNameDesc() {
         String name = "hp";
-        List<ProductDto> product = productService.getProductByNameContainingOrderByNameDesc(name);
+        List<ProductDTO> product = productService.getProductByNameContainingOrderByNameDesc(name);
     }
 
     @Test
@@ -156,7 +156,7 @@ class ProductServiceImplTest {
         String name = "macbook";
         BigDecimal priceMin = new BigDecimal(13_000_000);
         BigDecimal priceMax = new BigDecimal(30_000_000);
-        List<ProductDto> product = productService.getProductByNameContainingAndPriceBetween(name, priceMin, priceMax);
+        List<ProductDTO> product = productService.getProductByNameContainingAndPriceBetween(name, priceMin, priceMax);
         assertEquals(totalProduct, product.size());
     }
 
@@ -165,7 +165,7 @@ class ProductServiceImplTest {
     void getProductByNameContainingOrderByPriceDesc() {
         Integer totalProduct = 0;
         String name = "macbook";
-        List<ProductDto> product = productService.getProductByNameContainingOrderByPriceDesc(name);
+        List<ProductDTO> product = productService.getProductByNameContainingOrderByPriceDesc(name);
         assertEquals(totalProduct, product.size());
     }
 
@@ -174,7 +174,7 @@ class ProductServiceImplTest {
     void getProductByNameContainingOrderByPrice() {
         Integer totalProduct = 0;
         String name = "macbook";
-        List<ProductDto> product = productService.getProductByNameContainingOrderByPrice(name);
+        List<ProductDTO> product = productService.getProductByNameContainingOrderByPrice(name);
         assertEquals(totalProduct, product.size());
     }
 
@@ -184,7 +184,7 @@ class ProductServiceImplTest {
         Integer totalProduct = 0;
         BigDecimal priceMin = new BigDecimal(10_000_000);
         BigDecimal priceMax = new BigDecimal(20_000_000);
-        List<ProductDto> product = productService.getProductByPriceBetween(priceMin, priceMax);
+        List<ProductDTO> product = productService.getProductByPriceBetween(priceMin, priceMax);
         assertEquals(totalProduct, product.size());
     }
 
@@ -193,7 +193,7 @@ class ProductServiceImplTest {
     void getProductByPriceGreaterThanEqual() {
         Integer totalProduct = 0;
         BigDecimal price = new BigDecimal(10_000_000);
-        List<ProductDto> product = productService.getProductByPriceGreaterThanEqual(price);
+        List<ProductDTO> product = productService.getProductByPriceGreaterThanEqual(price);
         assertEquals(totalProduct, product.size());
     }
 
@@ -202,7 +202,7 @@ class ProductServiceImplTest {
     void getProductByPriceLessThanEqual() {
         Integer totalProduct = 0;
         BigDecimal price = new BigDecimal(10_000_000);
-        List<ProductDto> product = productService.getProductByPriceLessThanEqual(price);
+        List<ProductDTO> product = productService.getProductByPriceLessThanEqual(price);
         assertEquals(totalProduct, product.size());
     }
 

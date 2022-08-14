@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.nio.file.ReadOnlyFileSystemException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto createProduct(CreateProductRequest createProductRequest) {
+    public ProductDTO createProduct(CreateProductRequest createProductRequest) {
 
         Product product = new Product();
         product.setName(createProductRequest.getName());
@@ -40,24 +39,24 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedAt(Instant.now());
 
         productRepository.save(product);
-        return ProductDto.fromEntity(product);
+        return ProductDTO.fromEntity(product);
     }
 
     @Override
-    public ProductDto getProductById(String id) {
+    public ProductDTO getProductById(String id) {
         Product product = productRepository.getProductById(id);
-        return ProductDto.fromEntity(product);
+        return ProductDTO.fromEntity(product);
     }
 
     @Override
-    public List<ProductDto> getAllProduct() {
+    public List<ProductDTO> getAllProduct() {
         Iterable<Product> products = productRepository.findAll();
         List<Product> productList = StreamSupport.stream(products.spliterator(), false).collect(Collectors.toList());
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public ProductDto updateProduct(String id, UpdateProductRequest updateProductRequest) {
+    public ProductDTO updateProduct(String id, UpdateProductRequest updateProductRequest) {
 
         Product product = productRepository.getProductById(id);
         product.setName(updateProductRequest.getName());
@@ -66,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(Instant.now()); // sebenarnya tidak perlu, secara otomatis Spring akan melakukan auditing untuk update
 
         productRepository.save(product);
-        return ProductDto.fromEntity(product);
+        return ProductDTO.fromEntity(product);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         List<Product> productList = products.getContent();
 
-        List<ProductDto> productRespons = ProductDto.fromEntityList(productList);
+        List<ProductDTO> productRespons = ProductDTO.fromEntityList(productList);
 
         ListProductResponse listAllProductResponse = new ListProductResponse();
         listAllProductResponse.setProducts(productRespons);
@@ -101,69 +100,69 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getProductByName(String name) {
+    public ProductDTO getProductByName(String name) {
         Product product = productRepository.getProductByName(name);
-        return ProductDto.fromEntity(product);
+        return ProductDTO.fromEntity(product);
     }
 
     @Override
-    public List<ProductDto> getProductByNameContaining(String name) {
+    public List<ProductDTO> getProductByNameContaining(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCase(name);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByNameStartingWith(String name) {
+    public List<ProductDTO> getProductByNameStartingWith(String name) {
         List<Product> productList = productRepository.findByNameStartingWithIgnoreCase(name);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByNameContainingOrderByName(String name) {
+    public List<ProductDTO> getProductByNameContainingOrderByName(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByName(name);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByNameContainingOrderByNameDesc(String name) {
+    public List<ProductDTO> getProductByNameContainingOrderByNameDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByNameDesc(name);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
+    public List<ProductDTO> getProductByNameContainingAndPriceBetween(String name, BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseAndPriceBetween(name, priceMin, priceMax);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByNameContainingOrderByPrice(String name) {
+    public List<ProductDTO> getProductByNameContainingOrderByPrice(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPriceDesc(name);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByNameContainingOrderByPriceDesc(String name) {
+    public List<ProductDTO> getProductByNameContainingOrderByPriceDesc(String name) {
         List<Product> productList = productRepository.findByNameContainsIgnoreCaseOrderByPrice(name);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
+    public List<ProductDTO> getProductByPriceBetween(BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> productList = productRepository.findByPriceBetween(priceMin, priceMax);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByPriceGreaterThanEqual(BigDecimal price) {
+    public List<ProductDTO> getProductByPriceGreaterThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceGreaterThanEqual(price);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override
-    public List<ProductDto> getProductByPriceLessThanEqual(BigDecimal price) {
+    public List<ProductDTO> getProductByPriceLessThanEqual(BigDecimal price) {
         List<Product> productList = productRepository.findByPriceLessThanEqual(price);
-        return ProductDto.fromEntityList(productList);
+        return ProductDTO.fromEntityList(productList);
     }
 
     @Override

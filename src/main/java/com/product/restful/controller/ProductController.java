@@ -2,7 +2,7 @@ package com.product.restful.controller;
 
 import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.product.*;
-import com.product.restful.dto.product.ProductDto;
+import com.product.restful.dto.product.ProductDTO;
 import com.product.restful.dto.WebResponse;
 import com.product.restful.entity.Product;
 import com.product.restful.service.ProductService;
@@ -38,20 +38,20 @@ public class ProductController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<MessageResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
-        ProductDto product = productService.createProduct(createProductRequest);
+        ProductDTO product = productService.createProduct(createProductRequest);
         return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, String.format("Product name %s was created successfully", product.getName())), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<ProductDto>> getProductById(@PathVariable(name = "id") String id) {
-        ProductDto product = productService.getProductById(id);
+    public ResponseEntity<WebResponse<ProductDTO>> getProductById(@PathVariable(name = "id") String id) {
+        ProductDTO product = productService.getProductById(id);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product successfully retrieved based on id", product), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<WebResponse<ProductDto>> updateProduct(@PathVariable(name = "id") String id, @RequestBody UpdateProductRequest updateProductRequest) {
-        ProductDto product = productService.updateProduct(id, updateProductRequest);
+    public ResponseEntity<WebResponse<ProductDTO>> updateProduct(@PathVariable(name = "id") String id, @RequestBody UpdateProductRequest updateProductRequest) {
+        ProductDTO product = productService.updateProduct(id, updateProductRequest);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Product updated successfully", product), HttpStatus.OK);
     }
 
@@ -81,17 +81,17 @@ public class ProductController {
     }
 
     @GetMapping(value = "/name/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<List<ProductDto>>> getProductByName(@PathVariable(name = "name") String name) {
-        List<ProductDto> products = productService.getProductByNameContaining(name);
+    public ResponseEntity<WebResponse<List<ProductDTO>>> getProductByName(@PathVariable(name = "name") String name) {
+        List<ProductDTO> products = productService.getProductByNameContaining(name);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "All products successfully retrieved", products), HttpStatus.OK);
     }
 
     @GetMapping(value = "/name/{name}/price", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<List<ProductDto>>> getProductByNameAndPriceBetween(
+    public ResponseEntity<WebResponse<List<ProductDTO>>> getProductByNameAndPriceBetween(
             @PathVariable(name = "name") String name,
             @RequestParam(name = "priceMin") BigDecimal priceMin,
             @RequestParam(name = "priceMax") BigDecimal priceMax) {
-        List<ProductDto> products = productService.getProductByNameContainingAndPriceBetween(name, priceMin, priceMax);
+        List<ProductDTO> products = productService.getProductByNameContainingAndPriceBetween(name, priceMin, priceMax);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "All products successfully retrieved", products), HttpStatus.OK);
     }
 

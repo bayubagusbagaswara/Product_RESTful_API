@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ListProductResponse {
 
-    private List<ProductDto> products;
+    private List<ProductDTO> products;
 
     private Integer pageNo;
 

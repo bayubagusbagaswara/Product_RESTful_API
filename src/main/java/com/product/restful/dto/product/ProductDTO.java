@@ -1,6 +1,5 @@
 package com.product.restful.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.product.restful.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,35 +15,27 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductDTO {
 
     private String id;
-
     private String name;
-
     private BigDecimal price;
-
     private Integer quantity;
-
     private String description;
-
-    @JsonIgnore
     private Instant createdAt;
-
-    @JsonIgnore
     private Instant updatedAt;
 
-    public static ProductDto fromEntity(Product product) {
-        return new ProductDto(
+    public static ProductDTO mapFromEntity(Product product) {
+        return new ProductDTO(
                 product.getId(), product.getName(), product.getPrice(),
                 product.getQuantity(), product.getDescription(),
                 product.getCreatedAt(), product.getUpdatedAt()
         );
     }
 
-    public static List<ProductDto> fromEntityList(List<Product> productList) {
+    public static List<ProductDTO> mapFromEntityList(List<Product> productList) {
         return productList.stream()
-                .map(ProductDto::fromEntity)
+                .map(ProductDTO::mapFromEntity)
                 .collect(Collectors.toList());
     }
 }
