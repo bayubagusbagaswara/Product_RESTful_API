@@ -32,9 +32,9 @@ public class AuthController {
 
     @PostMapping(value = "/signup")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        UserDTO userDto = authService.signUp(registerRequest);
+        String userId = authService.register(registerRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{userId}")
-                .buildAndExpand(userDto.getId()).toUri();
+                .buildAndExpand(userId).toUri();
         return ResponseEntity
                 .created(location)
                 .body(new MessageResponse(Boolean.TRUE, "User registered successfully"));
