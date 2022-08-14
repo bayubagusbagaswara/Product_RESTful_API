@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 @Component
 public class ProductMapper {
 
-    private ProductDTO mapFromProduct(Product product) {
+    public ProductDTO mapFromProduct(Product product) {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
                 product.getQuantity(), product.getDescription(),
                 product.getCreatedAt(), product.getUpdatedAt()
         );
     }
 
-    private List<ProductDTO> mapFromProductList(List<Product> productList) {
+    public List<ProductDTO> mapFromProductList(List<Product> productList) {
         return productList.stream()
                 .map(this::mapFromProduct)
                 .collect(Collectors.toList());
