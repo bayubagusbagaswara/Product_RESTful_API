@@ -30,7 +30,7 @@ public interface UserService {
 
     UserDto getUserById(Long id);
 
-    ApiResponse deleteUser(String username);
+    void deleteUser(String username);
 
     UserDto updateUser(String username, UpdateUserRequest updateUserRequest);
 
