@@ -11,7 +11,7 @@ public interface AuthService {
 
     UserDTO register(RegisterRequest registerRequest);
 
-    AuthenticationResponse signIn(LoginRequest loginRequest);
+    AuthenticationResponse login(LoginRequest loginRequest);
 
     AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
 
