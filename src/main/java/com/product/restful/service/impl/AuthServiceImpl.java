@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+    public AuthenticationResponse createRefreshToken(RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = refreshTokenService.verifyExpirationRefreshToken(refreshTokenRequest.getRefreshToken());
         String token = jwtTokenProvider.generateTokenFromUserId(refreshToken.getUser().getId());
         log.info("Success created refresh token for User : {}", refreshToken.getUser().getEmail());
