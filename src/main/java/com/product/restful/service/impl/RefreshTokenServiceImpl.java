@@ -32,12 +32,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshTokenResponse generateRefreshToken(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-//        if (refreshTokenRepository.findByUserId(userId).isPresent()) {
-//            refreshTokenRepository.delete(user.getRefreshToken());
-//        }
+        if (refreshTokenRepository.findByUserId(userId).isPresent()) {
+            refreshTokenRepository.delete(user.getRefreshToken());
+        }
 
         RefreshToken refreshToken = new RefreshToken(
                 user, UUID.randomUUID().toString().replace("-",""),
@@ -45,26 +44,24 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         );
 
         refreshTokenRepository.save(refreshToken);
-        return RefreshTokenResponse.mapToDto(refreshToken);
+        return RefreshTokenResponse.fromEntity(refreshToken);
     }
 
     @Override
     public RefreshTokenResponse validateRefreshToken(String refreshToken) {
         RefreshToken token = verifyExpirationRefreshToken(refreshToken);
-        return RefreshTokenResponse.mapToDto(token);
+        return RefreshTokenResponse.fromEntity(token);
     }
 
     @Override
     public RefreshToken getRefreshToken(String refreshToken) {
-        return refreshTokenRepository.getByRefreshToken(refreshToken)
-                .orElseThrow(() -> new RefreshTokenNotFoundException("Invalid refresh token"));
+        return refreshTokenRepository.getByRefreshToken(refreshToken).orElseThrow(() -> new RefreshTokenNotFoundException("Invalid refresh token"));
     }
 
     @Override
     public RefreshToken verifyExpirationRefreshToken(String refreshToken) {
         RefreshToken token = getRefreshToken(refreshToken);
 
-        // jika expiryDate token < tanggal sekarang, maka hapus refreshToken, karena sudah kadaluarsa
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
             throw new TokenRefreshException(token.getRefreshToken(), "Refresh token was expired. Please make a new login request");
