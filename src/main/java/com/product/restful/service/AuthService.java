@@ -9,7 +9,7 @@ import com.product.restful.dto.user.UserDTO;
 
 public interface AuthService {
 
-    UserDTO register(RegisterRequest registerRequest);
+    String register(RegisterRequest registerRequest);
 
     AuthenticationResponse login(LoginRequest loginRequest);
 
