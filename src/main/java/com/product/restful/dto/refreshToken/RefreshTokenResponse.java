@@ -21,7 +21,7 @@ public class RefreshTokenResponse {
 
     private Instant expiryDate;
 
-    public static RefreshTokenResponse mapToDto(RefreshToken refreshToken) {
+    public static RefreshTokenResponse fromEntity(RefreshToken refreshToken) {
         return new RefreshTokenResponse(refreshToken.getId(), UserDto.fromEntity(refreshToken.getUser()), refreshToken.getRefreshToken(), refreshToken.getExpiryDate());
     }
 
