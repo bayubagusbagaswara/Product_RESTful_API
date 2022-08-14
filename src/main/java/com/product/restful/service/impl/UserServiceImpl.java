@@ -4,9 +4,7 @@ import com.product.restful.dto.ApiResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
-import com.product.restful.dto.user.UserProfileResponse;
 import com.product.restful.dto.user.UserDto;
-import com.product.restful.dto.user.UserSummaryResponse;
 import com.product.restful.entity.Role;
 import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.entity.user.ResetPassword;
@@ -83,17 +81,6 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUsername(String username) {
         User user = userRepository.getUserByName(username);
         return UserDto.fromEntity(user);
-    }
-
-    @Override
-    public UserProfileResponse getUserProfile(String username) {
-        final User user = userRepository.getUserByName(username);
-        return new UserProfileResponse(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
-    }
-
-    @Override
-    public UserSummaryResponse getCurrentUser(UserPrincipal currentUser) {
-        return new UserSummaryResponse(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getUsername());
     }
 
     @Override
@@ -217,7 +204,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void verifyEmailAfterRegister(String uniqueCode) {
+    public void verifyEmailActivation(String uniqueCode) {
         ResetPassword resetPassword = resetPasswordRepository.findByUniqueCode(uniqueCode).orElseThrow(() -> new ResetPasswordInvalidException("Unique Code Tidak Terdaftar"));
         User user = resetPassword.getUser();
         user.setUserActive(true);
