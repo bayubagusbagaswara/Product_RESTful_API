@@ -30,8 +30,8 @@ public class JwtTokenProvider {
         return generateTokenFromUsername(userPrincipal.getUsername());
     }
 
-    public String generateTokenByUserId(UserPrincipal userPrincipal) {
-        return generateTokenFromUserId(userPrincipal.getId());
+    public String generateTokenByUserId(Long userId) {
+        return generateTokenFromUserId(userId);
     }
 
     public String generateTokenFromUsername(String username) {
