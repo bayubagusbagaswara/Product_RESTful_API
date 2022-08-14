@@ -1,6 +1,6 @@
 package com.product.restful.controller;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.role.RoleDto;
@@ -28,8 +28,8 @@ public class RoleController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse> deleteRole(@PathVariable(name = "id") Long id, UserPrincipal currentUser) {
-        ApiResponse apiResponse = roleService.deleteRole(id, currentUser);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    public ResponseEntity<MessageResponse> deleteRole(@PathVariable(name = "id") Long id, UserPrincipal currentUser) {
+        MessageResponse messageResponse = roleService.deleteRole(id, currentUser);
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 }

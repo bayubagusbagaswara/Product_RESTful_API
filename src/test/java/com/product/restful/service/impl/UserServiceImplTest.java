@@ -1,6 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
@@ -216,13 +216,13 @@ class UserServiceImplTest {
     @Order(12)
     void deleteUserByAdmin() {
         String username = "james_gosling";
-        ApiResponse apiResponse = userService.deleteUser(username);
+        MessageResponse messageResponse = userService.deleteUser(username);
 
-        assertTrue(apiResponse.getSuccess());
-        assertEquals(true, apiResponse.getSuccess());
+        assertTrue(messageResponse.getSuccess());
+        assertEquals(true, messageResponse.getSuccess());
 
-        log.info("Success: {}", apiResponse.getSuccess());
-        log.info("Message: {}", apiResponse.getMessage());
+        log.info("Success: {}", messageResponse.getSuccess());
+        log.info("Message: {}", messageResponse.getMessage());
     }
 
     @Test
@@ -230,13 +230,13 @@ class UserServiceImplTest {
     @Order(13)
     void deleteUserBySelf() {
         String username = "newton";
-        ApiResponse apiResponse = userService.deleteUser(username);
+        MessageResponse messageResponse = userService.deleteUser(username);
 
-        assertTrue(apiResponse.getSuccess());
-        assertEquals(true, apiResponse.getSuccess());
+        assertTrue(messageResponse.getSuccess());
+        assertEquals(true, messageResponse.getSuccess());
 
-        log.info("Success: {}", apiResponse.getSuccess());
-        log.info("Message: {}", apiResponse.getMessage());
+        log.info("Success: {}", messageResponse.getSuccess());
+        log.info("Message: {}", messageResponse.getMessage());
     }
 
     @Test
@@ -245,7 +245,7 @@ class UserServiceImplTest {
     void deleteUserToAdmin() {
         String username = "bayu_bagaswara";
         assertThrows(AccessDeniedException.class, () -> {
-            ApiResponse apiResponse = userService.deleteUser(username);
+            MessageResponse messageResponse = userService.deleteUser(username);
         });
     }
 

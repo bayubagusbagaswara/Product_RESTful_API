@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 })
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponse {
+public class MessageResponse {
 
     @JsonProperty("success")
     private Boolean success;
@@ -28,11 +28,11 @@ public class ApiResponse {
     @JsonIgnore
     private HttpStatus status;
 
-    public ApiResponse(Boolean success) {
+    public MessageResponse(Boolean success) {
         this.success = success;
     }
 
-    public ApiResponse(Boolean success, String message) {
+    public MessageResponse(Boolean success, String message) {
         this.success = success;
         this.message = message;
     }

@@ -1,18 +1,18 @@
 package com.product.restful.exception;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 public class AccessDeniedException extends RuntimeException {
 
-    private ApiResponse apiResponse;
+    private MessageResponse messageResponse;
     private String message;
 
-    public AccessDeniedException(ApiResponse apiResponse) {
+    public AccessDeniedException(MessageResponse messageResponse) {
         super();
-        this.apiResponse = apiResponse;
+        this.messageResponse = messageResponse;
     }
 
     public AccessDeniedException(String message) {
@@ -24,12 +24,12 @@ public class AccessDeniedException extends RuntimeException {
         super(message, cause);
     }
 
-    public ApiResponse getApiResponse() {
-        return apiResponse;
+    public MessageResponse getApiResponse() {
+        return messageResponse;
     }
 
-    public void setApiResponse(ApiResponse apiResponse) {
-        this.apiResponse = apiResponse;
+    public void setApiResponse(MessageResponse messageResponse) {
+        this.messageResponse = messageResponse;
     }
 
     @Override

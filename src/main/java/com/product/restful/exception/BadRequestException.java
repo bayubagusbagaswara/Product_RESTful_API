@@ -1,17 +1,17 @@
 package com.product.restful.exception;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestException extends RuntimeException {
 
-    private ApiResponse apiResponse;
+    private MessageResponse messageResponse;
 
-    public BadRequestException(ApiResponse apiResponse) {
+    public BadRequestException(MessageResponse messageResponse) {
         super();
-        this.apiResponse = apiResponse;
+        this.messageResponse = messageResponse;
     }
 
     public BadRequestException(String message) {
@@ -22,7 +22,7 @@ public class BadRequestException extends RuntimeException {
         super(message, cause);
     }
 
-    public ApiResponse getApiResponse() {
-        return apiResponse;
+    public MessageResponse getApiResponse() {
+        return messageResponse;
     }
 }

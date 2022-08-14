@@ -1,13 +1,13 @@
 package com.product.restful.exception;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class ResourceNotFoundException extends RuntimeException {
 
-    private transient ApiResponse apiResponse;
+    private transient MessageResponse messageResponse;
 
     private String resourceName;
     private String fieldName;
@@ -32,13 +32,13 @@ public class ResourceNotFoundException extends RuntimeException {
         return fieldValue;
     }
 
-    public ApiResponse getApiResponse() {
-        return apiResponse;
+    public MessageResponse getApiResponse() {
+        return messageResponse;
     }
 
     private void setApiResponse() {
         String message = String.format("%s not found with %s: '%s'", resourceName, fieldName, fieldValue);
 
-        apiResponse = new ApiResponse(Boolean.FALSE, message);
+        messageResponse = new MessageResponse(Boolean.FALSE, message);
     }
 }

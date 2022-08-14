@@ -1,6 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.role.RoleDto;
 import com.product.restful.entity.Role;
@@ -36,15 +36,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public ApiResponse deleteRole(Long id, UserPrincipal currentUser) {
+    public MessageResponse deleteRole(Long id, UserPrincipal currentUser) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 
         if (!currentUser.getAuthorities().contains(new SimpleGrantedAuthority(RoleName.ADMIN.toString()))) {
-            throw new AccessDeniedException(new ApiResponse(Boolean.FALSE, "You don't have permission to delete role of: " + role.getName()));
+            throw new AccessDeniedException(new MessageResponse(Boolean.FALSE, "You don't have permission to delete role of: " + role.getName()));
         }
 
         roleRepository.delete(role);
-        return new ApiResponse(Boolean.TRUE, "You successfully deleted role id of: " + id);
+        return new MessageResponse(Boolean.TRUE, "You successfully deleted role id of: " + id);
     }
 }

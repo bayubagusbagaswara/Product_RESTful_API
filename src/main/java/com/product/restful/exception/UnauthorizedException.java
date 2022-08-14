@@ -1,6 +1,6 @@
 package com.product.restful.exception;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class UnauthorizedException extends RuntimeException {
 
-    private ApiResponse apiResponse;
+    private MessageResponse messageResponse;
 
     private String message;
 
-    public UnauthorizedException(ApiResponse apiResponse) {
+    public UnauthorizedException(MessageResponse messageResponse) {
         super();
-        this.apiResponse = apiResponse;
+        this.messageResponse = messageResponse;
     }
 
     public UnauthorizedException(String message) {
@@ -26,12 +26,12 @@ public class UnauthorizedException extends RuntimeException {
         super(message, cause);
     }
 
-    public ApiResponse getApiResponse() {
-        return apiResponse;
+    public MessageResponse getApiResponse() {
+        return messageResponse;
     }
 
-    public void setApiResponse(ApiResponse apiResponse) {
-        this.apiResponse = apiResponse;
+    public void setApiResponse(MessageResponse messageResponse) {
+        this.messageResponse = messageResponse;
     }
 
     public String getMessage() {

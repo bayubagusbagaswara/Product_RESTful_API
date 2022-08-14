@@ -1,6 +1,6 @@
 package com.product.restful.controller;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.role.RoleRequest;
 import com.product.restful.dto.user.CreateUserRequest;
@@ -31,9 +31,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody CreateUserRequest user) {
+    public ResponseEntity<MessageResponse> createUser(@Valid @RequestBody CreateUserRequest user) {
         final UserDto userDto = userService.createUser(user);
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, String.format("User %s was created successfully", userDto.getUsername()), HttpStatus.CREATED), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, String.format("User %s was created successfully", userDto.getUsername()), HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{username}")
@@ -45,30 +45,30 @@ public class UserController {
 
     @PutMapping(value = "/{username}/addRole")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> addRoleToUser(@PathVariable(name = "username") String username, @RequestBody RoleRequest roleRequest) {
+    public ResponseEntity<MessageResponse> addRoleToUser(@PathVariable(name = "username") String username, @RequestBody RoleRequest roleRequest) {
         userService.addRoleToUser(username, roleRequest.getName().toUpperCase());
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Successfully added role " + roleRequest.getName().toUpperCase() + " to user: " + username), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Successfully added role " + roleRequest.getName().toUpperCase() + " to user: " + username), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{username}")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable(name = "username") String username) {
+    public ResponseEntity<MessageResponse> deleteUser(@PathVariable(name = "username") String username) {
         userService.deleteUser(username);
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "You successfully deleted profile of: " + username), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "You successfully deleted profile of: " + username), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{username}/giveAdmin")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> giveAdmin(@PathVariable(name = "username") String username) {
+    public ResponseEntity<MessageResponse> giveAdmin(@PathVariable(name = "username") String username) {
         userService.giveAdmin(username);
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "You gave ADMIN role to user: " + username), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "You gave ADMIN role to user: " + username), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{username}/removeAdmin")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> removeAdmin(@PathVariable(name = "username") String username) {
-        ApiResponse apiResponse = userService.removeAdmin(username);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    public ResponseEntity<MessageResponse> removeAdmin(@PathVariable(name = "username") String username) {
+        MessageResponse messageResponse = userService.removeAdmin(username);
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
 }

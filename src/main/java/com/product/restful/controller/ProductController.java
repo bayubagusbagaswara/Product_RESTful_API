@@ -1,6 +1,6 @@
 package com.product.restful.controller;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.product.*;
 import com.product.restful.dto.product.ProductDto;
 import com.product.restful.dto.WebResponse;
@@ -37,9 +37,9 @@ public class ProductController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
+    public ResponseEntity<MessageResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
         ProductDto product = productService.createProduct(createProductRequest);
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, String.format("Product name %s was created successfully", product.getName())), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, String.format("Product name %s was created successfully", product.getName())), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,9 +57,9 @@ public class ProductController {
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = "hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable(name = "id") String id) {
+    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable(name = "id") String id) {
         productService.deleteProduct(id);
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, String.format("Product id %s deleted successfully", id)), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, String.format("Product id %s deleted successfully", id)), HttpStatus.OK);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

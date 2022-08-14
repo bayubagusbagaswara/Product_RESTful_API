@@ -1,6 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserIdentityAvailability;
@@ -10,7 +10,6 @@ import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.entity.user.ResetPassword;
 import com.product.restful.entity.user.User;
 import com.product.restful.entity.user.UserPassword;
-import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.exception.*;
 import com.product.restful.repository.ResetPasswordRepository;
 import com.product.restful.repository.RoleRepository;
@@ -66,14 +65,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void checkUsernameIsExists(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new BadRequestException(new ApiResponse(Boolean.FALSE, "Username is already taken"));
+            throw new BadRequestException(new MessageResponse(Boolean.FALSE, "Username is already taken"));
         }
     }
 
     @Override
     public void checkEmailIsExists(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new BadRequestException(new ApiResponse(Boolean.FALSE, "Email is already taken"));
+            throw new BadRequestException(new MessageResponse(Boolean.FALSE, "Email is already taken"));
         }
     }
 
@@ -178,11 +177,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse removeAdmin(String username) {
+    public MessageResponse removeAdmin(String username) {
         User user = userRepository.getUserByName(username);
         user.removeRole(roleRepository.getByName(RoleName.ADMIN.name()).orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         userRepository.save(user);
-        return new ApiResponse(Boolean.TRUE, "You took ADMIN role from user: " + username);
+        return new MessageResponse(Boolean.TRUE, "You took ADMIN role from user: " + username);
     }
 
     @Override

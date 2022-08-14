@@ -1,7 +1,7 @@
 package com.product.restful.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.product.restful.dto.ApiResponse;
+import com.product.restful.dto.MessageResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        ApiResponse body = new ApiResponse(Boolean.FALSE, "Access Denied. You don't have permission to access this resource", HttpStatus.FORBIDDEN);
+        MessageResponse body = new MessageResponse(Boolean.FALSE, "Access Denied. You don't have permission to access this resource", HttpStatus.FORBIDDEN);
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(httpServletResponse.getOutputStream(), body);
     }
