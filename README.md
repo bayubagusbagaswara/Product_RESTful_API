@@ -402,7 +402,7 @@ Test them using postman or any other rest client.
   "success": true,
   "message": "All products successfully retrieved",
   "data": {
-    "productRespons": [
+    "products": [
       {
         "id": "acer-aspire-3",
         "name": "Acer Aspire 3 a314-32",
