@@ -8,31 +8,31 @@ import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.entity.user.UserPrincipal;
 import com.product.restful.exception.AccessDeniedException;
 import com.product.restful.exception.ResourceNotFoundException;
+import com.product.restful.mapper.RoleMapper;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.service.RoleService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-
 @Service
 @Transactional
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+    private final RoleMapper roleMapper;
 
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper) {
         this.roleRepository = roleRepository;
+        this.roleMapper = roleMapper;
     }
 
     @Override
     public RoleDTO createRole(CreateRoleRequest createRoleRequest) {
         Role role = new Role();
         role.setName(RoleName.valueOf(createRoleRequest.getName().toUpperCase()));
-        role.setCreatedAt(Instant.now());
         roleRepository.save(role);
-        return RoleDTO.fromEntity(role);
+        return roleMapper.mapFromRole(role);
     }
 
     @Override
