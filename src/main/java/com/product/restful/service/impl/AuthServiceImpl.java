@@ -8,7 +8,7 @@ import com.product.restful.dto.auth.RegisterRequest;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.*;
-import com.product.restful.entity.user.UserPrincipal;
+import com.product.restful.entity.user.CustomUserDetails;
 import com.product.restful.security.JwtTokenProvider;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.RefreshTokenService;
@@ -65,12 +65,12 @@ public class AuthServiceImpl implements AuthService {
                 ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        log.info("Current User Login : {}", userPrincipal.getEmail());
-        String token = jwtTokenProvider.generateTokenByUserId(userPrincipal.getId());
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        log.info("Current User Login : {}", customUserDetails.getEmail());
+        String token = jwtTokenProvider.generateTokenByUserId(customUserDetails.getId());
         return AuthenticationResponse.builder()
                 .accessToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken(userPrincipal.getId()).getRefreshToken())
+                .refreshToken(refreshTokenService.generateRefreshToken(customUserDetails.getId()).getRefreshToken())
                 .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsernameOrEmail())
                 .build();

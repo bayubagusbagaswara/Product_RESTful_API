@@ -4,22 +4,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-/**
- * UserPrincipal adalah class yang mengimplementasikan UserDetails
- * artinya UserPrincipal digunakan untuk membawa data user yang tujuannya untuk autentikasi dan otorisasi
- */
 @Data
 @Builder
 @NoArgsConstructor
-public class UserPrincipal implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     private Long id;
     private String firstName;
@@ -29,7 +22,7 @@ public class UserPrincipal implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal( Long id, String firstName, String lastName, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(Long id, String firstName, String lastName, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -79,7 +72,7 @@ public class UserPrincipal implements UserDetails {
             return true;
         if (object == null || getClass() != object.getClass())
             return false;
-        UserPrincipal that = (UserPrincipal) object;
+        CustomUserDetails that = (CustomUserDetails) object;
         return Objects.equals(id, that.id);
     }
 

@@ -1,6 +1,6 @@
 package com.product.restful.security;
 
-import com.product.restful.entity.user.UserPrincipal;
+import com.product.restful.entity.user.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -26,8 +26,8 @@ public class JwtTokenProvider {
     @Value(value = "${app.jwtExpirationInMillis}")
     private Long jwtExpirationInMillis;
 
-    public String generateToken(UserPrincipal userPrincipal) {
-        return generateTokenFromUsername(userPrincipal.getUsername());
+    public String generateToken(CustomUserDetails customUserDetails) {
+        return generateTokenFromUsername(customUserDetails.getUsername());
     }
 
     public String generateTokenByUserId(Long userId) {

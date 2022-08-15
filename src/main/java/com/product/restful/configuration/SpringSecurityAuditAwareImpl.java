@@ -1,6 +1,6 @@
 package com.product.restful.configuration;
 
-import com.product.restful.entity.user.UserPrincipal;
+import com.product.restful.entity.user.CustomUserDetails;
 import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -22,8 +22,8 @@ public class SpringSecurityAuditAwareImpl implements AuditorAware<String> {
             return Optional.empty();
         }
 
-        UserPrincipal userPrincipal = (UserPrincipal) Objects.requireNonNull(authentication).getPrincipal();
+        CustomUserDetails customUserDetails = (CustomUserDetails) Objects.requireNonNull(authentication).getPrincipal();
 
-        return Optional.ofNullable(userPrincipal.getEmail());
+        return Optional.ofNullable(customUserDetails.getEmail());
     }
 }

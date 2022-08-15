@@ -1,7 +1,7 @@
 package com.product.restful.service.impl;
 
 import com.product.restful.entity.user.User;
-import com.product.restful.entity.user.UserPrincipal;
+import com.product.restful.entity.user.CustomUserDetails;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.CustomUserDetailsService;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,12 +36,12 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         return getUserPrincipal(user);
     }
 
-    private UserPrincipal getUserPrincipal(User user) {
+    private CustomUserDetails getUserPrincipal(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return UserPrincipal.builder()
+        return CustomUserDetails.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
