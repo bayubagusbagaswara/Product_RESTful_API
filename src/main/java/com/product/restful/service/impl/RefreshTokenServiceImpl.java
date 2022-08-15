@@ -6,6 +6,7 @@ import com.product.restful.entity.user.User;
 import com.product.restful.exception.RefreshTokenNotFoundException;
 import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.exception.TokenRefreshException;
+import com.product.restful.mapper.RefreshTokenMapper;
 import com.product.restful.repository.RefreshTokenRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.RefreshTokenService;
@@ -24,10 +25,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private Long refreshTokenDurationMs;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
+    private final RefreshTokenMapper refreshTokenMapper;
 
-    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository, RefreshTokenMapper refreshTokenMapper) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
+        this.refreshTokenMapper = refreshTokenMapper;
     }
 
     @Override
@@ -44,13 +47,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         );
 
         refreshTokenRepository.save(refreshToken);
-        return RefreshTokenDTO.fromEntity(refreshToken);
+        return refreshTokenMapper.mapFromRefreshToken(refreshToken);
     }
 
     @Override
     public RefreshTokenDTO validateRefreshToken(String refreshToken) {
         RefreshToken token = verifyExpirationRefreshToken(refreshToken);
-        return RefreshTokenDTO.fromEntity(token);
+        return refreshTokenMapper.mapFromRefreshToken(token);
     }
 
     @Override
