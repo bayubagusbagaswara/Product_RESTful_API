@@ -27,16 +27,16 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     @Override
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with id: %s", id)));
-        return getUserPrincipal(user);
+        return mapFromUserToUserDetails(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new UsernameNotFoundException(String.format("User not found with this username or email: %s", usernameOrEmail)));
-        return getUserPrincipal(user);
+        return mapFromUserToUserDetails(user);
     }
 
-    private CustomUserDetails getUserPrincipal(User user) {
+    private CustomUserDetails mapFromUserToUserDetails(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
