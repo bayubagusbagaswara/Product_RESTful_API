@@ -10,13 +10,16 @@ import com.product.restful.entity.enumerator.RoleName;
 import com.product.restful.entity.user.ResetPassword;
 import com.product.restful.entity.user.User;
 import com.product.restful.entity.user.UserPassword;
-import com.product.restful.exception.*;
+import com.product.restful.exception.AppException;
+import com.product.restful.exception.BadRequestException;
+import com.product.restful.exception.ResetPasswordInvalidException;
+import com.product.restful.exception.ResourceNotFoundException;
+import com.product.restful.mapper.UserMapper;
 import com.product.restful.repository.ResetPasswordRepository;
 import com.product.restful.repository.RoleRepository;
 import com.product.restful.repository.UserPasswordRepository;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,14 +39,15 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ResetPasswordRepository resetPasswordRepository;
     private final UserPasswordRepository userPasswordRepository;
+    private final UserMapper userMapper;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ResetPasswordRepository resetPasswordRepository, UserPasswordRepository userPasswordRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ResetPasswordRepository resetPasswordRepository, UserPasswordRepository userPasswordRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.resetPasswordRepository = resetPasswordRepository;
         this.userPasswordRepository = userPasswordRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByUsername(String username) {
         User user = userRepository.getUserByName(username);
-        return UserDTO.fromEntity(user);
+        return userMapper.mapFromUser(user);
     }
 
     @Override
@@ -99,7 +103,7 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)))));
 
         userRepository.save(user);
-        return UserDTO.fromEntity(user);
+        return userMapper.mapFromUser(user);
     }
 
     @Override
@@ -136,7 +140,7 @@ public class UserServiceImpl implements UserService {
         resetPassword.setUser(user);
         resetPasswordRepository.save(resetPassword);
 
-        return UserDTO.fromEntity(user);
+        return userMapper.mapFromUser(user);
     }
 
     @Override
@@ -149,7 +153,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "Id", id));
-        return UserDTO.fromEntity(user);
+        return userMapper.mapFromUser(user);
     }
 
     @Override
@@ -160,7 +164,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(updateUserRequest.getUsername());
         user.setEmail(updateUserRequest.getEmail());
         userRepository.save(user);
-        return UserDTO.fromEntity(user);
+        return userMapper.mapFromUser(user);
     }
 
     @Override
@@ -217,7 +221,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = resetPassword.getUser();
         resetPasswordRepository.deleteByUser(user);
-        return UserDTO.fromEntity(user);
+        return userMapper.mapFromUser(user);
     }
 
     @Override
