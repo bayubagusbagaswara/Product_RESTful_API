@@ -67,8 +67,8 @@ public class UserController {
     @PutMapping(value = "/{username}/removeAdmin")
     @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<MessageResponse> removeAdmin(@PathVariable(name = "username") String username) {
-        MessageResponse messageResponse = userService.removeAdmin(username);
-        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+        userService.removeAdmin(username);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "You took ADMIN role from user: " + username), HttpStatus.OK);
     }
 
 }
