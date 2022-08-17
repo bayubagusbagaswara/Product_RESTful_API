@@ -1,6 +1,5 @@
 package com.product.restful.service;
 
-import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UpdateUserRequest;
 import com.product.restful.dto.user.UserDTO;
@@ -33,7 +32,7 @@ public interface UserService {
 
     void giveAdmin(String username);
 
-    MessageResponse removeAdmin(String username);
+    void removeAdmin(String username);
 
     void verifyUserByUsername(String username);
 
