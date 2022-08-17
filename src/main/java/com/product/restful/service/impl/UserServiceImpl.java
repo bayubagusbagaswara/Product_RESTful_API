@@ -181,11 +181,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MessageResponse removeAdmin(String username) {
+    public void removeAdmin(String username) {
         User user = userRepository.getUserByName(username);
         user.removeRole(roleRepository.getByName(RoleName.ADMIN.name()).orElseThrow(() -> new AppException(USER_ROLE_NOT_SET)));
         userRepository.save(user);
-        return new MessageResponse(Boolean.TRUE, "You took ADMIN role from user: " + username);
     }
 
     @Override
