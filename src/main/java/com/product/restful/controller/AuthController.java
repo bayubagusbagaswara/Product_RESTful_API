@@ -95,4 +95,6 @@ public class AuthController {
     }
 
     // forgot password
+    // cukup kita klik link forgotPassword, lalu akan dikirimkan link resetPassword ke email
+    // lalu user akan klik link tersebut, kemudian dimunculkan form pengisian password dan confirm_password
 }
