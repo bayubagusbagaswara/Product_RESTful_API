@@ -7,14 +7,11 @@ import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.RegisterRequest;
-import com.product.restful.dto.user.UserDTO;
 import com.product.restful.service.AuthService;
+import com.product.restful.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -25,9 +22,11 @@ import java.net.URI;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     @PostMapping(value = "/register")
@@ -58,4 +57,14 @@ public class AuthController {
         return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Refresh token deleted successfully"), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/verify/email/activation")
+    public ResponseEntity<MessageResponse> verifyEmailActivation(@RequestParam(name = "unique_code") String uniqueCode) {
+        userService.verifyEmailActivation(uniqueCode);
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Email success activated"), HttpStatus.OK);
+    }
+
+    // reset password
+    // kita verifikasi
+
+    // forgot password
 }
