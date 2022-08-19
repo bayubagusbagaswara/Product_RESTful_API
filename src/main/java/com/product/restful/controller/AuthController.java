@@ -8,6 +8,9 @@ import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.RegisterRequest;
 import com.product.restful.dto.user.UserDTO;
+import com.product.restful.entity.user.User;
+import com.product.restful.exception.ResourceNotFoundException;
+import com.product.restful.repository.UserRepository;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -25,9 +28,12 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
-    public AuthController(AuthService authService, UserService userService) {
+    private final UserRepository userRepository;
+
+    public AuthController(AuthService authService, UserService userService, UserRepository userRepository) {
         this.authService = authService;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping(value = "/register")
@@ -64,14 +70,29 @@ public class AuthController {
         return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Email success activated"), HttpStatus.OK);
     }
 
-    // reset password
     @GetMapping(value = "/verify/reset/password/link")
     public ResponseEntity<WebResponse<UserDTO>> verifyResetPasswordLink(@RequestParam(name = "unique_code") String uniqueCode) {
         UserDTO userDTO = userService.verifyResetPasswordLink(uniqueCode);
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Success verify reset password link", userDTO), HttpStatus.OK);
     }
 
-    // kita verifikasi
+    // user akan melakukan setPassword nya
+    // parameternya adalah id user, password, dan confirm password
+    @PostMapping(value = "/{userId}/new/password")
+    public ResponseEntity<MessageResponse> setNewPassword(@PathVariable(name = "userId") Long userId,
+                                                          @RequestParam(name = "password") String password,
+                                                          @RequestParam(name = "confirm_password") String confirmPassword) {
+        // ambil data user
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        // cek apakah password dan confirmPassword sama
+
+        if (password.equals(confirmPassword)) {
+            userService.setNewPassword(user, password);
+        } else {
+            // gagal set password
+        }
+        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Success set new password"), HttpStatus.OK);
+    }
 
     // forgot password
 }
