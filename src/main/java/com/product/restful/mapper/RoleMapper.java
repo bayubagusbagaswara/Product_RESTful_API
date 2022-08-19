@@ -14,7 +14,7 @@ public class RoleMapper {
         return new RoleDTO(role.getId(), role.getName().name());
     }
 
-    public Set<RoleDTO> mapFromEntitiesSet(Set<Role> roles) {
+    public Set<RoleDTO> mapFromRoleSet(Set<Role> roles) {
         return roles.stream()
                 .map(this::mapFromRole)
                 .collect(Collectors.toSet());
