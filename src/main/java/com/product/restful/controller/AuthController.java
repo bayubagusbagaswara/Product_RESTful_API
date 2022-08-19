@@ -7,6 +7,7 @@ import com.product.restful.dto.refreshToken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.RegisterRequest;
+import com.product.restful.dto.user.UserDTO;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,12 @@ public class AuthController {
     }
 
     // reset password
+    @GetMapping(value = "/verify/reset/password/link")
+    public ResponseEntity<WebResponse<UserDTO>> verifyResetPasswordLink(@RequestParam(name = "unique_code") String uniqueCode) {
+        UserDTO userDTO = userService.verifyResetPasswordLink(uniqueCode);
+        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Success verify reset password link", userDTO), HttpStatus.OK);
+    }
+
     // kita verifikasi
 
     // forgot password
