@@ -1,6 +1,5 @@
 package com.product.restful.mapper;
 
-import com.product.restful.dto.role.RoleDTO;
 import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.user.User;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,7 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .roles(roleMapper.mapFromEntitiesSet(user.getRoles()))
+                .roles(roleMapper.mapFromRoleSet(user.getRoles()))
                 .build();
     }
 
