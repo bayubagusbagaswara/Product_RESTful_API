@@ -215,38 +215,38 @@ class UserServiceImplTest {
     @Disabled
     @Order(12)
     void deleteUserByAdmin() {
-        String username = "james_gosling";
-        MessageResponse messageResponse = userService.deleteUser(username);
-
-        assertTrue(messageResponse.getSuccess());
-        assertEquals(true, messageResponse.getSuccess());
-
-        log.info("Success: {}", messageResponse.getSuccess());
-        log.info("Message: {}", messageResponse.getMessage());
+//        String username = "james_gosling";
+//        MessageResponse messageResponse = userService.deleteUser(username);
+//
+//        assertTrue(messageResponse.getSuccess());
+//        assertEquals(true, messageResponse.getSuccess());
+//
+//        log.info("Success: {}", messageResponse.getSuccess());
+//        log.info("Message: {}", messageResponse.getMessage());
     }
 
     @Test
     @Disabled
     @Order(13)
     void deleteUserBySelf() {
-        String username = "newton";
-        MessageResponse messageResponse = userService.deleteUser(username);
-
-        assertTrue(messageResponse.getSuccess());
-        assertEquals(true, messageResponse.getSuccess());
-
-        log.info("Success: {}", messageResponse.getSuccess());
-        log.info("Message: {}", messageResponse.getMessage());
+//        String username = "newton";
+//        MessageResponse messageResponse = userService.deleteUser(username);
+//
+//        assertTrue(messageResponse.getSuccess());
+//        assertEquals(true, messageResponse.getSuccess());
+//
+//        log.info("Success: {}", messageResponse.getSuccess());
+//        log.info("Message: {}", messageResponse.getMessage());
     }
 
     @Test
     @Disabled
     @Order(14)
     void deleteUserToAdmin() {
-        String username = "bayu_bagaswara";
-        assertThrows(AccessDeniedException.class, () -> {
-            MessageResponse messageResponse = userService.deleteUser(username);
-        });
+//        String username = "bayu_bagaswara";
+//        assertThrows(AccessDeniedException.class, () -> {
+//            MessageResponse messageResponse = userService.deleteUser(username);
+//        });
     }
 
     @Test
@@ -265,21 +265,21 @@ class UserServiceImplTest {
 
     @Test
     void testVerifyEmailAfterRegister() {
-        String uniqueCode = "71c7622a-3b6d-403c-a4df-d55409baadb7";
-        userService.verifyEmailAfterRegister(uniqueCode);
+        String uniqueCode = "53ac9e63-bfba-48fe-b6a5-fa328101bc05";
+        userService.verifyEmailActivation(uniqueCode);
     }
 
     @Test
     void testVerifyResetPasswordLink() {
-        String uniqueCode = "3c80e520-0251-48ad-a24e-2119f8f5c4e2";
+        String uniqueCode = "4d06e5f3-bab8-4cc3-8efe-e89b01da9083";
         UserDTO userDto = userService.verifyResetPasswordLink(uniqueCode);
         assertNotNull(userDto);
     }
 
     @Test
     void testSetNewPassword() {
-        String password = "12345678";
-        Long userId = 3L;
+        String password = "B@gaswara_12";
+        Long userId = 1L;
         User user = userService.getUser(userId);
 
         userService.setNewPassword(user, password);
@@ -287,9 +287,12 @@ class UserServiceImplTest {
 
     @Test
     void testForgotPassword() {
-        String email = "";
+        String email = "bayu@gmail.com";
         userService.forgotPassword(email);
     }
+    // sehabis hit endpoint forgot password, maka kita harus hit endpoint verifyResetPasswordLink, lalu dilanjutnya set Password baru
+    // password lama  $2a$11$ZO9xRDeA39rmsjgi8nk3CeSWayzAcWj3bNCbwZWXJrYpR/kGVvJrq
+    // password baru  $2a$11$QJaVeRD8mm3rcPQGp43stu/5UjnIHLWkTgBeHRNxl7O3V/bFgIXou
 
     @Test
     void getUser() {
