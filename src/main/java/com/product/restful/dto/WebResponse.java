@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Data
-@Builder@JsonPropertyOrder({
+@Builder
+@JsonPropertyOrder({
         "success",
         "message",
         "data"
