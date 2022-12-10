@@ -30,7 +30,7 @@ public class ErrorController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<MessageResponse> resourceNotFoundHandler(ResourceNotFoundException resourceNotFoundException) {
-        return new ResponseEntity<>(resourceNotFoundException.getApiResponse(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(resourceNotFoundException.getMessageResponse(), HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
