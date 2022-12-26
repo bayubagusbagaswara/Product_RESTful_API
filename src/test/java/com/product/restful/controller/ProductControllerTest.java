@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProductControllerTest {
-//
+
 //    private final static Logger log = LoggerFactory.getLogger(ProductControllerTest.class);
 //
 //    @Autowired
@@ -22,6 +22,7 @@ class ProductControllerTest {
 //                .quantity(345)
 //                .description("This is test controller product description")
 //                .build();
+//
 //        WebResponse<GetProductResponse> createProductResponse = productController.createProduct(createProductRequest);
 //        assertEquals(HttpStatus.CREATED.value(), createProductResponse.getCode());
 //        assertEquals(HttpStatus.CREATED, createProductResponse.getStatus());
