@@ -2,13 +2,13 @@ package com.product.restful.entity;
 
 import com.product.restful.entity.audit.UserDateAudit;
 import com.product.restful.entity.user.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
