@@ -3,6 +3,7 @@ package com.product.restful.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.product.restful.entity.audit.UserDateAudit;
 import com.product.restful.entity.enumerator.StatusRecord;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
