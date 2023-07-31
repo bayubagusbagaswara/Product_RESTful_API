@@ -28,15 +28,15 @@ public class RefreshToken extends UserDateAudit {
     @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_refresh_token_user_id"), referencedColumnName = "id")
     private User user;
 
-    @Column(name = "refresh_token", nullable = false)
-    private String refreshToken;
+    @Column(name = "token", nullable = false)
+    private String token;
 
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;
 
     public RefreshToken(User user, String refreshToken, Instant expiryDate, Instant createdAt) {
         this.user = user;
-        this.refreshToken = refreshToken;
+        this.token = refreshToken;
         this.expiryDate = expiryDate;
         this.setCreatedAt(createdAt);
     }

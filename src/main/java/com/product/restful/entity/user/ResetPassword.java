@@ -1,10 +1,9 @@
 package com.product.restful.entity.user;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -30,7 +29,7 @@ public class ResetPassword {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @NotBlank
     @Column(name = "unique_code", nullable = false)
     private String uniqueCode = UUID.randomUUID().toString();
+
 }

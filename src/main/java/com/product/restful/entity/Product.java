@@ -27,8 +27,7 @@ import java.math.BigDecimal;
 public class Product extends UserDateAudit {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, length = 64)
     private String id;
 

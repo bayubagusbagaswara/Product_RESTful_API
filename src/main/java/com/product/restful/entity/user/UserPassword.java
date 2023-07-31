@@ -1,9 +1,8 @@
 package com.product.restful.entity.user;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "user_password")
@@ -22,4 +21,5 @@ public class UserPassword {
 
     @Column(name = "password")
     private String password;
+
 }
