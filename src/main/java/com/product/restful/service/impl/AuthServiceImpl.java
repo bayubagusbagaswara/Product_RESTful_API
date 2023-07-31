@@ -9,7 +9,7 @@ import com.product.restful.dto.user.CreateUserRequest;
 import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.*;
 import com.product.restful.entity.user.CustomUserDetails;
-import com.product.restful.security.JwtTokenProvider;
+import com.product.restful.security.JwtService;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.RefreshTokenService;
 import com.product.restful.service.UserService;
@@ -31,13 +31,13 @@ public class AuthServiceImpl implements AuthService {
     private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final UserService userService;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, RefreshTokenService refreshTokenService, UserService userService) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtService jwtService, RefreshTokenService refreshTokenService, UserService userService) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.userService = userService;
     }
@@ -67,11 +67,11 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         log.info("Current User Login : {}", customUserDetails.getEmail());
-        String token = jwtTokenProvider.generateTokenByUserId(customUserDetails.getId());
+        String token = jwtService.generateTokenByUserId(customUserDetails.getId());
         return AuthenticationResponse.builder()
                 .accessToken(token)
                 .refreshToken(refreshTokenService.generateRefreshToken(customUserDetails.getId()).getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
+                .expiresAt(Instant.now().plusMillis(jwtService.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsernameOrEmail())
                 .build();
     }
@@ -79,12 +79,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse createRefreshToken(RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = refreshTokenService.verifyExpirationRefreshToken(refreshTokenRequest.getRefreshToken());
-        String token = jwtTokenProvider.generateTokenFromUserId(refreshToken.getUser().getId());
+        String token = jwtService.generateTokenFromUserId(refreshToken.getUser().getId());
         log.info("Success created refresh token for User : {}", refreshToken.getUser().getEmail());
         return AuthenticationResponse.builder()
                 .accessToken(token)
                 .refreshToken(refreshToken.getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getJwtExpirationInMillis()))
+                .expiresAt(Instant.now().plusMillis(jwtService.getJwtExpirationInMillis()))
                 .username(refreshToken.getUser().getUsername())
                 .build();
     }

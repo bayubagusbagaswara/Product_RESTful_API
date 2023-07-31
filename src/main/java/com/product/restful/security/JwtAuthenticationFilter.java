@@ -23,12 +23,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtService jwtService;
 
     private final CustomUserDetailsServiceImpl customUserDetailsService;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, CustomUserDetailsServiceImpl customUserDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtAuthenticationFilter(JwtService jwtService, CustomUserDetailsServiceImpl customUserDetailsService) {
+        this.jwtService = jwtService;
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -40,10 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
+            if (jwt != null && jwtService.validateToken(jwt)) {
 
                 // String usernameFromJwtToken = jwtTokenProvider.getUsernameFromJwtToken(jwt);
-                Long userIdFromJwtToken = jwtTokenProvider.getUserIdFromJwtToken(jwt);
+                Long userIdFromJwtToken = jwtService.getUserIdFromJwtToken(jwt);
 
                 UserDetails userDetails = customUserDetailsService.loadUserById(userIdFromJwtToken);
 
