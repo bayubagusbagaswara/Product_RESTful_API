@@ -1,17 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.refreshToken.RefreshTokenDTO;
-import com.product.restful.entity.RefreshToken;
-import com.product.restful.exception.RefreshTokenNotFoundException;
-import com.product.restful.repository.UserRepository;
-import com.product.restful.service.RefreshTokenService;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class RefreshTokenServiceImplTest {
