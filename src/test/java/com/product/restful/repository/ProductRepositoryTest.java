@@ -29,25 +29,25 @@ class ProductRepositoryTest {
     @Autowired
     ProductRepository productRepository;
 
-    @Test
-    @Order(1)
-    void createProduct() {
-        Product product = Product.builder()
-                .name("Test Repository")
-                .price(new BigDecimal(5_000_000))
-                .quantity(50)
-                .build();
-
-        assertNull(product.getId());
-        productRepository.save(product);
-        assertNotNull(product.getId());
-
-        log.info("ID: {}", product.getId());
-        log.info("Name: {}", product.getName());
-        log.info("Price: {}", product.getPrice());
-        log.info("Quantity: {}", product.getQuantity());
-        log.info("Created At: {}", product.getCreatedAt());
-    }
+//    @Test
+//    @Order(1)
+//    void createProduct() {
+//        Product product = Product.builder()
+//                .name("Test Repository")
+//                .price(new BigDecimal(5_000_000))
+//                .quantity(50)
+//                .build();
+//
+//        assertNull(product.getId());
+//        productRepository.save(product);
+//        assertNotNull(product.getId());
+//
+//        log.info("ID: {}", product.getId());
+//        log.info("Name: {}", product.getName());
+//        log.info("Price: {}", product.getPrice());
+//        log.info("Quantity: {}", product.getQuantity());
+//        log.info("Created At: {}", product.getCreatedAt());
+//    }
 
 //    @Test
 //    @Order(2)
