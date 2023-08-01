@@ -44,7 +44,7 @@ public interface UserService {
 
     void verifyEmailActivation(String uniqueCode);
 
-    UserDTO verifyResetPasswordLink(String uniqueCode);
+//    UserDTO verifyResetPasswordLink(String uniqueCode);
 
     void setNewPassword(User user, String password);
 
