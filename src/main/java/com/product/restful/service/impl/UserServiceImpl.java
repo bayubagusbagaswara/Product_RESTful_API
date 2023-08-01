@@ -25,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -91,12 +93,11 @@ public class UserServiceImpl implements UserService {
         checkUsernameIsExists(userRequest.getUsername());
         checkEmailIsExists(userRequest.getEmail());
 
-        User user = User.builder()
-                .firstName(userRequest.getFirstName())
-                .lastName(userRequest.getLastName())
-                .username(userRequest.getUsername())
-                .email(userRequest.getEmail())
-                .build();
+        User user = new User();
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
 
         user.setRoles(new HashSet<>(Collections.singleton(
                 roleRepository.getByName(RoleName.ADMIN.name())
@@ -211,17 +212,17 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public UserDTO verifyResetPasswordLink(String uniqueCode) {
-        ResetPassword resetPassword = resetPasswordRepository.findByUniqueCode(uniqueCode).orElseThrow(() -> new ResetPasswordInvalidException("Invalid code " + uniqueCode));
-
-        if (LocalDateTime.now().isAfter(resetPassword.getExpired())) {
-            throw new ResetPasswordInvalidException("Unique code " + uniqueCode + " expired");
-        }
-        User user = resetPassword.getUser();
-        resetPasswordRepository.deleteByUser(user);
-        return userMapper.mapFromUser(user);
-    }
+//    @Override
+//    public UserDTO verifyResetPasswordLink(String uniqueCode) {
+//        ResetPassword resetPassword = resetPasswordRepository.findByUniqueCode(uniqueCode).orElseThrow(() -> new ResetPasswordInvalidException("Invalid code " + uniqueCode));
+//
+//        if (LocalDate.now().isAfter(resetPassword.getExpired())) {
+//            throw new ResetPasswordInvalidException("Unique code " + uniqueCode + " expired");
+//        }
+//        User user = resetPassword.getUser();
+//        resetPasswordRepository.deleteByUser(user);
+//        return userMapper.mapFromUser(user);
+//    }
 
     @Override
     public void setNewPassword(User user, String password) {
