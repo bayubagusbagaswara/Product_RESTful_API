@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtService.generateToken(customUserDetails);
         return AuthenticationResponse.builder()
                 .accessToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken(customUserDetails.getId()).getRefreshToken())
+//                .refreshToken(refreshTokenService.generateRefreshToken(customUserDetails.getId()).getRefreshToken())
                 .username(loginRequest.getUsernameOrEmail())
                 .build();
     }
@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
     public void logout(LogoutRequest logoutRequest) {
         userService.verifyUserByUsernameOrEmail(logoutRequest.getUsernameOrEmail());
         RefreshToken refreshToken = refreshTokenService.verifyExpirationRefreshToken(logoutRequest.getRefreshToken());
-        refreshTokenService.deleteRefreshToken(refreshToken.getRefreshToken());
+        refreshTokenService.deleteRefreshToken(refreshToken.getToken());
     }
 
 }
