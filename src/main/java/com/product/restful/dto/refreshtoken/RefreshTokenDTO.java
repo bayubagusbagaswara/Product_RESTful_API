@@ -1,4 +1,4 @@
-package com.product.restful.dto.refreshToken;
+package com.product.restful.dto.refreshtoken;
 
 import com.product.restful.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
