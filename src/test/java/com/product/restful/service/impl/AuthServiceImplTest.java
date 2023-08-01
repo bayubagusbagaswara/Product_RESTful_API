@@ -1,20 +1,6 @@
 package com.product.restful.service.impl;
 
-import com.product.restful.dto.auth.AuthenticationResponse;
-import com.product.restful.dto.auth.LoginRequest;
-import com.product.restful.dto.auth.LogoutRequest;
-import com.product.restful.dto.auth.RegisterRequest;
-import com.product.restful.dto.refreshToken.RefreshTokenRequest;
-import com.product.restful.dto.user.UserDTO;
-import com.product.restful.service.AuthService;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AuthServiceImplTest {
