@@ -1,6 +1,6 @@
 package com.product.restful.mapper;
 
-import com.product.restful.dto.refreshToken.RefreshTokenDTO;
+import com.product.restful.dto.refreshtoken.RefreshTokenDTO;
 import com.product.restful.entity.RefreshToken;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class RefreshTokenMapper {
         return RefreshTokenDTO.builder()
                 .id(refreshToken.getId())
                 .user(userMapper.mapFromUser(refreshToken.getUser()))
-                .refreshToken(refreshToken.getRefreshToken())
+                .refreshToken(refreshToken.getToken())
                 .expiryDate(refreshToken.getExpiryDate())
                 .build();
     }
