@@ -1,8 +1,8 @@
 package com.product.restful.util;
 
+import jakarta.validation.*;
 import org.springframework.stereotype.Component;
 
-import javax.validation.*;
 import java.util.Set;
 
 @Component
