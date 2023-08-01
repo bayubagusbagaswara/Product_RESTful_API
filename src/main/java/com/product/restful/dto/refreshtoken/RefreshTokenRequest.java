@@ -1,11 +1,10 @@
-package com.product.restful.dto.refreshToken;
+package com.product.restful.dto.refreshtoken;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
