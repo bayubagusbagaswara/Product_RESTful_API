@@ -3,7 +3,7 @@ package com.product.restful.integration;
 import com.product.restful.dto.product.CreateProductRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import static io.restassured.RestAssured.port;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ProductIntegrationTest {
+class ProductIntegrationTest {
 
     @LocalServerPort
     private Integer serverPort;
