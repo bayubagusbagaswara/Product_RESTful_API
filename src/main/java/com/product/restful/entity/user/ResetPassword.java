@@ -1,32 +1,34 @@
 package com.product.restful.entity.user;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reset_password", uniqueConstraints = {
-        @UniqueConstraint(name = "reset_password_code_unique", columnNames = "unique_code")
-})
+@Table(name = "reset_password")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResetPassword {
-
-    private static final Integer RESET_PASSWORD_EXPIRY_DAYS = 15;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime generated = LocalDateTime.now();
-
-    private LocalDateTime expired = LocalDateTime.now().plusDays(RESET_PASSWORD_EXPIRY_DAYS);
+//    @Column(name = "generated")
+//    private LocalDate generated = LocalDate.now();
+//
+//    @Column(name = "expired")
+//    private LocalDate expired = LocalDate.now().plus(1, ChronoUnit.DAYS);
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_reset_password_user_id"), referencedColumnName = "id")
     private User user;
 
     @Column(name = "unique_code", nullable = false)
