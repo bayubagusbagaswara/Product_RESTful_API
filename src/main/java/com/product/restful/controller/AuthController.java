@@ -3,22 +3,21 @@ package com.product.restful.controller;
 import com.product.restful.dto.MessageResponse;
 import com.product.restful.dto.WebResponse;
 import com.product.restful.dto.auth.LogoutRequest;
-import com.product.restful.dto.refreshToken.RefreshTokenRequest;
+import com.product.restful.dto.refreshtoken.RefreshTokenRequest;
 import com.product.restful.dto.auth.AuthenticationResponse;
 import com.product.restful.dto.auth.LoginRequest;
 import com.product.restful.dto.auth.RegisterRequest;
-import com.product.restful.dto.user.UserDTO;
 import com.product.restful.entity.user.User;
 import com.product.restful.exception.ResourceNotFoundException;
 import com.product.restful.repository.UserRepository;
 import com.product.restful.service.AuthService;
 import com.product.restful.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -52,11 +51,11 @@ public class AuthController {
         return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "User authenticated successfully", authenticationResponse), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/create/refreshToken")
-    public ResponseEntity<WebResponse<AuthenticationResponse>> createRefreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        AuthenticationResponse authenticationResponse = authService.createRefreshToken(refreshTokenRequest);
-        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Refresh token successfully updated", authenticationResponse), HttpStatus.OK);
-    }
+//    @PostMapping(value = "/create/refreshToken")
+//    public ResponseEntity<WebResponse<AuthenticationResponse>> createRefreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+//        AuthenticationResponse authenticationResponse = authService.createRefreshToken(refreshTokenRequest);
+//        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Refresh token successfully updated", authenticationResponse), HttpStatus.OK);
+//    }
 
     @PostMapping(value = "/logout")
     public ResponseEntity<MessageResponse> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
@@ -70,11 +69,11 @@ public class AuthController {
         return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "Email success activated"), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/verify/reset/password/link")
-    public ResponseEntity<WebResponse<UserDTO>> verifyResetPasswordLink(@RequestParam(name = "unique_code") String uniqueCode) {
-        UserDTO userDTO = userService.verifyResetPasswordLink(uniqueCode);
-        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Success verify reset password link", userDTO), HttpStatus.OK);
-    }
+//    @GetMapping(value = "/verify/reset/password/link")
+//    public ResponseEntity<WebResponse<UserDTO>> verifyResetPasswordLink(@RequestParam(name = "unique_code") String uniqueCode) {
+//        UserDTO userDTO = userService.verifyResetPasswordLink(uniqueCode);
+//        return new ResponseEntity<>(new WebResponse<>(Boolean.TRUE, "Success verify reset password link", userDTO), HttpStatus.OK);
+//    }
 
     // user akan melakukan setPassword nya
     // parameternya adalah id user, password, dan confirm password
