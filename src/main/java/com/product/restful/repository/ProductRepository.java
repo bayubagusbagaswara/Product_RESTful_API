@@ -57,11 +57,11 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             "AND MATCH(name, short_description, full_description) AGAINST (?1)", nativeQuery = true)
     Page<Product> search(String keyword, Pageable pageable);
 
-    @Query("UPDATE Product p SET p.averageRating = " +
-            "COALESCE((SELECT AVG(r.rating) FROM Review r WHERE " +
-            "p.reviewCount = (SELECT COUNT(r.id) FROM Review r WHERE r.product.id = ?1)" +
-            "WHERE p.id = ?1")
-    void updateReviewCountAndAverageRating(Integer productId);
+//    @Query("UPDATE Product p SET p.averageRating = " +
+//            "COALESCE((SELECT AVG(r.rating) FROM Review r WHERE " +
+//            "p.reviewCount = (SELECT COUNT(r.id) FROM Review r WHERE r.product.id = ?1)" +
+//            "WHERE p.id = ?1")
+//    void updateReviewCountAndAverageRating(Integer productId);
 
     default Product getProductById(String id) {
         return findById(id)
