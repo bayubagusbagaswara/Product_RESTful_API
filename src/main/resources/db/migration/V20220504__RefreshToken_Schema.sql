@@ -6,7 +6,7 @@ create table refresh_tokens (
     created_by character varying(255),
     updated_by character varying(255),
     expiry_date timestamp without time zone not null,
-    refresh_token character varying(255) not null,
+    token character varying(255) not null,
     id_user bigserial
 );
 
