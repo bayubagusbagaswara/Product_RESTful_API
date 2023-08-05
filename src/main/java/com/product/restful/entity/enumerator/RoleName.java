@@ -1,20 +1,52 @@
 package com.product.restful.entity.enumerator;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import static com.product.restful.entity.enumerator.Permission.*;
+
+@RequiredArgsConstructor
 public enum RoleName {
 
-    MANAGER("MANAGER"),
+    MANAGER(Set.of(
+            MANAGER_READ,
+            MANAGER_UPDATE,
+            MANAGER_CREATE,
+            MANAGER_DELETE
+    )),
 
-    ADMIN("ADMIN"),
-    CUSTOMER("CUSTOMER"),
-    USER("USER");
+    ADMIN(Set.of(
+            ADMIN_READ,
+            ADMIN_UPDATE,
+            ADMIN_CREATE,
+            ADMIN_DELETE,
+            MANAGER_READ,
+            MANAGER_UPDATE,
+            MANAGER_CREATE,
+            MANAGER_DELETE
+    )),
 
-    private final String roleName;
+    USER(Collections.emptySet())
 
-    RoleName(String roleName) {
-        this.roleName = roleName;
+    ;
+
+    @Getter
+    private final Set<Permission> permissions;
+
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(
+                        permission.getPermission()
+                ))
+                .toList());
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        return authorities;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
 }
