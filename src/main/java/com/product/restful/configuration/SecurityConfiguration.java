@@ -7,11 +7,11 @@ import com.product.restful.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,8 +24,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
+import static com.product.restful.entity.enumerator.RoleName.*;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -57,11 +60,11 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/roles").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/roles/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+                        .requestMatchers("/api/admin/**").hasRole(ADMIN.name())
+                        .requestMatchers("/api/users/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+                        .requestMatchers("/api/products/**").hasAnyRole(ADMIN.name(), MANAGER.name(), USER.name())
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
